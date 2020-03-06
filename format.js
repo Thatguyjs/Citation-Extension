@@ -116,5 +116,5 @@ let CitationObject = {
 
 
 	Example Citation Format:
-	 :MLA8:↔2. "↔0" ↔3, ↔4, ↔1:0.;
+	 :MLA8:2. "0" 3, 4, 1:0.;
 */
