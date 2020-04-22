@@ -1,0 +1,22 @@
+{
+	"name": "Citations",
+	"description": "Create citations from any website",
+	"version": "0.0.0.0",
+
+	"browser_action": {
+		"default_title": "Create Citations",
+		"default_popup": "browser/index.html"
+	},
+
+	"web_accessible_resources": [
+		"inject/*.*"
+	],
+
+	"permissions": [
+		"activeTab",
+		"storage"
+	],
+
+	"minimum_chrome_version": "39",
+	"manifest_version": 2
+}

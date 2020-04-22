@@ -1,0 +1,94 @@
+body {
+	width: 100%;
+	height: 100%;
+}
+
+
+/* All Content */
+#content {
+	width: 100%;
+	height: var(--body-height);
+}
+.content-row {
+	vertical-align: top;
+}
+
+
+/* Left Menu */
+#left-menu {
+	width: 20%;
+}
+
+
+/* Citation List */
+#citation-list {
+	overflow-y: scroll;
+}
+
+
+/* Right Menu */
+#right-menu {
+	width: 20%;
+}
+
+#social-links {
+	position: absolute;
+
+	top: 50%;
+	right: 15px;
+	transform: translateY(-50%);
+
+	width: 50px;
+}
+#social-links a {
+	display: block;
+
+	margin-bottom: 50%;
+
+	width: 50px;
+	height: 50px;
+}
+#social-links a:last-child {
+	margin-bottom: 0;
+}
+#social-links a img {
+	width: 100%;
+}
+#social-links a:hover {
+	filter: drop-shadow(2px 2px 1px rgb(20, 20, 20));
+
+	cursor: pointer;
+}
+
+
+/* Search Bar */
+#searchbar {
+	margin-top: 10px;
+	margin-left: 10px;
+
+	padding: 2px 5px;
+
+	width: 650px;
+	height: 25px;
+
+	font-size: 14px;
+	font-family: system-ui;
+
+	border-radius: 3px;
+	border: 2px solid white;
+}
+
+
+/* Dropdown Menus */
+.dropdown-container:focus-within .dropdown {
+	opacity: 1;
+}
+
+.dropdown {
+	position: absolute;
+
+	opacity: 0;
+	transition: opacity 250ms;
+
+	z-index: 2;
+}

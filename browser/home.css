@@ -1,0 +1,31 @@
+/* Style for the "home" menu */
+
+
+/* Tab styles */
+.tab {
+	margin: 9px 6%;
+	padding: 0;
+
+	width: 88%;
+	height: 60px;
+
+	background: var(--content-background-dark);
+	border-radius: 4px;
+	box-shadow: 1px 1px 3px black;
+
+	cursor: pointer;
+}
+.tab h2 {
+	margin: 0;
+	padding: 8px 0 0 14px;
+
+	font-size: 17px;
+	color: var(--text-primary-dark);
+}
+.tab p {
+	margin: 0;
+	padding: 4px 0 0 14px;
+
+	font-size: 14px;
+	color: var(--text-secondary-dark);
+}

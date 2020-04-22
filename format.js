@@ -1,3 +1,14 @@
+/*
+	Generic Formatting Standards
+
+	Next Up:
+	 - User-defined title for citation on finish page
+	 - FIX SAVING BUGS
+	 - Celebrate because now it kinda works
+*/
+
+
+
 // Citation Object Format
 
 let CitationObject = {

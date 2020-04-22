@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+	<head>
+		<meta charset="utf-8">
+
+		<!-- Main stylesheets -->
+		<link rel="stylesheet" href="../general/general.css">
+		<link rel="stylesheet" href="style.css">
+
+		<!-- Page-specific stylesheets -->
+		<link rel="stylesheet" href="home.css">
+		<link rel="stylesheet" href="finish.css">
+		<link rel="stylesheet" href="create.css">
+	</head>
+	<body>
+		<!-- Header -->
+		<header>
+			<h1 id="title">Home</h1>
+			<button id="back" class="redirect-home hidden">Back</button>
+		</header>
+
+
+		<!-- Home page -->
+		<div class="page page-home">
+			<div class="tab redirect-finish">
+				<h2>Finish Citation</h2>
+				<p>Finish the current citation</p>
+			</div>
+			<div class="tab redirect-create">
+				<h2>New Citation</h2>
+				<p>Create a new citation on the current page</p>
+			</div>
+			<div class="tab redirect-history">
+				<h2>History</h2>
+				<p>View your citation history</p>
+			</div>
+		</div>
+
+
+		<!-- Finish a citation -->
+		<div class="page page-finish hidden">
+			<div class="finish-error hidden">
+				<h1>No citation to finish!</h1>
+				<button class="redirect-home">Back</button>
+			</div>
+			<div class="finish-success">
+				<div id="finish-container">
+					<h2 class="finish-format">Loading...</h2>
+
+					<div class="finish-data">Loading...</div>
+
+					<div id="finish-container-footer">
+						<button class="finish-edit">Edit</button>
+						<button class="finish-copy">Copy</button>
+						<button class="finish-save">Save</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+		<!-- Create a citation -->
+		<div class="page page-create hidden">
+			<input class="format-search" placeholder="Search">
+			<div id="format-list"></div>
+		</div>
+
+
+		<!-- Scripts -->
+		<script src="../general/storage.js"></script>
+		<script src="../general/format.js"></script>
+		<script src="../general/history.js"></script>
+		<script src="main.js"></script>
+
+		<script src="home.js"></script>
+		<script src="finish.js"></script>
+		<script src="create.js"></script>
+
+		<script src="load.js"></script>
+	</body>
+</html>

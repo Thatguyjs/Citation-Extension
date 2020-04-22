@@ -1,0 +1,15 @@
+/* More specific (but still general) style */
+
+
+/* Default styles */
+.menu {
+	display: block;
+	
+	background: var(--background-dark);
+}
+
+
+/* Hide specific menus */
+.hidden {
+	display: none;
+}

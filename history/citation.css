@@ -1,0 +1,104 @@
+/* Style for individual citation elements */
+
+
+.citation {
+	margin-bottom: 6px;
+
+	height: 140px;
+}
+
+.citation .dropdown {
+	background: var(--content-background-dark);
+}
+
+
+.citation-table {
+	height: 100%;
+}
+
+.citation-table td {
+	position: relative;
+
+	background: var(--content-background-dark);
+	box-shadow: 1px 1px 3px black;
+}
+
+.citation-table img {
+	filter: invert(0.4);
+}
+
+
+/* Left section */
+.citation-section-left {
+	width: 60px;
+
+	border-top-left-radius: 5px;
+	border-bottom-left-radius: 5px;
+}
+
+.citation-move {
+	margin-left: calc(50% - 12px);
+
+	cursor: pointer;
+}
+
+
+/* Center section */
+.citation-section-center {
+	vertical-align: top;
+
+	width: 550px;
+}
+
+.citation-name {
+	display: inline-block;
+	margin: 6px 16px;
+
+	font-size: 20px;
+	color: var(--text-primary-dark);
+}
+
+.citation-created {
+	float: right;
+	/* position: absolute; */
+	display: inline-block;
+
+	margin: 6px 16px;
+
+	font-size: 20px;
+	color: var(--text-primary-dark);
+}
+
+.citation-body {
+	display: block;
+
+	margin: 14px 28px;
+	width: 90%;
+
+	font-size: 16px;
+	font-family: times;
+	color: var(--text-secondary-dark);
+
+	text-indent: 40px;
+}
+
+
+/* Right section */
+.citation-section-right {
+	vertical-align: top;
+
+	width: 60px;
+
+	border-top-right-radius: 5px;
+	border-bottom-right-radius: 5px;
+}
+
+.citation-checkbox {
+	position: absolute;
+
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+
+	cursor: pointer;
+}

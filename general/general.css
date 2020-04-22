@@ -1,0 +1,77 @@
+/* General Page Styling */
+
+
+:root {
+	--header-height: 50px;
+	--body-height: calc(100vh - var(--header-height) - 1px);
+
+	--header-dark: rgb(41, 42, 45);
+	--outline-dark: rgb(60, 62, 67);
+	--background-dark: rgb(32, 33, 36);
+
+	--content-background-dark: rgb(42, 43, 47);
+
+	--text-primary-dark: rgb(200, 202, 206);
+	--text-secondary-dark: rgb(140, 142, 148);
+
+	--affirmative-dark: rgb(30, 140, 80);
+	--negative-dark: rgb(220, 115, 110);
+}
+
+
+html {
+	width: 100%;
+	height: 100%;
+}
+
+
+body {
+	margin: 0;
+	padding: 0;
+
+	width: 480px;
+	height: 270px;
+
+	background: var(--background-dark);
+}
+
+
+header {
+	display: inline-block;
+
+	width: 100%;
+	height: var(--header-height);
+
+	background: var(--header-dark);
+	border-bottom: 1px solid var(--outline-dark);
+}
+header h1 {
+	margin: 0;
+	padding: 8px 14px;
+
+	color: rgb(235, 230, 232);
+}
+header button {
+	position: absolute;
+
+	right: 8px;
+	top: 8px;
+
+	width: 70px;
+	height: 32px;
+
+	color: var(--negative-dark);
+
+	background: Transparent;
+	border: 1px solid var(--outline-dark);
+	border-radius: 3px;
+}
+header button:hover {
+	background: rgba(255, 255, 255, 0.05);
+}
+
+
+button {
+	border-width: 2px;
+	cursor: pointer;
+}
