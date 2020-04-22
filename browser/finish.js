@@ -119,6 +119,10 @@ const Finish = {
 
 		// Add it to history
 		ExtStorage.get("citation-storage", (data) => {
+			if(!Array.isArray(data['citation-storage'])) {
+				data['citation-storage'] = [];
+			}
+
 			data['citation-storage'].push(citation);
 
 			ExtStorage.set(data);
