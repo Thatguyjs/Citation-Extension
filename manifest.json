@@ -1,10 +1,10 @@
 {
-	"name": "Citations",
+	"name": "Cite!",
 	"description": "Create citations from any website",
 	"version": "0.0.0.0",
 
 	"browser_action": {
-		"default_title": "Create Citations",
+		"default_title": "Cite!",
 		"default_popup": "browser/index.html"
 	},
 
