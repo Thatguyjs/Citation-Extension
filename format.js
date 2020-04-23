@@ -4,6 +4,7 @@
 	Next Up:
 	 - User-defined title for citation on finish page
 	 - Clean up popup code
+	 - Finish IEEE format
 */
 
 

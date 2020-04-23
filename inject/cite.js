@@ -6,6 +6,10 @@ window.CitationFormats = {
 	"MLA8": {
 		manual: ['authors', 'publishers', 'publishdate'],
 		automatic: ['title', 'url']
+	},
+	"IEEE": {
+		manual: ['authors', 'publishers', 'publishdate'],
+		automatic: ['title', 'url', 'accessdate']
 	}
 };
 

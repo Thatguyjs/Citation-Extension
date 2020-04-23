@@ -9,7 +9,8 @@ const Create = {
 
 	// List of citation formats
 	_formats: [
-		"MLA8"
+		"MLA8",
+		"IEEE"
 	],
 
 
