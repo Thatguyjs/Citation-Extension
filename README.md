@@ -1,4 +1,4 @@
-<img width="512" height="512" src="/Cite!.png" alt="Create citations for free; without the ads.">
+<img width="512" src="/Cite!.png" alt="Create citations for free; without the ads.">
 
 [Open Alpha] A Chrome Extension for citing websites in various formats
 
