@@ -1,4 +1,5 @@
-# Citation Extension
+<img width="512" src="/Cite!.png" alt="Create citations for free; without the ads.">
+
 [Open Alpha] A Chrome Extension for citing websites in various formats
 
 **The extension will be published on the Chrome Web Store  
