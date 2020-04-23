@@ -6,3 +6,5 @@
 after a stable beta version is released.**  
   
 When it is published, it will be called `Cite!` and will be free to use.
+
+Feedback is appreciated, whether it's about the code or a suggestion for a new feature.
