@@ -3,8 +3,22 @@
 
 	Next Up:
 	 - User-defined title for citation on finish page
-	 - FIX SAVING BUGS
-	 - Celebrate because now it kinda works
+	 - Clean up popup code
+*/
+
+
+
+/*
+	Version Details
+
+	The version is split up into three numbers.
+	From left-to-right, they represent:
+	 - The current release / major update
+	 - The current minor update
+	 - The current fix number
+
+	[Note]: While in alpha and beta, only the second two
+			numbers will be used.
 */
 
 
