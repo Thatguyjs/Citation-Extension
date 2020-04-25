@@ -10,7 +10,7 @@ const Formatter = {
 
 	// Available format file versions
 	_allowedVersions: [
-		"00.00.00"
+		"00.00.01"
 	],
 
 
@@ -68,7 +68,7 @@ const Formatter = {
 			let formats = this._loadFormats(data.slice(this._headerLength));
 
 			for(let f in formats) {
-				this._formats[formats[f].name] = formats[f].data;
+				this._formats[formats[f].name] = formats[f];
 			}
 
 		});
@@ -94,11 +94,15 @@ const Formatter = {
 			// Start of a new format
 			else if(data[index] === ':') {
 				currentFormat = {
-					name: data.slice(index + 1, data.indexOf(':', index + 1)),
+					name: data.slice(index + 1, data.indexOf(this._elementMarker, index)),
+					indent: null,
 					data: []
 				};
 
-				index = data.indexOf(':', index + 1) + 1;
+				index = data.indexOf(this._elementMarker, index) + 1;
+
+				currentFormat.indent = !!Number(data.slice(index, data.indexOf(':', index)));
+				index = data.indexOf(':', index) + 1;
 			}
 
 			// Citation element
@@ -166,10 +170,17 @@ const Formatter = {
 		let result = "";
 
 		if(!properties) {
-			result += citation.url;
+			result = citation.url;
 		}
 		else if(properties[0] === 0 && citation.url.includes('://')) {
-			result += citation.url.slice(citation.url.indexOf('://') + 3);
+			result = citation.url.slice(citation.url.indexOf('://') + 3);
+		}
+		else if(properties[0] === 1) {
+			result = this._formatUrl([0], citation);
+
+			if(result.includes('/')) {
+				result = result.slice(0, result.indexOf('/'));
+			}
 		}
 
 		return result;
@@ -303,21 +314,21 @@ const Formatter = {
 		if(!activeFormat) return "Format Error";
 
 		// Reset the result
-		this._result = "";
+		this._result = activeFormat.indent ? "\t" : "";
 
 		// Generate the citation
-		for(let e in activeFormat) {
+		for(let e in activeFormat.data) {
 
 			// Call the correct citation function
-			if(typeof activeFormat[e] === 'object') {
+			if(typeof activeFormat.data[e] === 'object') {
 				this._result += this[
-					"_format" + this._elements[activeFormat[e].element]
-				](activeFormat[e].properties, citation);
+					"_format" + this._elements[activeFormat.data[e].element]
+				](activeFormat.data[e].properties, citation);
 			}
 
 			// Add the string to the result
 			else {
-				this._result += activeFormat[e];
+				this._result += activeFormat.data[e];
 			}
 		}
 

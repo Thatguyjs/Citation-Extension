@@ -88,13 +88,14 @@ let CitationObject = {
 /*
 	Format Files:
 	 - All format files must begin with "FORMAT v.(version number)\r\n"
-	   where (version number) is the format version triplet (e.g. 00.00.00)
+	   where (version number) is the format version triplet (e.g. 12.34.56)
 	 - .fmt is the default format file extension
 
 
 	General Syntax:
-	 - All citations start with their uppercase format name and one
-	   colon (:) on each side
+	 - All citations start with their uppercase format name, an integer
+	   representing if they should be indented (0 or 1), and colons (:)
+	   on the ends
 	 - All citations end with a semicolon
 	 - Anything between the last element and the next element is ignored
 	 - Use the group separator () followed by the element number
@@ -119,6 +120,7 @@ let CitationObject = {
 	  - N/A
 	 url:
 	  - (0) Remove the URI (http[s]://)
+	  - (1) Get the base URI (https://example.com/home --> example.com)
 	 authors:
 	  - (0) Only the first author
 	  - (1) The prefix of any author (recursive)
@@ -142,7 +144,7 @@ let CitationObject = {
 
 
 	Example Citation Format:
-	 :MLA8:2. "0" 3, 4, 1:0.;
+	 :MLA81:2. "0" 3, 4, 1:0.;
 */
 
 
