@@ -60,7 +60,6 @@
 
 .citation-created {
 	float: right;
-	/* position: absolute; */
 	display: inline-block;
 
 	margin: 6px 16px;
@@ -71,8 +70,8 @@
 
 .citation-body {
 	display: block;
-
 	margin: 14px 28px;
+
 	width: 90%;
 
 	font-size: 16px;

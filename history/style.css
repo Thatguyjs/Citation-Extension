@@ -22,7 +22,23 @@ body {
 
 /* Citation List */
 #citation-list {
+	position: relative;
 	overflow-y: scroll;
+}
+
+/* "No citations" message */
+#citations-empty {
+	display: block;
+	position: absolute;
+
+	margin-top: 20px;
+
+	left: 325px;
+	transform: translateX(-50%);
+}
+#citations-empty p {
+	color: var(--text-secondary-dark);
+	font-size: 17px;
 }
 
 

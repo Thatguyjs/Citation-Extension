@@ -6,6 +6,9 @@ const CitationList = {
 	// Main citation list container
 	_list: document.getElementById("citation-list"),
 
+	// "No citations" message
+	_message: document.getElementById("citations-empty"),
+
 
 	// Citation element html
 	_citationHTML: "",
@@ -24,6 +27,10 @@ const CitationList = {
 
 	// Load citation + container lists
 	load: function(object) {
+		if(object.citations.length) {
+			this._message.style.display = 'none';
+		}
+
 		for(let c in object.citations) {
 			let element = document.createElement('div');
 			element.id = "citation-num-" + c;
