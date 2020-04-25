@@ -35,6 +35,7 @@
 	color: var(--text-primary-dark);
 
 	white-space: pre-wrap;
+	word-break: break-all;
 }
 
 #finish-container-footer {

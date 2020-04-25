@@ -44,7 +44,7 @@ const CitationList = {
 
 			let createdDate = [
 				object.citations[c].created.day,
-				object.citations[c].created.month + ',',
+				object.citations[c].created.month + '.',
 				object.citations[c].created.year
 			].join(' ');
 

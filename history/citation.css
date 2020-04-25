@@ -2,9 +2,7 @@
 
 
 .citation {
-	margin-bottom: 6px;
-
-	height: 140px;
+	margin-bottom: 8px;
 }
 
 .citation .dropdown {
@@ -36,10 +34,10 @@
 	border-bottom-left-radius: 5px;
 }
 
-.citation-move {
+.citation-drag {
 	margin-left: calc(50% - 12px);
 
-	cursor: pointer;
+	cursor: ns-resize;
 }
 
 
@@ -70,7 +68,8 @@
 
 .citation-body {
 	display: block;
-	margin: 14px 28px;
+	margin: 8px 28px;
+	margin-bottom: 10px;
 
 	max-width: 90%;
 
@@ -79,6 +78,17 @@
 	color: var(--text-secondary-dark);
 
 	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.citation-containers {
+	margin-left: 4%;
+
+	width: 92%;
+	height: 30px;
+
+	background: rgba(255, 255, 255, 0.05);
+	border-radius: 4px;
 }
 
 
