@@ -120,7 +120,7 @@ let CitationObject = {
 	  - N/A
 	 url:
 	  - (0) Remove the URI (http[s]://)
-	  - (1) Get the base URI (https://example.com/home --> example.com)
+	  - (1) Get the base URI (http[s]://example.com/home --> example.com)
 	 authors:
 	  - (0) Only the first author
 	  - (1) The prefix of any author (recursive)

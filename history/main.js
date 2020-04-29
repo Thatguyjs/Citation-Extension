@@ -47,7 +47,6 @@ const Main = {
 	// Drag citations
 	dragCitation: function(id) {
 		let citation = document.getElementById("citation-num-" + id);
-
 		let allCitations = Array.from(document.getElementsByClassName("citation"));
 
 		citation.style.position = "absolute";
@@ -69,8 +68,6 @@ const Main = {
 
 			for(let c in allCitations) {
 				let otherPos = allCitations[c].getBoundingClientRect();
-
-				console.log(otherPos.y, citationPos.y);
 
 				if(citationPos.y > otherPos.y) {
 					insertAfter = Number(c);
