@@ -7,15 +7,54 @@ const Main = {
 		ExtStorage.get("citation-storage", (data) => {
 			CitationList.load({
 				citations: data['citation-storage']
-			});
+			}, this.eventCallback);
 		});
-
 
 		// Override right-clicks
 		window.addEventListener('contextmenu', (event) => {
 			this.rclick(event);
 			event.preventDefault();
 		});
+	},
+
+
+	// General event callback
+	eventCallback: function(type, id) {
+		switch(type) {
+
+			case 'drag':
+			return Main.dragCitation(id);
+
+			case 'show-containers':
+			return Main.showContainers(id);
+
+		}
+	},
+
+
+	// Drag citations
+	dragCitation: function(id) {
+		let citation = document.getElementById("citation-num-" + id);
+		let allCitations = Array.from(document.getElementsByClassName("citation"));
+
+		console.log(allCitations[0].getBoundingClientRect());
+
+		//citation.style.position = "absolute";
+
+		console.log("Drag");
+
+		let releaseEvent = () => {
+
+			window.removeEventListener('mouseup', releaseEvent);
+		}
+
+		window.addEventListener('mouseup', releaseEvent);
+	},
+
+
+	// Callback to show all containers
+	showContainers: function(citation) {
+		console.log("EEE");
 	},
 
 

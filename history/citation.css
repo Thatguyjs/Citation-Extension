@@ -32,12 +32,12 @@
 
 	border-top-left-radius: 5px;
 	border-bottom-left-radius: 5px;
+
+	cursor: move;
 }
 
 .citation-drag {
 	margin-left: calc(50% - 12px);
-
-	cursor: ns-resize;
 }
 
 
@@ -82,13 +82,25 @@
 }
 
 .citation-containers {
+	position: relative;
 	margin-left: 4%;
 
 	width: 92%;
 	height: 30px;
 
-	background: rgba(255, 255, 255, 0.05);
+	background: rgba(255, 255, 255, 0.025);
 	border-radius: 4px;
+}
+
+.show-containers {
+	position: absolute;
+	top: 3px;
+	right: 4px;
+
+	background: rgba(255, 255, 255, 0.1);
+	border-radius: 2px;
+
+	cursor: pointer;
 }
 
 

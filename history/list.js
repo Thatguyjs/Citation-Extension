@@ -26,7 +26,7 @@ const CitationList = {
 
 
 	// Load citation + container lists
-	load: function(object) {
+	load: function(object, callback) {
 		if(object.citations.length) {
 			this._message.style.display = 'none';
 		}
@@ -49,6 +49,11 @@ const CitationList = {
 			].join(' ');
 
 			element.querySelector('.citation-created').innerHTML = createdDate;
+
+			element.querySelector('.citation-section-left').addEventListener('mousedown', (event) => {
+				callback('drag', Number(c));
+				event.preventDefault();
+			});
 
 			this._list.appendChild(element);
 		}
