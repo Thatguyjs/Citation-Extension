@@ -1,9 +1,21 @@
 const Main = {
 
+	// Mouse position
+	mouse: {
+		x: 0,
+		y: 0
+	},
+
+
 	// Initialize the main object
 	init: function() {
+		// Update mouse position
+		window.addEventListener('mousemove', (event) => {
+			Main.mouse.x = event.clientX;
+			Main.mouse.y = event.clientY;
+		});
 
-		// Stored as JSON for now
+		// Stored as JSON (for now)
 		ExtStorage.get("citation-storage", (data) => {
 			CitationList.load({
 				citations: data['citation-storage']
@@ -35,26 +47,65 @@ const Main = {
 	// Drag citations
 	dragCitation: function(id) {
 		let citation = document.getElementById("citation-num-" + id);
+
 		let allCitations = Array.from(document.getElementsByClassName("citation"));
 
-		console.log(allCitations[0].getBoundingClientRect());
+		citation.style.position = "absolute";
+		citation.style.zIndex = 2;
 
-		//citation.style.position = "absolute";
+		let mouseOffset = {
+			x: Main.mouse.x - citation.getBoundingClientRect().x,
+			y: Main.mouse.y - citation.getBoundingClientRect().y
+		};
 
-		console.log("Drag");
+		let moveEvent = () => {
+			citation.style.left = (Main.mouse.x - mouseOffset.x) + 'px';
+			citation.style.top = (Main.mouse.y - mouseOffset.y) + 'px';
+		}
 
 		let releaseEvent = () => {
+			let citationPos = citation.getBoundingClientRect();
+			let insertAfter = -1;
 
+			for(let c in allCitations) {
+				let otherPos = allCitations[c].getBoundingClientRect();
+
+				console.log(otherPos.y, citationPos.y);
+
+				if(citationPos.y > otherPos.y) {
+					insertAfter = Number(c);
+				}
+			}
+
+			citation.parentNode.removeChild(citation);
+
+			let insertBefore = document.getElementById("citation-num-" + (insertAfter + 1));
+
+			if(insertBefore != null) {
+				insertBefore.parentNode.insertBefore(citation, insertBefore);
+			}
+			else {
+				document.getElementById("citation-list").appendChild(citation);
+			}
+
+			citation.style.position = "";
+			citation.style.left = "";
+			citation.style.top = "";
+
+			citation.style.zIndex = "";
+
+			window.removeEventListener('mousemove', moveEvent);
 			window.removeEventListener('mouseup', releaseEvent);
 		}
 
+		window.addEventListener('mousemove', moveEvent);
 		window.addEventListener('mouseup', releaseEvent);
 	},
 
 
 	// Callback to show all containers
 	showContainers: function(citation) {
-		console.log("EEE");
+		console.log("TODO: Show all containers");
 	},
 
 

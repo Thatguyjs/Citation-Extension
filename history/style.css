@@ -22,7 +22,6 @@ body {
 
 /* Citation List */
 #citation-list {
-	position: relative;
 	overflow-y: scroll;
 }
 
