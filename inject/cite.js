@@ -10,6 +10,10 @@ window.CitationFormats = {
 	"IEEE": {
 		manual: ['authors', 'publishers', 'publishdate'],
 		automatic: ['title', 'url', 'accessdate']
+	},
+	"BibTeX": {
+		manual: ['authors', 'publishers', 'publishdate'],
+		automatic: ['title', 'url']
 	}
 };
 
