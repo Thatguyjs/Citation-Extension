@@ -28,10 +28,8 @@ const CitationList = {
 	// Load citation + container lists
 	load: function(object, callback) {
 		if(object.citations.length) {
-			//this._message.style.display = 'none';
+			this._message.style.display = 'none';
 		}
-
-		return;
 
 		for(let c in object.citations) {
 			let element = document.createElement('div');
