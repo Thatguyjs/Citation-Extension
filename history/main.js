@@ -15,17 +15,31 @@ const Main = {
 			Main.mouse.y = event.clientY;
 		});
 
-		// Stored as JSON (for now)
-		ExtStorage.get("citation-storage", (data) => {
-			CitationList.load({
-				citations: data['citation-storage']
-			}, this.eventCallback);
+		// Load the citation list
+		this.loadCitations();
+
+		// Refresh the citation list
+		document.getElementById("refresh-list").addEventListener('click', () => {
+			this.loadCitations();
 		});
 
 		// Override right-clicks
 		window.addEventListener('contextmenu', (event) => {
 			this.rclick(event);
 			event.preventDefault();
+		});
+	},
+
+
+	// Load all citations
+	loadCitations: function() {
+		ExtStorage.get("citation-storage", (data) => {
+			CitationList.clear();
+
+			// Stored as JSON (for now)
+			CitationList.load({
+				citations: data['citation-storage']
+			}, this.eventCallback);
 		});
 	},
 

@@ -19,6 +19,31 @@ body {
 	width: 20%;
 }
 
+/* Import / Export citations */
+#citation-import {
+	padding: 10px 20px;
+
+	color: var(--text-secondary-dark);
+
+	background: var(--content-background-dark);
+	border-radius: 3px;
+
+	box-shadow: 1px 1px 4px rgb(20, 20, 20);
+	border: none;
+}
+
+#citation-export {
+	padding: 10px 20px;
+
+	color: var(--text-secondary-dark);
+
+	background: var(--content-background-dark);
+	border-radius: 3px;
+
+	box-shadow: 1px 1px 4px rgb(20, 20, 20);
+	border: none;
+}
+
 
 /* Citation List */
 #citation-list {
@@ -83,9 +108,9 @@ body {
 
 /* Search Bar */
 #searchbar {
-	margin-top: 10px;
-	margin-left: 10px;
+	float: left;
 
+	margin: 10px;
 	padding: 2px 5px;
 
 	width: 650px;
@@ -96,6 +121,35 @@ body {
 
 	border-radius: 3px;
 	border: 2px solid white;
+}
+
+/* Refresh citation list */
+#refresh-list {
+	position: relative;
+
+	float: left;
+	margin-top: 10px;
+
+	padding: 0;
+
+	width: 40px;
+	height: 32px;
+
+	background: rgb(52, 53, 57);
+	box-shadow: 1px 1px 3px rgb(10, 12, 12);
+	border-radius: 2px;
+
+	cursor: pointer;
+}
+
+#refresh-list img {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+
+	transform: translate(-50%, -50%);
+
+	filter: invert(0.4);
 }
 
 

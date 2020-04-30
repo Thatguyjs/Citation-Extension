@@ -9,7 +9,6 @@ const CitationList = {
 	// "No citations" message
 	_message: document.getElementById("citations-empty"),
 
-
 	// Citation element html
 	_citationHTML: "",
 
@@ -56,6 +55,19 @@ const CitationList = {
 			});
 
 			this._list.appendChild(element);
+		}
+	},
+
+
+	// Clear the citation list
+	clear: function() {
+		let parent = document.getElementById('citation-list');
+
+		let elements = document.getElementsByClassName('citation');
+		elements = elements ? Array.from(elements) : [];
+
+		for(let e in elements) {
+			parent.removeChild(elements[e]);
 		}
 	}
 
