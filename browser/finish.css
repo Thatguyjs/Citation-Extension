@@ -20,7 +20,24 @@
 
 	overflow: hidden;
 }
+.finish-name {
+	margin: 8px 10px;
+	padding-left: 6px;
+
+	width: 200px;
+	height: 26px;
+
+	font-size: 15px;
+	font-family: system-ui;
+	color: rgb(150, 154, 157);
+
+	background: rgb(60, 64, 66);
+	border: none;
+
+	border-radius: 2px;
+}
 .finish-format {
+	float: right;
 	padding: 8px 16px;
 
 	color: var(--text-secondary-dark);

@@ -116,7 +116,8 @@ const Finish = {
 			year: date.getFullYear()
 		};
 
-		citation.name = "New Citation";
+		let name = document.getElementsByClassName('finish-name')[0].value;
+		citation.name = name || "New Citation";
 
 		citation.containers = [];
 
