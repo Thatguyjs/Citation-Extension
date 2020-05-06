@@ -43,8 +43,6 @@ const HistoryFormatter = {
 	_loadFile: function(data) {
 		let accepted = false;
 
-		console.log(data);
-
 		for(let v in this._allowedVersions) {
 			let matchString = this._fileHeader + this._allowedVersions[v] + '\r\n';
 
@@ -55,6 +53,7 @@ const HistoryFormatter = {
 		}
 
 		if(!accepted) {
+			console.log("Invalid history file");
 			return; // TODO: Error Message
 		}
 
@@ -150,15 +149,9 @@ const HistoryFormatter = {
 
 				index++;
 
-				let months = [
-					"Jan", "Feb", "Mar", "Apr",
-					"May", "Jun", "Jul", "Aug",
-					"Sep", "Oct", "Nov", "Dec"
-				];
-
 				node.value = {
 					day: Number(data.slice(index, index + 2)),
-					month: months[Number(data.slice(index + 2, index + 4)) - 1],
+					month: Number(data.slice(index + 2, index + 4)),
 					year: Number(data.slice(index + 4, index + 8))
 				};
 
@@ -206,10 +199,11 @@ const HistoryFormatter = {
 					node.value.push(result);
 					index++;
 				}
+			}
 
-				if(node.value.length === 1) {
-					node.value = node.value[0];
-				}
+			// Whitespace
+			else if(data[index].match(/\s/)) {
+				index++;
 			}
 
 			// String
@@ -231,17 +225,6 @@ const HistoryFormatter = {
 				}
 			}
 
-		}
-
-		for(let c in citations) {
-			for(let a in citations[c].authors) {
-				citations[c].authors[a] = {
-					prefix: citations[c].authors[a][0],
-					firstname: citations[c].authors[a][1],
-					middlename: citations[c].authors[a][2],
-					lastname: citations[c].authors[a][3]
-				};
-			}
 		}
 
 		return {
@@ -267,7 +250,6 @@ const HistoryFormatter = {
 				result += this._elementMarker;
 
 				let value = object.citations[c][this._metadata[m][0]];
-				console.log("Getting", this._metadata[m][0], "Result:", value);
 
 				// Arrays
 				if(Array.isArray(value)) {
@@ -303,7 +285,7 @@ const HistoryFormatter = {
 				else if(typeof value === 'object') {
 					let temp = {
 						day: ('0' + value.day).slice(-2),
-						month: ('0' + (value.month + 1)).slice(-2),
+						month: ('0' + value.month).slice(-2),
 						year: value.year.toString()
 					};
 
@@ -352,15 +334,9 @@ const HistoryFormatter = {
 
 				// Dates
 				else if(typeof value === 'object') {
-					let months = {
-						'Jan': 1, 'Feb': 2, 'Mar': 3, 'Apr': 4,
-						'May': 5, 'Jun': 6, 'Jul': 7, 'Aug': 8,
-						'Sep': 9, 'Oct': 10, 'Nov': 11, 'Dec': 12
-					};
-
 					let temp = {
 						day: ('0' + value.day).slice(-2),
-						month: ('0' + months[value.month]).slice(-2),
+						month: ('0' + value.month).slice(-2),
 						year: value.year.toString()
 					};
 

@@ -241,7 +241,6 @@ window.CitationEditor = {
 
 				// Finished editing
 				window.CitationStorage.store(this._citation);
-				console.log(this._citation);
 			}
 		}
 	},
@@ -283,6 +282,12 @@ window.CitationEditor = {
 		let element = this._elements[this._current - 1];
 		let children = element.children;
 
+		let months = [
+			'jan', 'feb', 'mar', 'apr',
+			'may', 'jun', 'jul', 'aug',
+			'sep', 'oct', 'Nov', 'dec'
+		];
+
 		switch(element.getAttribute('name')) {
 
 			case 'title':
@@ -290,8 +295,11 @@ window.CitationEditor = {
 			break;
 
 			case 'publishdate':
+				let month = children[2].value.slice(0, 3);
+				month = months.indexOf(month.toLowerCase()) + 1;
+
 				this._citation.publishdate.day = children[1].value;
-				this._citation.publishdate.month = children[2].value;
+				this._citation.publishdate.month = month.toString();
 				this._citation.publishdate.year = children[3].value;
 			break;
 
@@ -303,12 +311,12 @@ window.CitationEditor = {
 
 					let items = children[1].children[a].children[1].children;
 
-					this._citation.authors.push({
-						prefix: items[0].value,
-						firstname: items[1].value,
-						middlename: items[2].value,
-						lastname: items[3].value
-					});
+					this._citation.authors.push([
+						items[0].value,
+						items[1].value,
+						items[2].value,
+						items[3].value
+					]);
 				}
 			break;
 

@@ -3,11 +3,17 @@
 
 const CitationList = {
 
-	// Main citation list container
+	// Loaded citation properties
+	_citations: {},
+
+
+	// Citation element display container
 	_list: document.getElementById("citation-list"),
+
 
 	// "No citations" message
 	_message: document.getElementById("citations-empty"),
+
 
 	// Citation element html
 	_citationHTML: "",
@@ -15,6 +21,18 @@ const CitationList = {
 
 	// Get basic information
 	init: function() {
+
+		// Listen for imports
+		document.getElementById('citation-import').addEventListener(
+			'click', this.import
+		);
+
+		// Listen for exports
+		document.getElementById('citation-export').addEventListener(
+			'click', this.export
+		);
+
+		// Load the citations
 		return new Promise((resolve, reject) => {
 			ExtStorage.readFile("./history/citation_elem.html", (data) => {
 				this._citationHTML = data;
@@ -30,6 +48,14 @@ const CitationList = {
 			this._message.style.display = 'none';
 		}
 
+		let months = [
+			'Jan', 'Feb', 'Mar', 'Apr',
+			'May', 'Jun', 'Jul', 'Aug',
+			'Sep', 'Oct', 'Nov', 'Dec'
+		];
+
+		this._citations = object;
+
 		for(let c in object.citations) {
 			let element = document.createElement('div');
 			element.id = "citation-num-" + c;
@@ -43,7 +69,7 @@ const CitationList = {
 
 			let createdDate = [
 				object.citations[c].created.day,
-				object.citations[c].created.month + '.',
+				months[object.citations[c].created.month - 1],
 				object.citations[c].created.year
 			].join(' ');
 
@@ -69,6 +95,39 @@ const CitationList = {
 		for(let e in elements) {
 			parent.removeChild(elements[e]);
 		}
+	},
+
+
+	// Import citations
+	import: function() {
+		let area = document.getElementById('import-area');
+
+		area.addEventListener('change', (event) => {
+			let reader = new FileReader();
+
+			reader.onload = () => {
+				let citations = HistoryFormatter._loadFile(reader.result);
+
+				CitationList.clear();
+				CitationList.load(citations, Main.eventCallback);
+			}
+
+			reader.readAsText(area.files[0]);
+		});
+
+		area.click();
+	},
+
+
+	// Export citations
+	export: function() {
+		let historyString = HistoryFormatter.export(CitationList._citations);
+		historyString = "data:text/chf," + historyString;
+
+		chrome.downloads.download({
+			url: historyString,
+			filename: "history.chf"
+		});
 	}
 
 };

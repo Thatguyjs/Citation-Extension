@@ -83,9 +83,8 @@ window.CitationParser = {
 		if(match) node.day = match[0].trim();
 
 		match = data.match(/(january|february|march|april|may|june|july|august|september|october|november|december)/i);
-		if(!match) {
-			match = data.match(/(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)/i);
-		}
+		if(!match) match = data.match(/(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)/i);
+
 		if(match) node.month = match[0].trim();
 
 		match = data.match(/\d{4}/);
@@ -106,7 +105,7 @@ window.CitationParser = {
 
 			data = {
 				day: date.getDate(),
-				month: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"][date.getMonth()],
+				month: date.getMonth() + 1,
 				year: date.getFullYear()
 			};
 		}

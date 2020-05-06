@@ -19,6 +19,11 @@ body {
 	width: 20%;
 }
 
+/* Hidden import area */
+#import-area {
+	display: none;
+}
+
 /* Import / Export citations */
 #citation-import {
 	padding: 10px 20px;

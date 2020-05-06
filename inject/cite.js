@@ -5,7 +5,7 @@
 window.CitationFormats = {
 	"MLA8": {
 		manual: ['authors', 'publishers', 'publishdate'],
-		automatic: ['title', 'url']
+		automatic: ['title', 'url', 'accessdate']
 	},
 	"IEEE": {
 		manual: ['authors', 'publishers', 'publishdate'],
@@ -13,7 +13,7 @@ window.CitationFormats = {
 	},
 	"BibTeX": {
 		manual: ['authors', 'publishers', 'publishdate'],
-		automatic: ['title', 'url']
+		automatic: ['title', 'url', 'accessdate']
 	}
 };
 
@@ -119,7 +119,7 @@ window.CitationConstructor = {
 			// Citation Type
 			case 'type':
 				// Separate types are not supported yet
-				window.CitationLogger.log("Separate citation types are not supported yet.");
+				window.CitationLogger.log("Other citation types are not supported yet.");
 
 				this._citation.type = "Article"; // Temp
 			break;

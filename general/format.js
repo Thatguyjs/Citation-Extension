@@ -226,8 +226,8 @@ const Formatter = {
 		for(let a in authors) { // TODO: Add prefix and middlename support
 			result += (
 				(Number(a) > 0 ? " and " : "") +
-				(authors[a].lastname ? authors[a].lastname + " " : "") +
-				(authors[a].firstname || "")
+				(authors[a][3] ? authors[a][3] + " " : "") +
+				(authors[a][1] || "")
 			);
 		}
 
@@ -260,10 +260,16 @@ const Formatter = {
 	_formatPublishDate: function(properties, citation) {
 		let result = "";
 
+		let months = [
+			'Jan', 'Feb', 'Mar', 'Apr',
+			'May', 'Jun', 'Jul', 'Aug',
+			'Sep', 'Oct', 'Nov', 'Dec'
+		];
+
 		if(!properties) {
 			result += (
 				citation.publishdate.day + " " +
-				citation.publishdate.month + " " +
+				months[citation.publishdate.month - 1] + " " +
 				citation.publishdate.year
 			);
 		}
@@ -271,7 +277,7 @@ const Formatter = {
 			result += citation.publishdate.day.toString();
 		}
 		else if(properties[0] === 1) {
-			result += citation.publishdate.month;
+			result += months[citation.publishdate.month - 1];
 		}
 		else if(properties[0] === 2) {
 			result += citation.publishdate.year.toString();

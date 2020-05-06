@@ -102,20 +102,23 @@ const Finish = {
 		let citation = Finish._citation;
 
 		let date = new Date();
-		let months = [
-			'Jan', 'Feb', 'Mar', 'Apr',
-			'May', 'Jun', 'Jul', 'Aug',
-			'Sep', 'Oct', 'Nov', 'Dec'
-		];
 
 		// Create citation metadata
 		citation.created = {
 			day: date.getDate(),
-			month: months[date.getMonth()],
+			month: date.getMonth() + 1,
+			year: date.getFullYear()
+		};
+
+		citation.modified = {
+			day: date.getDate(),
+			month: date.getMonth() + 1,
 			year: date.getFullYear()
 		};
 
 		citation.name = "New Citation";
+
+		citation.containers = [];
 
 		// Add it to history
 		ExtStorage.get("citation-storage", (data) => {
@@ -127,8 +130,6 @@ const Finish = {
 
 			ExtStorage.set(data);
 		});
-
-		console.log("SAVE:", citation);
 	}
 
 };

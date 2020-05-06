@@ -34,6 +34,10 @@ const Main = {
 	// Load all citations
 	loadCitations: function() {
 		ExtStorage.get("citation-storage", (data) => {
+			if(!Array.isArray(data['citation-storage'])) {
+				data['citation-storage'] = [];
+			}
+
 			CitationList.clear();
 
 			// Stored as JSON (for now)
