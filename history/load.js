@@ -5,6 +5,6 @@ window.addEventListener('load', async () => {
 	Formatter.init();
 	ContextMenu.init();
 
-	await CitationList.init();
+	await CitationManager.init();
 	Main.init();
 });
