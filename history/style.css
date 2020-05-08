@@ -50,9 +50,50 @@ body {
 }
 
 
-/* Citation List */
-#citation-list {
-	overflow-y: scroll;
+/* Citation Tabs */
+#citation-tabs {
+	position: relative;
+}
+
+.citation-tab {
+	display: none;
+
+	/* background: red; */
+}
+
+.citation-tab-active {
+	display: block;
+}
+
+/* Citation tab header */
+#tab-headers {
+	position: absolute;
+	bottom: 0;
+
+	width: calc(100% - 3px);
+	height: 32px;
+
+	background: rgb(24, 27, 29);
+	border: 1px solid rgb(14, 18, 20);
+	border-bottom: none;
+}
+
+.tab-header {
+	display: inline-block;
+	margin-top: -1px;
+
+	max-width: 180px;
+	min-width: 110px;
+	height: calc(100% + 1px);
+
+	background: Transparent;
+	border-left: 3px solid Transparent;
+	border-right: 1px solid rgb(14, 18, 21);
+}
+
+.tab-header-active {
+	background: var(--background-dark);
+	border-left-color: rgb(30, 100, 140);
 }
 
 /* "No citations" message */

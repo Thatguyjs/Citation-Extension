@@ -2,12 +2,13 @@
 
 
 class CitationTab {
-	constructor(id, tabElement) {
+	constructor(id, headerElement, tabElement) {
 
 		// Tab id
 		this._id = id;
 
-		// Container element
+		// Container header / content
+		this._header = headerElement;
 		this._element = tabElement;
 
 		// Citation / container lists
@@ -48,7 +49,7 @@ class CitationTab {
 			element.querySelector('.citation-created').innerHTML = createdDate;
 
 			element.querySelector('.citation-section-left').addEventListener('mousedown', (event) => {
-				callback('drag', Number(c));
+				CitationManager._eventCallback('drag', Number(c));
 				event.preventDefault();
 			});
 
@@ -59,10 +60,10 @@ class CitationTab {
 
 	// Clear all citations / containers
 	clear() {
-		let children = this._element.children();
+		let children = Array.from(this._element.children);
 
 		for(let c in children) {
-			console.log(children[c]);
+			this._element.removeChild(children[c]);
 		}
 	}
 

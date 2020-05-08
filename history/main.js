@@ -20,6 +20,9 @@ const Main = {
 			this.rclick(event);
 			event.preventDefault();
 		});
+
+		// Set the event callback
+		CitationManager.setCallback(this.eventCallback);
 	},
 
 
@@ -32,6 +35,7 @@ const Main = {
 
 			// Load into the default tab
 			CitationManager.setTab(0);
+			CitationManager.clearTab();
 			CitationManager.load(data['citation-storage'], []);
 		});
 	},
@@ -42,7 +46,7 @@ const Main = {
 		switch(type) {
 
 			case 'drag':
-			return Main.dragCitation(id);
+			return 0;
 
 			case 'show-containers':
 			return Main.showContainers(id);

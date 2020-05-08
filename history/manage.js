@@ -4,6 +4,7 @@
 const CitationManager = {
 
 	// Citation element display container
+	_tabHeaders: document.getElementById("tab-headers"),
 	_tabList: document.getElementById("citation-tabs"),
 
 
@@ -21,7 +22,7 @@ const CitationManager = {
 
 
 	// Event callback
-	_eventCallback: null,
+	_eventCallback: () => {},
 
 
 	// Get basic information
@@ -55,12 +56,37 @@ const CitationManager = {
 
 	// Load citation + container lists
 	createTab: function(active=false) {
+		// Create the tab header / related elements
+		let header = document.createElement('div');
+		header.className = "tab-header";
+		header.id = "tab-header-" + this._tabs.length;
+
+		let closeButton = document.createElement('button');
+		closeButton.className = "tab-close";
+
+		header.appendChild(closeButton);
+
+		// Listen for header clicks
+		header.addEventListener('click', (event) => {
+			let id = event.target.id;
+			id = id.slice(id.lastIndexOf('-') + 1);
+
+			CitationManager.setTab(Number(id));
+		});
+
+		// Create the tab container
 		let container = document.createElement('div');
 		container.className = "citation-tab";
 
+		this._tabHeaders.appendChild(header);
 		this._tabList.appendChild(container);
 
-		this._tabs.push(new CitationTab(this._tabs.length, container));
+		this._tabs.push(new CitationTab(
+			this._tabs.length,
+			header,
+			container
+		));
+
 		if(active) this._activeTab = this._tabs[this._tabs.length - 1];
 	},
 
@@ -69,7 +95,15 @@ const CitationManager = {
 	setTab: function(tabId) {
 		if(tabId < 0 || tabId >= this._tabs.length) return -1;
 
+		if(this._activeTab) {
+			this._activeTab._element.classList.remove('citation-tab-active');
+			this._activeTab._header.classList.remove('tab-header-active');
+		}
+
 		this._activeTab = this._tabs[tabId];
+		this._activeTab._element.classList.add('citation-tab-active');
+		this._activeTab._header.classList.add('tab-header-active');
+
 		return 0;
 	},
 
@@ -97,7 +131,12 @@ const CitationManager = {
 		// Switch tabs if the current tab is closed
 		if(this._activeTab._id == tabId) {
 			this._activeTab = this._tabs[tabId - 1];
+			this._activeTab._element.classList.add('citation-tab-active');
+			this._activeTab._header.classList.add('tab-header-active');
 		}
+
+		// Remove the header
+		this._tabHeaders.removeChild(this._tabs[tabId]._header);
 
 		// Remove element
 		this._tabList.removeChild(this._tabs[tabId]._element);
