@@ -55,11 +55,12 @@ const CitationManager = {
 
 
 	// Load citation + container lists
-	createTab: function(active=false) {
+	createTab: function(name, active=false) {
 		// Create the tab header / related elements
 		let header = document.createElement('div');
 		header.className = "tab-header";
 		header.id = "tab-header-" + this._tabs.length;
+		header.innerHTML = "<span>" + name + "</span>";
 
 		let closeButton = document.createElement('button');
 		closeButton.className = "tab-close";
@@ -145,6 +146,7 @@ const CitationManager = {
 	// Remove a tab
 	removeTab: function(tabId) {
 		if(tabId < 1 || tabId >= this._tabs.length) return -1; // Prevent default tab from closing
+		if(!this._tabs[tabId]) return -1; // Tab was already closed
 
 		// Switch tabs if the current tab is closed
 		if(this._activeTab._id == tabId) {
@@ -159,8 +161,13 @@ const CitationManager = {
 		// Remove element
 		this._tabList.removeChild(this._tabs[tabId]._element);
 
-		// Remove it from the array
-		this._tabs.splice(tabId, 1);
+		// Erase the tab value
+		this._tabs[tabId] = null;
+
+		// Remove null tabs
+		while(this._tabs.slice(-1) === null) {
+			this._tabs.length--;
+		}
 	},
 
 
@@ -168,18 +175,23 @@ const CitationManager = {
 	import: function() {
 		let area = document.getElementById('import-area');
 
-		area.addEventListener('change', (event) => {
+		area.onchange = () => {
+			let name = area.files[0].name;
+			name = name.slice(0, name.lastIndexOf('.'));
+
 			let reader = new FileReader();
 
 			reader.onload = () => {
 				let data = HistoryFormatter._loadFile(reader.result);
 
-				CitationManager.createTab(true);
+				CitationManager.createTab(name, true);
 				CitationManager.load(data.citations, data.containers);
 			}
 
 			reader.readAsText(area.files[0]);
-		});
+
+			area.value = '';
+		};
 
 		area.click();
 	},

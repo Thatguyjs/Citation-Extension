@@ -82,13 +82,24 @@ body {
 	display: inline-block;
 	position: relative;
 
-	max-width: 180px;
+	width: 180px;
 	min-width: 110px;
 	height: calc(100% + 1px);
 
 	background: Transparent;
 	border-left: 3px solid Transparent;
 	border-right: 1px solid rgb(14, 18, 21);
+}
+
+.tab-header span {
+	position: absolute;
+	top: 6px;
+	left: 10px;
+
+	font-size: 14px;
+	color: rgb(100, 103, 108);
+
+	cursor: default;
 }
 
 .tab-header button {
@@ -106,6 +117,10 @@ body {
 	border-radius: 2px;
 }
 
+.tab-header:first-child button {
+	cursor: not-allowed;
+}
+
 .tab-header button img {
 	width: 100%;
 	height: 100%;
@@ -116,6 +131,10 @@ body {
 .tab-header-active {
 	background: var(--background-dark);
 	border-left-color: rgb(30, 100, 140);
+}
+
+.tab-header-active span {
+	color: rgb(210, 215, 222);
 }
 
 /* "No citations" message */

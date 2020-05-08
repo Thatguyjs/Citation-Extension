@@ -4,7 +4,7 @@ const Main = {
 	init: function() {
 
 		// Create the initial tab
-		CitationManager.createTab();
+		CitationManager.createTab("My Citations");
 		CitationManager.setTab(0);
 
 		// Load the citation list
@@ -110,7 +110,8 @@ const Main = {
 						ExtStorage.set(data);
 					});
 
-					CitationManager._tabList.removeChild(container);
+					console.log("TODO: Remove citation from list");
+					//CitationManager._tabList.removeChild(container);
 				}
 			break;
 
