@@ -63,6 +63,7 @@ const CitationManager = {
 
 		let closeButton = document.createElement('button');
 		closeButton.className = "tab-close";
+		closeButton.innerHTML = "<img src=\"svg/close_tab.svg\">";
 
 		header.appendChild(closeButton);
 
@@ -72,6 +73,14 @@ const CitationManager = {
 			id = id.slice(id.lastIndexOf('-') + 1);
 
 			CitationManager.setTab(Number(id));
+		});
+
+		// Listen for closeButton clicks
+		closeButton.addEventListener('click', (event) => {
+			let id = header.id;
+			id = id.slice(id.lastIndexOf('-') + 1);
+
+			CitationManager.removeTab(Number(id));
 		});
 
 		// Create the tab container
@@ -87,7 +96,16 @@ const CitationManager = {
 			container
 		));
 
-		if(active) this._activeTab = this._tabs[this._tabs.length - 1];
+		if(active) {
+			if(this._activeTab) {
+				this._activeTab._element.classList.remove('citation-tab-active');
+				this._activeTab._header.classList.remove('tab-header-active');
+			}
+
+			this._activeTab = this._tabs[this._tabs.length - 1];
+			this._activeTab._element.classList.add('citation-tab-active');
+			this._activeTab._header.classList.add('tab-header-active');
+		}
 	},
 
 
