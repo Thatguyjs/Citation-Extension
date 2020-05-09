@@ -1,19 +1,11 @@
 const Main = {
 
-	// Mouse position
-	mouse: {
-		x: 0,
-		y: 0
-	},
-
-
 	// Initialize the main object
 	init: function() {
-		// Update mouse position
-		window.addEventListener('mousemove', (event) => {
-			Main.mouse.x = event.clientX;
-			Main.mouse.y = event.clientY;
-		});
+
+		// Create the initial tab
+		CitationManager.createTab("My Citations");
+		CitationManager.setTab(0);
 
 		// Load the citation list
 		this.loadCitations();
@@ -28,22 +20,23 @@ const Main = {
 			this.rclick(event);
 			event.preventDefault();
 		});
+
+		// Set the event callback
+		CitationManager.setCallback(this.eventCallback);
 	},
 
 
-	// Load all citations
+	// Load local citations
 	loadCitations: function() {
 		ExtStorage.get("citation-storage", (data) => {
 			if(!Array.isArray(data['citation-storage'])) {
 				data['citation-storage'] = [];
 			}
 
-			CitationList.clear();
-
-			// Stored as JSON (for now)
-			CitationList.load({
-				citations: data['citation-storage']
-			}, this.eventCallback);
+			// Load into the default tab
+			CitationManager.setTab(0);
+			CitationManager.clearTab();
+			CitationManager.load(data['citation-storage'], []);
 		});
 	},
 
@@ -53,68 +46,12 @@ const Main = {
 		switch(type) {
 
 			case 'drag':
-			return Main.dragCitation(id);
+			return 0;
 
 			case 'show-containers':
 			return Main.showContainers(id);
 
 		}
-	},
-
-
-	// Drag citations
-	dragCitation: function(id) {
-		let citation = document.getElementById("citation-num-" + id);
-		let allCitations = Array.from(document.getElementsByClassName("citation"));
-
-		citation.style.position = "absolute";
-		citation.style.zIndex = 2;
-
-		let mouseOffset = {
-			x: Main.mouse.x - citation.getBoundingClientRect().x,
-			y: Main.mouse.y - citation.getBoundingClientRect().y
-		};
-
-		let moveEvent = () => {
-			citation.style.left = (Main.mouse.x - mouseOffset.x) + 'px';
-			citation.style.top = (Main.mouse.y - mouseOffset.y) + 'px';
-		}
-
-		let releaseEvent = () => {
-			let citationPos = citation.getBoundingClientRect();
-			let insertAfter = -1;
-
-			for(let c in allCitations) {
-				let otherPos = allCitations[c].getBoundingClientRect();
-
-				if(citationPos.y > otherPos.y) {
-					insertAfter = Number(c);
-				}
-			}
-
-			citation.parentNode.removeChild(citation);
-
-			let insertBefore = document.getElementById("citation-num-" + (insertAfter + 1));
-
-			if(insertBefore != null) {
-				insertBefore.parentNode.insertBefore(citation, insertBefore);
-			}
-			else {
-				document.getElementById("citation-list").appendChild(citation);
-			}
-
-			citation.style.position = "";
-			citation.style.left = "";
-			citation.style.top = "";
-
-			citation.style.zIndex = "";
-
-			window.removeEventListener('mousemove', moveEvent);
-			window.removeEventListener('mouseup', releaseEvent);
-		}
-
-		window.addEventListener('mousemove', moveEvent);
-		window.addEventListener('mouseup', releaseEvent);
 	},
 
 
@@ -173,7 +110,7 @@ const Main = {
 						ExtStorage.set(data);
 					});
 
-					document.getElementById("citation-list").removeChild(container);
+					CitationManager._activeTab._element.removeChild(container);
 				}
 			break;
 

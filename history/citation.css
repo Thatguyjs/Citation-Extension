@@ -33,7 +33,7 @@
 	border-top-left-radius: 5px;
 	border-bottom-left-radius: 5px;
 
-	cursor: move;
+	cursor: ns-resize;
 }
 
 .citation-drag {
