@@ -12,7 +12,7 @@ class CitationTab {
 		this._element = tabElement;
 
 		// Citation / container lists
-		this._citation = [];
+		this._citations = [];
 		this._containers = [];
 
 	}

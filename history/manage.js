@@ -106,6 +106,8 @@ const CitationManager = {
 			this._activeTab = this._tabs[this._tabs.length - 1];
 			this._activeTab._element.classList.add('citation-tab-active');
 			this._activeTab._header.classList.add('tab-header-active');
+
+			this._message.style.display = "block";
 		}
 	},
 
@@ -123,6 +125,14 @@ const CitationManager = {
 		this._activeTab._element.classList.add('citation-tab-active');
 		this._activeTab._header.classList.add('tab-header-active');
 
+		// Display "No citations found"
+		if(this._activeTab._citations.length) {
+			this._message.style.display = "none";
+		}
+		else {
+			this._message.style.display = "block";
+		}
+
 		return 0;
 	},
 
@@ -131,6 +141,8 @@ const CitationManager = {
 	load: function(citations=[], containers=[]) {
 		if(this._activeTab) {
 			this._activeTab.load(citations, containers);
+
+			if(citations.length) this._message.style.display = "none";
 		}
 	},
 
@@ -165,7 +177,7 @@ const CitationManager = {
 		this._tabs[tabId] = null;
 
 		// Remove null tabs
-		while(this._tabs.slice(-1) === null) {
+		while(this._tabs.slice(-1)[0] === null) {
 			this._tabs.length--;
 		}
 	},
@@ -199,7 +211,13 @@ const CitationManager = {
 
 	// Export citations
 	export: function() {
-		let historyString = HistoryFormatter.export(CitationManager._citations);
+		let historyString = HistoryFormatter.export({
+			containers: CitationManager._activeTab._containers,
+			citations: CitationManager._activeTab._citations
+		});
+
+		console.log(CitationManager._activeTab);
+
 		historyString = "data:text/chf," + historyString;
 
 		chrome.downloads.download({
