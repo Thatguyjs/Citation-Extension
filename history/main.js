@@ -110,8 +110,7 @@ const Main = {
 						ExtStorage.set(data);
 					});
 
-					console.log("TODO: Remove citation from list");
-					//CitationManager._tabList.removeChild(container);
+					CitationManager._activeTab._element.removeChild(container);
 				}
 			break;
 

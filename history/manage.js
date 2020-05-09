@@ -60,24 +60,30 @@ const CitationManager = {
 		let header = document.createElement('div');
 		header.className = "tab-header";
 		header.id = "tab-header-" + this._tabs.length;
-		header.innerHTML = "<span>" + name + "</span>";
+
+		let headerName = document.createElement('span');
+		headerName.innerHTML = name || "New Citation";
 
 		let closeButton = document.createElement('button');
 		closeButton.className = "tab-close";
 		closeButton.innerHTML = "<img src=\"svg/close_tab.svg\">";
 
+		header.appendChild(headerName);
 		header.appendChild(closeButton);
 
 		// Listen for header clicks
-		header.addEventListener('click', (event) => {
-			let id = event.target.id;
+		let headerClick = () => {
+			let id = header.id;
 			id = id.slice(id.lastIndexOf('-') + 1);
 
 			CitationManager.setTab(Number(id));
-		});
+		}
+
+		header.addEventListener('click', headerClick);
+		headerName.addEventListener('click', headerClick);
 
 		// Listen for closeButton clicks
-		closeButton.addEventListener('click', (event) => {
+		closeButton.addEventListener('click', () => {
 			let id = header.id;
 			id = id.slice(id.lastIndexOf('-') + 1);
 
@@ -215,8 +221,6 @@ const CitationManager = {
 			containers: CitationManager._activeTab._containers,
 			citations: CitationManager._activeTab._citations
 		});
-
-		console.log(CitationManager._activeTab);
 
 		historyString = "data:text/chf," + historyString;
 
