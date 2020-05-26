@@ -21,6 +21,11 @@ const CitationManager = {
 	_activeTab: null,
 
 
+	// If all citations are selected / "Select all" button
+	_allSelected: false,
+	_selectAllElem: document.getElementById("select-all"),
+
+
 	// Event callback
 	_eventCallback: () => {},
 
@@ -29,9 +34,14 @@ const CitationManager = {
 	init: function() {
 
 		// "Select all" button
-		document.getElementById('select-all').addEventListener(
-			'click', () => { CitationManager.selectAll(); }
-		);
+		this._selectAllElem.addEventListener('click', () => {
+			if(CitationManager._allSelected) {
+				CitationManager.deselectAll();
+			}
+			else {
+				CitationManager.selectAll();
+			}
+		});
 
 		// Listen for imports
 		document.getElementById('citation-import').addEventListener(
@@ -109,6 +119,12 @@ const CitationManager = {
 		));
 
 		if(active) {
+			// Uncheck the "Select all" button
+			if(this._allSelected) {
+				this._selectAllElem.children[0].src = "svg/checkbox_blank.svg";
+				this._allSelected = false;
+			}
+
 			if(this._activeTab) {
 				this._activeTab._element.classList.remove('citation-tab-active');
 				this._activeTab._header.classList.remove('tab-header-active');
@@ -139,6 +155,16 @@ const CitationManager = {
 		// Display "No citations found"
 		if(this._activeTab._citations.length) {
 			this._message.style.display = "none";
+
+			// Update the "Select all" button
+			if(this._activeTab._selected.length === this._activeTab._citations.length) {
+				this._allSelected = true;
+				this._selectAllElem.children[0].src = "svg/checkbox_checked.svg";
+			}
+			else {
+				this._allSelected = false;
+				this._selectAllElem.children[0].src = "svg/checkbox_blank.svg";
+			}
 		}
 		else {
 			this._message.style.display = "block";
@@ -196,21 +222,19 @@ const CitationManager = {
 
 	// Select all citations in the active tab
 	selectAll: function() {
-		let checkbox = document.getElementById('select-all').children[0];
+		this._selectAllElem.children[0].src = 'svg/checkbox_checked.svg';
 
-		// Select / deselect button & citations
-		if(checkbox.classList.contains('checked')) {
-			checkbox.src = 'svg/checkbox_blank.svg';
-			checkbox.classList.remove('checked');
+		this._activeTab.selectAll();
+		this._allSelected = true;
+	},
 
-			this._activeTab.deselectAll();
-		}
-		else {
-			checkbox.src = 'svg/checkbox_checked.svg';
-			checkbox.classList.add('checked');
 
-			this._activeTab.selectAll();
-		}
+	// De-select all citations in the active tab
+	deselectAll: function() {
+		this._selectAllElem.children[0].src = 'svg/checkbox_blank.svg';
+
+		this._activeTab.deselectAll();
+		this._allSelected = false;
 	},
 
 
@@ -245,10 +269,12 @@ const CitationManager = {
 		let selected = [];
 
 		// Get selected citations
-		for(let c in CitationManager._activeTab._selected) {
-			let index = CitationManager._activeTab._selected[c];
+		for(let t in CitationManager._tabs) {
+			for(let c in CitationManager._tabs[t]._selected) {
+				let index = CitationManager._tabs[t]._selected[c];
 
-			selected.push(CitationManager._activeTab._citations[index]);
+				selected.push(CitationManager._tabs[t]._citations[index]);
+			}
 		}
 
 

@@ -87,12 +87,15 @@ class CitationTab {
 	select(index) {
 		if(index < 0 || index >= this._citations.length) return -1;
 
-		let image = this._element.children[index].querySelector('.citation-checkbox');
-
-		image.classList.add('checked');
-		image.src = 'svg/checkbox_checked.svg';
+		let img = this._element.children[index].querySelector('.citation-checkbox');
+		img.src = 'svg/checkbox_checked.svg';
 
 		this._selected.push(index);
+
+		if(this._selected.length === this._citations.length) {
+			CitationManager._allSelected = true;
+			CitationManager._selectAllElem.children[0].src = "svg/checkbox_checked.svg";
+		}
 	}
 
 
@@ -101,12 +104,14 @@ class CitationTab {
 		if(index < 0 || index >= this._citations.length) return -1;
 		if(!this._selected.includes(index)) return -1;
 
-		let image = this._element.children[index].querySelector('.citation-checkbox');
-
-		image.classList.remove('checked');
-		image.src = 'svg/checkbox_blank.svg';
+		let img = this._element.children[index].querySelector('.citation-checkbox');
+		img.src = 'svg/checkbox_blank.svg';
 
 		this._selected.splice(this._selected.indexOf(index), 1);
+
+		// Update the CitationManager's select state
+		CitationManager._allSelected = false;
+		CitationManager._selectAllElem.children[0].src = "svg/checkbox_blank.svg";
 	}
 
 
