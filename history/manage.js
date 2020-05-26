@@ -28,6 +28,11 @@ const CitationManager = {
 	// Get basic information
 	init: function() {
 
+		// "Select all" button
+		document.getElementById('select-all').addEventListener(
+			'click', () => { CitationManager.selectAll(); }
+		);
+
 		// Listen for imports
 		document.getElementById('citation-import').addEventListener(
 			'click', this.import
@@ -35,7 +40,7 @@ const CitationManager = {
 
 		// Listen for exports
 		document.getElementById('citation-export').addEventListener(
-			'click', this.export
+			'click', this.exportSelected
 		);
 
 		// Load the citations
@@ -189,6 +194,26 @@ const CitationManager = {
 	},
 
 
+	// Select all citations in the active tab
+	selectAll: function() {
+		let checkbox = document.getElementById('select-all').children[0];
+
+		// Select / deselect button & citations
+		if(checkbox.classList.contains('checked')) {
+			checkbox.src = 'svg/checkbox_blank.svg';
+			checkbox.classList.remove('checked');
+
+			this._activeTab.deselectAll();
+		}
+		else {
+			checkbox.src = 'svg/checkbox_checked.svg';
+			checkbox.classList.add('checked');
+
+			this._activeTab.selectAll();
+		}
+	},
+
+
 	// Import citations
 	import: function() {
 		let area = document.getElementById('import-area');
@@ -216,10 +241,21 @@ const CitationManager = {
 
 
 	// Export citations
-	export: function() {
+	exportSelected: function() {
+		let selected = [];
+
+		// Get selected citations
+		for(let c in CitationManager._activeTab._selected) {
+			let index = CitationManager._activeTab._selected[c];
+
+			selected.push(CitationManager._activeTab._citations[index]);
+		}
+
+
+
 		let historyString = HistoryFormatter.export({
-			containers: CitationManager._activeTab._containers,
-			citations: CitationManager._activeTab._citations
+			citations: selected,
+			containers: CitationManager._activeTab._containers
 		});
 
 		historyString = "data:text/chf," + historyString;

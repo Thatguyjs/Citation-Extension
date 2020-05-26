@@ -14,10 +14,32 @@ body {
 }
 
 
+/* The current tab toolbar */
+.tab-toolbar {
+	/* background: rgba(255, 0, 0, 0.15); */
+}
+.tab-toolbar button {
+	display: inline-block;
+
+	min-width: 44px;
+	height: 34px;
+
+	background: var(--content-background-dark);
+	border-radius: 2px;
+
+	box-shadow: 1px 1px 3px rgb(20, 20, 20);
+	border: none;
+}
+.tab-toolbar button > img {
+	filter: invert(0.3);
+}
+
+
 /* Left Menu */
 #left-menu {
 	width: 20%;
 }
+
 
 /* Hidden import area */
 #import-area {
@@ -50,6 +72,30 @@ body {
 }
 
 
+/* Containers from the active tab */
+#tab-containers {
+	margin-top: 20px;
+	margin-left: 10%;
+
+	width: 80%;
+	min-height: 100px;
+
+	background: var(--content-background-dark);
+	border-radius: 4px;
+	box-shadow: 2px 2px 4px rgb(26, 27, 30);
+}
+
+#tab-containers span {
+	display: inline-block;
+
+	margin: 6px 12px;
+
+	color: var(--text-primary-dark);
+	font-size: 16px;
+	font-family: system-ui;
+}
+
+
 /* Citation Tabs */
 #citation-tabs {
 	position: relative;
@@ -57,13 +103,12 @@ body {
 
 .citation-tab {
 	display: none;
-
-	/* background: red; */
 }
 
 .citation-tab-active {
 	display: block;
 }
+
 
 /* Citation tab header */
 #tab-headers {
@@ -73,7 +118,7 @@ body {
 	width: calc(100% - 3px);
 	height: 32px;
 
-	background: rgb(24, 27, 29);
+	background: rgb(26, 27, 29);
 	border: 1px solid rgb(14, 18, 20);
 	border-bottom: none;
 }
@@ -137,6 +182,7 @@ body {
 	color: rgb(210, 215, 222);
 }
 
+
 /* "No citations" message */
 #citations-empty {
 	display: block;
@@ -160,7 +206,7 @@ body {
 
 /* Right Menu */
 #right-menu {
-	width: 20%;
+	width: 80px;
 }
 
 #social-links {
@@ -197,7 +243,7 @@ body {
 #searchbar {
 	float: left;
 
-	margin: 10px;
+	margin: 8px 10px 0 10px;
 	padding: 2px 5px;
 
 	width: 650px;
@@ -211,25 +257,25 @@ body {
 }
 
 /* Refresh citation list */
-#refresh-list {
+#filter-search {
 	position: relative;
 
 	float: left;
-	margin-top: 10px;
+	margin-top: 8px;
 
 	padding: 0;
 
 	width: 40px;
 	height: 32px;
 
-	background: rgb(52, 53, 57);
+	background: var(--content-background-dark);
 	box-shadow: 1px 1px 3px rgb(10, 12, 12);
 	border-radius: 2px;
 
 	cursor: pointer;
 }
 
-#refresh-list img {
+#filter-search img {
 	position: absolute;
 	left: 50%;
 	top: 50%;

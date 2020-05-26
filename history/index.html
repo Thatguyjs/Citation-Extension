@@ -18,7 +18,7 @@
 
 		<!-- Page Content -->
 		<table id="content">
-			<tr class="content-row" height="55px">
+			<tr class="content-row" height="50px">
 				<!-- Extra Margin -->
 				<td></td>
 
@@ -26,11 +26,27 @@
 				<td>
 					<input id="searchbar" type="text" placeholder="Search">
 
-					<!-- Refresh list -->
-					<div id="refresh-list">
-						<img src="svg/refresh_list.svg">
+					<!-- Search filtering -->
+					<div id="filter-search">
+						<img src="svg/filter_search.svg">
 					</div>
 				</td>
+			</tr>
+			<tr class="content-row" height="40px">
+				<!-- Extra Margin -->
+				<td></td>
+
+				<!-- Main toolbar -->
+				<td class="tab-toolbar">
+
+					<button id="select-all" title="Select all">
+						<img src="svg/checkbox_blank.svg">
+					</button>
+
+				</td>
+
+				<td></td>
+
 			</tr>
 			<tr class="content-row">
 				<!-- Left Menu -->
@@ -42,6 +58,15 @@
 					<!-- Import / Export citations -->
 					<button id="citation-import">Import File</button>
 					<button id="citation-export">Export Selected</button>
+
+					<!-- Containers from the active tab -->
+					<div id="tab-containers">
+						<span>Containers</span>
+
+						<div id="tab-container-list">
+
+						</div>
+					</div>
 
 				</td>
 
@@ -64,10 +89,10 @@
 				<td id="right-menu">
 					<!-- Social Media -->
 					<div id="social-links">
-						<a href="https://instagram.com/thatguy.js" target="_blank">
+						<a href="https://instagram.com/thatguy.js" target="_blank" rel="noreferrer">
 							<img src="images/ig_logo.png">
 						</a>
-						<a href="https://github.com/Thatguyjs" target="_blank">
+						<a href="https://github.com/Thatguyjs" target="_blank" rel="noreferrer">
 							<img src="images/github_logo.png">
 						</a>
 					</div>

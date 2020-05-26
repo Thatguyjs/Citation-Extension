@@ -4,16 +4,10 @@ const Main = {
 	init: function() {
 
 		// Create the initial tab
-		CitationManager.createTab("My Citations");
-		CitationManager.setTab(0);
+		CitationManager.createTab("My Citations", true);
 
 		// Load the citation list
 		this.loadCitations();
-
-		// Refresh the citation list
-		document.getElementById("refresh-list").addEventListener('click', () => {
-			this.loadCitations();
-		});
 
 		// Override right-clicks
 		window.addEventListener('contextmenu', (event) => {

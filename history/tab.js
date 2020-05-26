@@ -15,6 +15,9 @@ class CitationTab {
 		this._citations = [];
 		this._containers = [];
 
+		// Selected citations
+		this._selected = [];
+
 	}
 
 
@@ -48,7 +51,19 @@ class CitationTab {
 
 			element.querySelector('.citation-created').innerHTML = createdDate;
 
+			// Selecting citations
+			element.querySelector('.citation-checkbox').addEventListener('click', (event) => {
+				if(CitationManager._activeTab.isSelected(Number(c))) {
+					CitationManager._activeTab.deselect(Number(c));
+				}
+				else {
+					CitationManager._activeTab.select(Number(c));
+				}
+			});
+
+			// Dragging citations
 			element.querySelector('.citation-section-left').addEventListener('mousedown', (event) => {
+				console.log("DRAG");
 				CitationManager._eventCallback('drag', Number(c));
 				event.preventDefault();
 			});
@@ -65,6 +80,61 @@ class CitationTab {
 		for(let c in children) {
 			this._element.removeChild(children[c]);
 		}
+	}
+
+
+	// Select a citation
+	select(index) {
+		if(index < 0 || index >= this._citations.length) return -1;
+
+		let image = this._element.children[index].querySelector('.citation-checkbox');
+
+		image.classList.add('checked');
+		image.src = 'svg/checkbox_checked.svg';
+
+		this._selected.push(index);
+	}
+
+
+	// De-select a citation
+	deselect(index) {
+		if(index < 0 || index >= this._citations.length) return -1;
+		if(!this._selected.includes(index)) return -1;
+
+		let image = this._element.children[index].querySelector('.citation-checkbox');
+
+		image.classList.remove('checked');
+		image.src = 'svg/checkbox_blank.svg';
+
+		this._selected.splice(this._selected.indexOf(index), 1);
+	}
+
+
+	// Select all citations
+	selectAll() {
+		let length = this._citations.length;
+
+		for(let i = 0; i < length; i++) {
+			this.select(i);
+		}
+	}
+
+
+	// De-select all citations
+	deselectAll() {
+		let length = this._citations.length;
+
+		for(let i = 0; i < length; i++) {
+			this.deselect(i);
+		}
+	}
+
+
+	// Check if a citation is selected
+	isSelected(index) {
+		if(index < 0 || index >= this._citations.length) return false;
+
+		return this._selected.includes(index);
 	}
 
 };
