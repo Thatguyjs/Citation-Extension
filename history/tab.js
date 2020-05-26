@@ -63,7 +63,6 @@ class CitationTab {
 
 			// Dragging citations
 			element.querySelector('.citation-section-left').addEventListener('mousedown', (event) => {
-				console.log("DRAG");
 				CitationManager._eventCallback('drag', Number(c));
 				event.preventDefault();
 			});
@@ -92,10 +91,8 @@ class CitationTab {
 
 		this._selected.push(index);
 
-		if(this._selected.length === this._citations.length) {
-			CitationManager._allSelected = true;
-			CitationManager._selectAllElem.children[0].src = "svg/checkbox_checked.svg";
-		}
+		// Update the CitationManager's selected state
+		CitationManager.updateAllSelected();
 	}
 
 
@@ -109,9 +106,8 @@ class CitationTab {
 
 		this._selected.splice(this._selected.indexOf(index), 1);
 
-		// Update the CitationManager's select state
-		CitationManager._allSelected = false;
-		CitationManager._selectAllElem.children[0].src = "svg/checkbox_blank.svg";
+		// Update the CitationManager's selected state
+		CitationManager.updateAllSelected();
 	}
 
 

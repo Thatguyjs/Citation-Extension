@@ -35,12 +35,8 @@ const CitationManager = {
 
 		// "Select all" button
 		this._selectAllElem.addEventListener('click', () => {
-			if(CitationManager._allSelected) {
-				CitationManager.deselectAll();
-			}
-			else {
-				CitationManager.selectAll();
-			}
+			if(CitationManager._allSelected) CitationManager.deselectAll();
+			else CitationManager.selectAll();
 		});
 
 		// Listen for imports
@@ -119,12 +115,6 @@ const CitationManager = {
 		));
 
 		if(active) {
-			// Uncheck the "Select all" button
-			if(this._allSelected) {
-				this._selectAllElem.children[0].src = "svg/checkbox_blank.svg";
-				this._allSelected = false;
-			}
-
 			if(this._activeTab) {
 				this._activeTab._element.classList.remove('citation-tab-active');
 				this._activeTab._header.classList.remove('tab-header-active');
@@ -157,14 +147,7 @@ const CitationManager = {
 			this._message.style.display = "none";
 
 			// Update the "Select all" button
-			if(this._activeTab._selected.length === this._activeTab._citations.length) {
-				this._allSelected = true;
-				this._selectAllElem.children[0].src = "svg/checkbox_checked.svg";
-			}
-			else {
-				this._allSelected = false;
-				this._selectAllElem.children[0].src = "svg/checkbox_blank.svg";
-			}
+			this.updateAllSelected();
 		}
 		else {
 			this._message.style.display = "block";
@@ -179,7 +162,12 @@ const CitationManager = {
 		if(this._activeTab) {
 			this._activeTab.load(citations, containers);
 
-			if(citations.length) this._message.style.display = "none";
+			if(citations.length) {
+				this._message.style.display = "none";
+
+				// Update the "Select all" button
+				this.updateAllSelected();
+			}
 		}
 	},
 
@@ -200,8 +188,12 @@ const CitationManager = {
 		// Switch tabs if the current tab is closed
 		if(this._activeTab._id == tabId) {
 			this._activeTab = this._tabs[tabId - 1];
+
 			this._activeTab._element.classList.add('citation-tab-active');
 			this._activeTab._header.classList.add('tab-header-active');
+
+			// Check for selected citations
+			this.updateAllSelected();
 		}
 
 		// Remove the header
@@ -235,6 +227,21 @@ const CitationManager = {
 
 		this._activeTab.deselectAll();
 		this._allSelected = false;
+	},
+
+
+	// Check if all citations are selected in the active tab
+	updateAllSelected: function() {
+		let all = this._activeTab._selected.length === this._activeTab._citations.length;
+
+		if(all) {
+			this._selectAllElem.children[0].src = 'svg/checkbox_checked.svg';
+			this._allSelected = true;
+		}
+		else {
+			this._selectAllElem.children[0].src = 'svg/checkbox_blank.svg';
+			this._allSelected = false;
+		}
 	},
 
 
