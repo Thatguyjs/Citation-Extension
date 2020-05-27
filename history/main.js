@@ -64,6 +64,7 @@ const Main = {
 			if(event.path[e].classList.contains('citation-table')) {
 				ContextMenu.create([
 					"Copy",
+					"Open Link",
 					"#break",
 					"Edit",
 					"Delete"
@@ -95,6 +96,8 @@ const Main = {
 
 	// Callback for clicking a citation context menu button
 	citationMenuClick: function(text, container) {
+		let index = container.id.slice(container.id.lastIndexOf('-') + 1);
+
 		switch(text) {
 
 			case 'Copy':
@@ -103,17 +106,19 @@ const Main = {
 				).catch(alert);
 			break;
 
+			case 'Open Link':
+				let citation = CitationManager._activeTab._citations[index];
+				window.open(citation.url);
+			break;
+
 			case 'Edit':
 				alert("Editing is not implemented yet");
 			break;
 
 			case 'Delete':
 				if(confirm("Delete the citation?")) {
-					let index = container.id.slice(container.id.lastIndexOf('-') + 1);
-					index = Number(index);
-
 					ExtStorage.get("citation-storage", (data) => {
-						data['citation-storage'].splice(index, 1);
+						data['citation-storage'].splice(Number(index), 1);
 
 						// TEMP COMMENT
 						ExtStorage.set(data);
@@ -145,13 +150,13 @@ const Main = {
 				for(let t in CitationManager._tabs) {
 					if(t === index) continue;
 
-					CitationManager.removeTab(Number(index));
+					CitationManager.removeTab(Number(t));
 				}
 			break;
 
 			case 'Close All Tabs':
 				for(let t in CitationManager._tabs) {
-					CitationManager.removeTab(Number(index));
+					CitationManager.removeTab(Number(t));
 				}
 			break;
 

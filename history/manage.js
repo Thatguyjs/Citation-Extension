@@ -32,13 +32,6 @@ const CitationManager = {
 
 	// Get basic information
 	init: function() {
-
-		// "Select all" button
-		this._selectAllElem.addEventListener('click', () => {
-			if(CitationManager._allSelected) CitationManager.deselectAll();
-			else CitationManager.selectAll();
-		});
-
 		// Listen for imports
 		document.getElementById('citation-import').addEventListener(
 			'click', this.import

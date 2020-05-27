@@ -32,8 +32,6 @@
 
 	border-top-left-radius: 5px;
 	border-bottom-left-radius: 5px;
-
-	cursor: ns-resize;
 }
 
 .citation-drag {
@@ -106,12 +104,12 @@
 
 /* Right section */
 .citation-section-right {
-	vertical-align: top;
-
 	width: 60px;
 
 	border-top-right-radius: 5px;
 	border-bottom-right-radius: 5px;
+
+	cursor: ns-resize;
 }
 
 .citation-checkbox {

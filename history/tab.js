@@ -62,10 +62,12 @@ class CitationTab {
 			});
 
 			// Dragging citations
-			element.querySelector('.citation-section-left').addEventListener('mousedown', (event) => {
-				CitationManager._eventCallback('drag', Number(c));
-				event.preventDefault();
-			});
+			element.querySelector('.citation-section-right').addEventListener(
+				'mousedown', (event) => {
+					CitationManager._eventCallback('drag', Number(c));
+					event.preventDefault();
+				}
+			);
 
 			this._element.appendChild(element);
 		}

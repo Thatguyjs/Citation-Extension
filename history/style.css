@@ -18,8 +18,12 @@ body {
 .tab-toolbar {
 	/* background: rgba(255, 0, 0, 0.15); */
 }
+.tab-toolbar button:first-child {
+	margin-left: 11px;
+}
 .tab-toolbar button {
 	display: inline-block;
+	margin: 0 4px;
 
 	min-width: 44px;
 	height: 34px;
@@ -31,7 +35,7 @@ body {
 	border: none;
 }
 .tab-toolbar button > img {
-	filter: invert(0.3);
+	filter: invert(0.4);
 }
 
 
@@ -113,7 +117,7 @@ body {
 }
 
 
-/* Citation tab header */
+/* Citation tab headers */
 #tab-headers {
 	position: absolute;
 	bottom: 0;
@@ -144,8 +148,14 @@ body {
 	top: 6px;
 	left: 10px;
 
+	width: 130px;
+
 	font-size: 14px;
 	color: rgb(100, 103, 108);
+
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 
 	cursor: default;
 }

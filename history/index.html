@@ -39,8 +39,19 @@
 				<!-- Main toolbar -->
 				<td class="tab-toolbar">
 
-					<button id="select-all" title="Select all">
+					<!-- Select all citations in the current tab -->
+					<button id="select-all" title="Select All">
 						<img src="svg/checkbox_blank.svg">
+					</button>
+
+					<!-- Copy selected citations -->
+					<button id="copy-selected" title="Copy Selected">
+						<img src="svg/copy.svg">
+					</button>
+
+					<!-- Delete selected citations -->
+					<button id="delete-selected" title="Delete Selected">
+						<img src="svg/delete.svg">
 					</button>
 
 				</td>
@@ -109,6 +120,7 @@
 
 		<script src="tab.js"></script>
 		<script src="manage.js"></script>
+		<script src="toolbar.js"></script>
 		<script src="main.js"></script>
 
 		<script src="load.js"></script>
