@@ -83,7 +83,7 @@ class CitationTab {
 
 
 	// Select a citation
-	select(index) {
+	select(index, check=true) {
 		if(index < 0 || index >= this._citations.length) return -1;
 
 		let img = this._element.children[index].querySelector('.citation-checkbox');
@@ -92,12 +92,12 @@ class CitationTab {
 		this._selected.push(index);
 
 		// Update the CitationManager's selected state
-		CitationManager.updateAllSelected();
+		if(check) CitationManager.updateAllSelected();
 	}
 
 
 	// De-select a citation
-	deselect(index) {
+	deselect(index, check=true) {
 		if(index < 0 || index >= this._citations.length) return -1;
 		if(!this._selected.includes(index)) return -1;
 
@@ -107,7 +107,7 @@ class CitationTab {
 		this._selected.splice(this._selected.indexOf(index), 1);
 
 		// Update the CitationManager's selected state
-		CitationManager.updateAllSelected();
+		if(check) CitationManager.updateAllSelected();
 	}
 
 
@@ -116,7 +116,7 @@ class CitationTab {
 		let length = this._citations.length;
 
 		for(let i = 0; i < length; i++) {
-			this.select(i);
+			this.select(i, false);
 		}
 	}
 
@@ -126,7 +126,7 @@ class CitationTab {
 		let length = this._citations.length;
 
 		for(let i = 0; i < length; i++) {
-			this.deselect(i);
+			this.deselect(i, false);
 		}
 	}
 

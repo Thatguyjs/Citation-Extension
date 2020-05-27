@@ -60,7 +60,7 @@ const Main = {
 		for(let e in event.path) {
 			if(!event.path[e].className) continue;
 
-			// Click on a citation
+			// Right-click on a citation
 			if(event.path[e].classList.contains('citation-table')) {
 				ContextMenu.create([
 					"Copy",
@@ -68,18 +68,33 @@ const Main = {
 					"Edit",
 					"Delete"
 				], (index, text) => {
-					this.menuClick(text, event.path[e].parentNode);
+					this.citationMenuClick(text, event.path[e].parentNode);
 				}, true);
 
 				break;
+			}
+
+			// Right-click on a tab
+			else if(event.path[e].classList.contains('tab-header')) {
+				ContextMenu.create([
+					"Close Tab",
+					"Close Other Tabs",
+					"Close All Tabs",
+					"#break",
+					"Merge With...",
+					"#break",
+					"Duplicate Tab"
+				], (index, text) => {
+					this.tabMenuClick(text, event.path[e]);
+				}, true);
 			}
 
 		}
 	},
 
 
-	// Callback for clicking a context menu button
-	menuClick: function(text, container) {
+	// Callback for clicking a citation context menu button
+	citationMenuClick: function(text, container) {
 		switch(text) {
 
 			case 'Copy':
@@ -106,6 +121,51 @@ const Main = {
 
 					CitationManager._activeTab._element.removeChild(container);
 				}
+			break;
+
+		}
+	},
+
+
+	// Callback for clicking a tab context menu button
+	tabMenuClick: function(text, tab) {
+		let index = tab.id.slice(tab.id.lastIndexOf('-') + 1);
+		let name = tab.querySelector('span').innerHTML;
+
+		let clickedTab = CitationManager._tabs[Number(index)];
+
+		switch(text) {
+
+			// Closing stuff
+			case 'Close Tab':
+				tab.querySelector('button').click();
+			break;
+
+			case 'Close Other Tabs':
+				for(let t in CitationManager._tabs) {
+					if(t === index) continue;
+
+					CitationManager.removeTab(Number(index));
+				}
+			break;
+
+			case 'Close All Tabs':
+				for(let t in CitationManager._tabs) {
+					CitationManager.removeTab(Number(index));
+				}
+			break;
+
+
+			// Modification stuff
+			case 'Merge With...':
+				alert("Merging is not implemented yet!");
+			break;
+
+
+			// Other tab stuff
+			case 'Duplicate Tab':
+				CitationManager.createTab(name + ' (duplicate)', true);
+				CitationManager.load(clickedTab._citations, clickedTab._containers);
 			break;
 
 		}
