@@ -47,6 +47,9 @@ const Toolbar = {
 					}
 				}
 
+				// Don't copy if nothing's selected
+				if(!copyString.length) break;
+
 				navigator.clipboard.writeText(
 					copyString.trimEnd()
 				).catch(alert);

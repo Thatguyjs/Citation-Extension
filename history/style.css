@@ -14,7 +14,13 @@ body {
 }
 
 
-/* The current tab toolbar */
+/* Main toolbar */
+#main-toolbar {
+	width: 690px;
+}
+
+
+/* Tab toolbars */
 .tab-toolbar {
 	/* background: rgba(255, 0, 0, 0.15); */
 }
@@ -39,40 +45,18 @@ body {
 }
 
 
+/* Tab selection type */
+#selection-type {
+	float: right;
+	margin-right: 17px;
+}
+
+
 /* Left Menu */
 #left-menu {
+	position: relative;
+
 	width: 20%;
-}
-
-
-/* Hidden import area */
-#import-area {
-	display: none;
-}
-
-/* Import / Export citations */
-#citation-import {
-	padding: 10px 20px;
-
-	color: var(--text-secondary-dark);
-
-	background: var(--content-background-dark);
-	border-radius: 3px;
-
-	box-shadow: 1px 1px 4px rgb(20, 20, 20);
-	border: none;
-}
-
-#citation-export {
-	padding: 10px 20px;
-
-	color: var(--text-secondary-dark);
-
-	background: var(--content-background-dark);
-	border-radius: 3px;
-
-	box-shadow: 1px 1px 4px rgb(20, 20, 20);
-	border: none;
 }
 
 
@@ -117,10 +101,31 @@ body {
 }
 
 
+/* "No citations" message */
+#citations-empty {
+	display: block;
+	position: relative;
+
+	width: 100%;
+	height: 40px;
+}
+#citations-empty p {
+	position: absolute;
+	margin: 0;
+
+	top: 50%;
+	left: 325px; /* Half the search bar width */
+	transform: translate(-50%, -50%);
+
+	color: var(--text-secondary-dark);
+	font-size: 17px;
+}
+
+
 /* Citation tab headers */
 #tab-headers {
 	position: absolute;
-	bottom: 0;
+	bottom: -1px;
 
 	width: calc(100% - 3px);
 	height: 32px;
@@ -131,12 +136,12 @@ body {
 }
 
 .tab-header {
-	display: inline-block;
 	position: relative;
+	display: inline-block;
 
 	width: 180px;
 	min-width: 110px;
-	height: calc(100% + 1px);
+	height: 100%;
 
 	background: Transparent;
 	border-left: 3px solid Transparent;
@@ -196,24 +201,42 @@ body {
 }
 
 
-/* "No citations" message */
-#citations-empty {
-	display: block;
+/* New tab (import) */
+#import-tab {
+	display: inline-block;
 	position: relative;
 
-	width: 100%;
-	height: 40px;
+	margin: 5px;
+
+	height: 22px;
+	width: 22px;
+
+	background: Transparent;
+	border-radius: 3px;
+
+	transition: background 0.2s;
 }
-#citations-empty p {
+
+#import-tab:hover {
+	background: var(--content-background-dark);
+
+	cursor: pointer;
+}
+
+#import-tab img {
 	position: absolute;
-	margin: 0;
+	left: 1px;
+	top: 1px;
 
-	top: 50%;
-	left: 325px; /* Half the search bar width */
-	transform: translate(-50%, -50%);
+	width: 20px;
 
-	color: var(--text-secondary-dark);
-	font-size: 17px;
+	filter: invert(0.4);
+}
+
+
+/* Hidden import area */
+#import-area {
+	display: none;
 }
 
 

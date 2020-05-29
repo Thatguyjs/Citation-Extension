@@ -16,9 +16,15 @@ const CitationManager = {
 	_citationHTML: "",
 
 
-	// All tabs / active tab
+	// All tabs / active tab / new tab button
 	_tabs: [],
 	_activeTab: null,
+	_createTab: document.getElementById("import-tab"),
+
+
+	// Selection type & element
+	_selectionType: 'active',
+	_selectionTypeElem: document.getElementById("selection-type"),
 
 
 	// If all citations are selected / "Select all" button
@@ -32,13 +38,29 @@ const CitationManager = {
 
 	// Get basic information
 	init: function() {
+		// Change the selection type
+		this._selectionTypeElem.addEventListener('click', (event) => {
+			if(CitationManager._selectionType === 'active') {
+				CitationManager._selectionType = 'all';
+
+				CitationManager._selectionTypeElem.children[0].src = "svg/tabs_all.svg";
+				CitationManager._selectionTypeElem.title = "All Tabs";
+			}
+			else {
+				CitationManager._selectionType = 'active';
+
+				CitationManager._selectionTypeElem.children[0].src = "svg/tabs_active.svg";
+				CitationManager._selectionTypeElem.title = "Active Tab";
+			}
+		});
+
 		// Listen for imports
-		document.getElementById('citation-import').addEventListener(
+		document.getElementById('import-tab').addEventListener(
 			'click', this.import
 		);
 
 		// Listen for exports
-		document.getElementById('citation-export').addEventListener(
+		document.getElementById('export-selected').addEventListener(
 			'click', this.exportSelected
 		);
 
@@ -98,7 +120,7 @@ const CitationManager = {
 		let container = document.createElement('div');
 		container.className = "citation-tab";
 
-		this._tabHeaders.appendChild(header);
+		this._tabHeaders.insertBefore(header, this._createTab);
 		this._tabList.appendChild(container);
 
 		this._tabs.push(new CitationTab(
