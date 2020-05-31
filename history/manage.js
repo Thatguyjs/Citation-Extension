@@ -59,10 +59,7 @@ const CitationManager = {
 			'click', this.import
 		);
 
-		// Listen for exports
-		document.getElementById('export-selected').addEventListener(
-			'click', this.exportSelected
-		);
+		// Exports are handled in toolbar.js
 
 		// Load the citations
 		return new Promise((resolve, reject) => {
@@ -260,6 +257,40 @@ const CitationManager = {
 	},
 
 
+	// Get selected citations
+	getSelected: function() {
+		let citations = [];
+		let elements = [];
+
+		// Get from active tab
+		if(this._selectionType === 'active') {
+			for(let c in this._activeTab._selected) {
+				let index = this._activeTab._selected[c];
+
+				citations.push(this._activeTab._citations[index]);
+				elements.push(this._activeTab._element.querySelector('#citation-num-' + c));
+			}
+		}
+
+		// Get from all tabs
+		else {
+			for(let t in this._tabs) {
+				for(let c in this._tabs[c]._selected) {
+					let index = this._tabs[t]._selected[c];
+
+					citations.push(this._tabs[t]._citations[index]);
+					elements.push(this._tabs[t]._element.querySelector('#citation-num-' + c));
+				}
+			}
+		}
+
+		return {
+			citations,
+			elements
+		};
+	},
+
+
 	// Import citations
 	import: function() {
 		let area = document.getElementById('import-area');
@@ -283,35 +314,6 @@ const CitationManager = {
 		};
 
 		area.click();
-	},
-
-
-	// Export citations
-	exportSelected: function() {
-		let selected = [];
-
-		// Get selected citations
-		for(let t in CitationManager._tabs) {
-			for(let c in CitationManager._tabs[t]._selected) {
-				let index = CitationManager._tabs[t]._selected[c];
-
-				selected.push(CitationManager._tabs[t]._citations[index]);
-			}
-		}
-
-
-
-		let historyString = HistoryFormatter.export({
-			citations: selected,
-			containers: CitationManager._activeTab._containers
-		});
-
-		historyString = "data:text/chf," + historyString;
-
-		chrome.downloads.download({
-			url: historyString,
-			filename: "history.chf"
-		});
 	}
 
 };

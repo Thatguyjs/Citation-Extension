@@ -7,7 +7,8 @@ const Toolbar = {
 	_buttons: {
 		'select': document.getElementById('select-all'),
 		'copy': document.getElementById('copy-selected'),
-		'delete': document.getElementById('delete-selected')
+		'delete': document.getElementById('delete-selected'),
+		'export': document.getElementById('export-selected')
 	},
 
 
@@ -23,41 +24,54 @@ const Toolbar = {
 
 	// Toolbar button actions
 	click: function(button, event) {
+		let selected = CitationManager.getSelected();
+
 		switch(button) {
 
-			// Select all citations in the active tab
+			// Select / deselect citations in the active tab
 			case 'select':
 				if(CitationManager._allSelected) CitationManager.deselectAll();
 				else CitationManager.selectAll();
 			break;
 
-			// Copy all selected citations
+			// Copy selected citations
 			case 'copy':
+				// Don't copy if no citations are selected
+				if(!selected.citations.length) break;
+
 				let copyString = "";
 
-				for(let t in CitationManager._tabs) {
-					let tab = CitationManager._tabs[t]._element;
+				// Append to string
+				for(let e in selected.elements) {
+					let name = selected.elements[e].querySelector('pre');
 
-					for(let c in CitationManager._tabs[t]._selected) {
-						let index = CitationManager._tabs[t]._selected[c];
-
-						let citation = tab.querySelector('#citation-num-' + index);
-
-						copyString += citation.querySelector('pre').innerText + '\n\n';
-					}
+					copyString += name.innerText + '\n\n';
 				}
 
-				// Don't copy if nothing's selected
-				if(!copyString.length) break;
-
+				// Copy to clipboard
 				navigator.clipboard.writeText(
 					copyString.trimEnd()
 				).catch(alert);
 			break;
 
-			// Delete all selected citations
+			// Delete selected citations
 			case 'delete':
 				alert("Mass deleting is not implemented yet!");
+			break;
+
+			// Export selected citations
+			case 'export':
+				let historyString = HistoryFormatter.export({
+					citations: selected.citations,
+					containers: [] // TODO
+				});
+
+				historyString = "data:text/chf," + historyString;
+
+				chrome.downloads.download({
+					url: historyString,
+					filename: "history.chf"
+				});
 			break;
 
 		}
