@@ -14,39 +14,73 @@ body {
 }
 
 
+/* Main toolbar */
+#main-toolbar {
+	width: 690px;
+}
+
+
+/* Tab toolbars */
+.tab-toolbar {
+	/* background: rgba(255, 0, 0, 0.15); */
+}
+.tab-toolbar button:first-child {
+	margin-left: 11px;
+}
+.tab-toolbar button {
+	display: inline-block;
+	margin: 0 4px;
+
+	min-width: 44px;
+	height: 34px;
+
+	background: var(--content-background-dark);
+	border-radius: 2px;
+
+	box-shadow: 1px 1px 3px rgb(20, 20, 20);
+	border: none;
+}
+.tab-toolbar button > img {
+	filter: invert(0.4);
+}
+
+
+/* Tab selection type */
+#selection-type {
+	float: right;
+	margin-right: 17px;
+}
+
+
 /* Left Menu */
 #left-menu {
+	position: relative;
+
 	width: 20%;
 }
 
-/* Hidden import area */
-#import-area {
-	display: none;
-}
 
-/* Import / Export citations */
-#citation-import {
-	padding: 10px 20px;
+/* Containers from the active tab */
+#tab-containers {
+	margin-top: 20px;
+	margin-left: 10%;
 
-	color: var(--text-secondary-dark);
+	width: 80%;
+	min-height: 100px;
 
 	background: var(--content-background-dark);
-	border-radius: 3px;
-
-	box-shadow: 1px 1px 4px rgb(20, 20, 20);
-	border: none;
+	border-radius: 4px;
+	box-shadow: 2px 2px 4px rgb(26, 27, 30);
 }
 
-#citation-export {
-	padding: 10px 20px;
+#tab-containers span {
+	display: inline-block;
 
-	color: var(--text-secondary-dark);
+	margin: 6px 12px;
 
-	background: var(--content-background-dark);
-	border-radius: 3px;
-
-	box-shadow: 1px 1px 4px rgb(20, 20, 20);
-	border: none;
+	color: var(--text-primary-dark);
+	font-size: 16px;
+	font-family: system-ui;
 }
 
 
@@ -58,33 +92,56 @@ body {
 .citation-tab {
 	display: none;
 
-	/* background: red; */
+	height: calc(100% - 32px);
+	overflow-y: scroll;
 }
 
 .citation-tab-active {
 	display: block;
 }
 
-/* Citation tab header */
+
+/* "No citations" message */
+#citations-empty {
+	display: block;
+	position: relative;
+
+	width: 100%;
+	height: 40px;
+}
+#citations-empty p {
+	position: absolute;
+	margin: 0;
+
+	top: 50%;
+	left: 325px; /* Half the search bar width */
+	transform: translate(-50%, -50%);
+
+	color: var(--text-secondary-dark);
+	font-size: 17px;
+}
+
+
+/* Citation tab headers */
 #tab-headers {
 	position: absolute;
-	bottom: 0;
+	bottom: -1px;
 
 	width: calc(100% - 3px);
 	height: 32px;
 
-	background: rgb(24, 27, 29);
+	background: rgb(26, 27, 29);
 	border: 1px solid rgb(14, 18, 20);
 	border-bottom: none;
 }
 
 .tab-header {
-	display: inline-block;
 	position: relative;
+	display: inline-block;
 
 	width: 180px;
 	min-width: 110px;
-	height: calc(100% + 1px);
+	height: 100%;
 
 	background: Transparent;
 	border-left: 3px solid Transparent;
@@ -96,8 +153,14 @@ body {
 	top: 6px;
 	left: 10px;
 
+	width: 130px;
+
 	font-size: 14px;
 	color: rgb(100, 103, 108);
+
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 
 	cursor: default;
 }
@@ -137,30 +200,49 @@ body {
 	color: rgb(210, 215, 222);
 }
 
-/* "No citations" message */
-#citations-empty {
-	display: block;
+
+/* New tab (import) */
+#import-tab {
+	display: inline-block;
 	position: relative;
 
-	width: 100%;
-	height: 40px;
+	margin: 5px;
+
+	height: 22px;
+	width: 22px;
+
+	background: Transparent;
+	border-radius: 3px;
+
+	transition: background 0.2s;
 }
-#citations-empty p {
+
+#import-tab:hover {
+	background: var(--content-background-dark);
+
+	cursor: pointer;
+}
+
+#import-tab img {
 	position: absolute;
-	margin: 0;
+	left: 1px;
+	top: 1px;
 
-	top: 50%;
-	left: 325px; /* Half the search bar width */
-	transform: translate(-50%, -50%);
+	width: 20px;
 
-	color: var(--text-secondary-dark);
-	font-size: 17px;
+	filter: invert(0.4);
+}
+
+
+/* Hidden import area */
+#import-area {
+	display: none;
 }
 
 
 /* Right Menu */
 #right-menu {
-	width: 20%;
+	width: 80px;
 }
 
 #social-links {
@@ -197,7 +279,7 @@ body {
 #searchbar {
 	float: left;
 
-	margin: 10px;
+	margin: 8px 10px 0 10px;
 	padding: 2px 5px;
 
 	width: 650px;
@@ -211,25 +293,25 @@ body {
 }
 
 /* Refresh citation list */
-#refresh-list {
+#filter-search {
 	position: relative;
 
 	float: left;
-	margin-top: 10px;
+	margin-top: 8px;
 
 	padding: 0;
 
 	width: 40px;
 	height: 32px;
 
-	background: rgb(52, 53, 57);
+	background: var(--content-background-dark);
 	box-shadow: 1px 1px 3px rgb(10, 12, 12);
 	border-radius: 2px;
 
 	cursor: pointer;
 }
 
-#refresh-list img {
+#filter-search img {
 	position: absolute;
 	left: 50%;
 	top: 50%;

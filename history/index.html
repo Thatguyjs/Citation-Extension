@@ -18,7 +18,7 @@
 
 		<!-- Page Content -->
 		<table id="content">
-			<tr class="content-row" height="55px">
+			<tr class="content-row" height="50px">
 				<!-- Extra Margin -->
 				<td></td>
 
@@ -26,29 +26,66 @@
 				<td>
 					<input id="searchbar" type="text" placeholder="Search">
 
-					<!-- Refresh list -->
-					<div id="refresh-list">
-						<img src="svg/refresh_list.svg">
+					<!-- Search filtering -->
+					<div id="filter-search">
+						<img src="svg/filter_search.svg">
 					</div>
 				</td>
 			</tr>
+			<tr class="content-row" height="40px">
+				<!-- Extra Margin -->
+				<td></td>
+
+				<!-- Main toolbar -->
+				<td>
+					<div id="main-toolbar" class="tab-toolbar">
+
+						<!-- Select all citations in the current tab -->
+						<button id="select-all" title="Select All">
+							<img src="svg/checkbox_blank.svg">
+						</button>
+
+						<!-- Copy selected citations -->
+						<button id="copy-selected" title="Copy Selected">
+							<img src="svg/copy.svg">
+						</button>
+
+						<!-- Delete selected citations -->
+						<button id="delete-selected" title="Delete Selected">
+							<img src="svg/delete.svg">
+						</button>
+
+						<!-- Export selected citations -->
+						<button id="export-selected" title="Export Selected">
+							<img src="svg/export.svg">
+						</button>
+
+						<!-- Single / all tab selection -->
+						<button id="selection-type">
+							<img src="svg/tabs_active.svg">
+						</button>
+
+					</div>
+				</td>
+
+				<!-- Extra margin -->
+				<td></td>
+			</tr>
 			<tr class="content-row">
-				<!-- Left Menu -->
+				<!-- Left Menu & tab containers -->
 				<td id="left-menu">
+					<div id="tab-containers">
+						<span>Containers</span>
 
-					<!-- Hidden import area -->
-					<input id="import-area" type="file" accept=".chf">
-
-					<!-- Import / Export citations -->
-					<button id="citation-import">Import File</button>
-					<button id="citation-export">Export Selected</button>
-
+						<!-- Containers are dynamically loaded -->
+						<div id="tab-container-list"></div>
+					</div>
 				</td>
 
 
 				<!-- Citation List -->
 				<td id="citation-tabs">
-					<!-- citations are dynamically loaded -->
+					<!-- Citations are dynamically loaded -->
 
 					<!-- Shown if no citations exist -->
 					<div id="citations-empty">
@@ -56,21 +93,33 @@
 					</div>
 
 					<!-- Headers for citation tabs -->
-					<div id="tab-headers"></div>
+					<div id="tab-headers">
+
+						<!-- Import citations into a new tab -->
+						<div id="import-tab">
+							<img src="svg/tabs_new.svg">
+						</div>
+
+					</div>
+
+					<!-- Hidden import area -->
+					<input id="import-area" type="file" accept=".chf">
 				</td>
 
 
 				<!-- Right Menu -->
 				<td id="right-menu">
+
 					<!-- Social Media -->
 					<div id="social-links">
-						<a href="https://instagram.com/thatguy.js" target="_blank">
+						<a href="https://instagram.com/thatguy.js" target="_blank" rel="noreferrer">
 							<img src="images/ig_logo.png">
 						</a>
-						<a href="https://github.com/Thatguyjs" target="_blank">
+						<a href="https://github.com/Thatguyjs" target="_blank" rel="noreferrer">
 							<img src="images/github_logo.png">
 						</a>
 					</div>
+
 				</td>
 			</tr>
 		</table>
@@ -84,6 +133,7 @@
 
 		<script src="tab.js"></script>
 		<script src="manage.js"></script>
+		<script src="toolbar.js"></script>
 		<script src="main.js"></script>
 
 		<script src="load.js"></script>

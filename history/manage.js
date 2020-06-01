@@ -16,9 +16,20 @@ const CitationManager = {
 	_citationHTML: "",
 
 
-	// All tabs / active tab
+	// All tabs / active tab / new tab button
 	_tabs: [],
 	_activeTab: null,
+	_createTab: document.getElementById("import-tab"),
+
+
+	// Selection type & element
+	_selectionType: 'active',
+	_selectionTypeElem: document.getElementById("selection-type"),
+
+
+	// If all citations are selected / "Select all" button
+	_allSelected: false,
+	_selectAllElem: document.getElementById("select-all"),
 
 
 	// Event callback
@@ -27,16 +38,28 @@ const CitationManager = {
 
 	// Get basic information
 	init: function() {
+		// Change the selection type
+		this._selectionTypeElem.addEventListener('click', (event) => {
+			if(CitationManager._selectionType === 'active') {
+				CitationManager._selectionType = 'all';
+
+				CitationManager._selectionTypeElem.children[0].src = "svg/tabs_all.svg";
+				CitationManager._selectionTypeElem.title = "All Tabs";
+			}
+			else {
+				CitationManager._selectionType = 'active';
+
+				CitationManager._selectionTypeElem.children[0].src = "svg/tabs_active.svg";
+				CitationManager._selectionTypeElem.title = "Active Tab";
+			}
+		});
 
 		// Listen for imports
-		document.getElementById('citation-import').addEventListener(
+		document.getElementById('import-tab').addEventListener(
 			'click', this.import
 		);
 
-		// Listen for exports
-		document.getElementById('citation-export').addEventListener(
-			'click', this.export
-		);
+		// Exports are handled in toolbar.js
 
 		// Load the citations
 		return new Promise((resolve, reject) => {
@@ -94,7 +117,7 @@ const CitationManager = {
 		let container = document.createElement('div');
 		container.className = "citation-tab";
 
-		this._tabHeaders.appendChild(header);
+		this._tabHeaders.insertBefore(header, this._createTab);
 		this._tabList.appendChild(container);
 
 		this._tabs.push(new CitationTab(
@@ -134,6 +157,9 @@ const CitationManager = {
 		// Display "No citations found"
 		if(this._activeTab._citations.length) {
 			this._message.style.display = "none";
+
+			// Update the "Select all" button
+			this.updateAllSelected();
 		}
 		else {
 			this._message.style.display = "block";
@@ -148,7 +174,12 @@ const CitationManager = {
 		if(this._activeTab) {
 			this._activeTab.load(citations, containers);
 
-			if(citations.length) this._message.style.display = "none";
+			if(citations.length) {
+				this._message.style.display = "none";
+
+				// Update the "Select all" button
+				this.updateAllSelected();
+			}
 		}
 	},
 
@@ -169,8 +200,12 @@ const CitationManager = {
 		// Switch tabs if the current tab is closed
 		if(this._activeTab._id == tabId) {
 			this._activeTab = this._tabs[tabId - 1];
+
 			this._activeTab._element.classList.add('citation-tab-active');
 			this._activeTab._header.classList.add('tab-header-active');
+
+			// Check for selected citations
+			this.updateAllSelected();
 		}
 
 		// Remove the header
@@ -186,6 +221,73 @@ const CitationManager = {
 		while(this._tabs.slice(-1)[0] === null) {
 			this._tabs.length--;
 		}
+	},
+
+
+	// Select all citations in the active tab
+	selectAll: function() {
+		this._selectAllElem.children[0].src = 'svg/checkbox_checked.svg';
+
+		this._activeTab.selectAll();
+		this._allSelected = true;
+	},
+
+
+	// De-select all citations in the active tab
+	deselectAll: function() {
+		this._selectAllElem.children[0].src = 'svg/checkbox_blank.svg';
+
+		this._activeTab.deselectAll();
+		this._allSelected = false;
+	},
+
+
+	// Check if all citations are selected in the active tab
+	updateAllSelected: function() {
+		let all = this._activeTab._selected.length === this._activeTab._citations.length;
+
+		if(all) {
+			this._selectAllElem.children[0].src = 'svg/checkbox_checked.svg';
+			this._allSelected = true;
+		}
+		else {
+			this._selectAllElem.children[0].src = 'svg/checkbox_blank.svg';
+			this._allSelected = false;
+		}
+	},
+
+
+	// Get selected citations
+	getSelected: function() {
+		let citations = [];
+		let elements = [];
+
+		// Get from active tab
+		if(this._selectionType === 'active') {
+			for(let c in this._activeTab._selected) {
+				let index = this._activeTab._selected[c];
+
+				citations.push(this._activeTab._citations[index]);
+				elements.push(this._activeTab._element.querySelector('#citation-num-' + c));
+			}
+		}
+
+		// Get from all tabs
+		else {
+			for(let t in this._tabs) {
+				for(let c in this._tabs[t]._selected) {
+					let index = this._tabs[t]._selected[c];
+
+					citations.push(this._tabs[t]._citations[index]);
+					elements.push(this._tabs[t]._element.querySelector('#citation-num-' + c));
+				}
+			}
+		}
+
+		return {
+			citations,
+			elements
+		};
 	},
 
 
@@ -212,22 +314,6 @@ const CitationManager = {
 		};
 
 		area.click();
-	},
-
-
-	// Export citations
-	export: function() {
-		let historyString = HistoryFormatter.export({
-			containers: CitationManager._activeTab._containers,
-			citations: CitationManager._activeTab._citations
-		});
-
-		historyString = "data:text/chf," + historyString;
-
-		chrome.downloads.download({
-			url: historyString,
-			filename: "history.chf"
-		});
 	}
 
 };
