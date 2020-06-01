@@ -275,7 +275,7 @@ const CitationManager = {
 		// Get from all tabs
 		else {
 			for(let t in this._tabs) {
-				for(let c in this._tabs[c]._selected) {
+				for(let c in this._tabs[t]._selected) {
 					let index = this._tabs[t]._selected[c];
 
 					citations.push(this._tabs[t]._citations[index]);
