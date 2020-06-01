@@ -1,4 +1,4 @@
-// Creates custom context menus with callbacks
+// Create custom context menus
 
 
 const ContextMenu = {
@@ -65,6 +65,16 @@ const ContextMenu = {
 
 		// Append to the page
 		document.body.appendChild(container);
+
+		// Reposition if the menu is past window bounds
+		let position = container.getBoundingClientRect();
+
+		if(position.x + position.width >= window.innerWidth) {
+			container.style.left = position.x - position.width + 'px';
+		}
+		if(position.y + position.height >= window.innerHeight) {
+			container.style.top = position.y - position.height + 'px';
+		}
 
 		// Remove after clicking
 		if(oneUse) {
