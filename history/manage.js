@@ -3,7 +3,7 @@
 
 const CitationManager = {
 
-	// Citation element display container
+	// Tab / header elements
 	_tabHeaders: document.getElementById("tab-headers"),
 	_tabList: document.getElementById("citation-tabs"),
 

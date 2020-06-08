@@ -1,0 +1,36 @@
+/* Style for individual tabs */
+
+
+/* All tabs */
+.content-tab {
+	display: none;
+
+	width: 95%;
+	height: 305px;
+
+	margin-left: 5%;
+
+	overflow-y: scroll;
+}
+
+
+/* Active tab */
+.active-tab {
+	display: block;
+}
+
+
+/* Finish */
+#tab-Finish p {
+	color: var(--ext-text-secondary);
+	font-size: 15px;
+}
+
+#tab-Finish code {
+	padding: 0 3px;
+
+	font-size: 15px;
+
+	background: rgba(255, 255, 255, 0.06);
+	border-radius: 2px;
+}

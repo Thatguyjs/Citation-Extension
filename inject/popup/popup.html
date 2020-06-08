@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+	<head>
+		<meta charset="utf-8">
+		<title>Citation Extension Popup</title>
+
+		<link rel="stylesheet" href="../general/general.css">
+		<link rel="stylesheet" href="../general/list.css">
+
+		<link rel="stylesheet" href="popup.css">
+		<link rel="stylesheet" href="tabs.css">
+	</head>
+	<body>
+		<h1 id="tab-name">Loading...</h1>
+
+		<main id="content-tabs">
+
+			<!-- Article title -->
+			<div class="content-tab" id="tab-Title">
+				<textarea class="scalable"></textarea>
+			</div>
+
+			<!-- Article author list -->
+			<div class="content-tab" id="tab-Authors">
+				<button id="add-author" class="list-add">+ Add Author</button>
+				<div class="fold-list" id="list-authors"></div>
+			</div>
+
+			<!-- Article publisher list -->
+			<div class="content-tab" id="tab-Publishers">
+				<button id="add-publisher" class="list-add">+ Add Publisher</button>
+				<div class="fold-list" id="list-publishers"></div>
+			</div>
+
+			<!-- Article publish date -->
+			<div class="content-tab" id="tab-Publish_Date">
+				<div class="date">
+					<input class="date-day" type="number" placeholder="Day"></input>
+					<input class="date-month" type="text" placeholder="Month"></input>
+					<input class="date-year" type="number" placeholder="Year"></input>
+				</div>
+			</div>
+
+			<!-- Client access date -->
+			<div class="content-tab" id="tab-Access_Date">
+				<div class="date">
+					<input class="date-day" type="number" placeholder="Day"></input>
+					<input class="date-month" type="text" placeholder="Month"></input>
+					<input class="date-year" type="number" placeholder="Year"></input>
+				</div>
+			</div>
+
+			<!-- "Finish" tab -->
+			<div class="content-tab" id="tab-Finish">
+				<input id="citation-name" type="text" placeholder="New Citation"></input>
+
+				<pre id="citation-formatted"></pre>
+			</div>
+
+		</main>
+
+
+		<!-- Back / Copy / Next buttons -->
+		<div id="nav-buttons">
+			<button id="button-back">Back</button>
+			<button id="button-copy">Copy</button>
+			<button id="button-next">Next</button>
+		</div>
+
+
+		<!-- Scripts -->
+		<script src="../../general/storage.js"></script>
+		<script src="../../general/format.js"></script>
+
+		<script src="../general/log.js"></script>
+		<script src="../general/message.js"></script>
+		<script src="../general/list.js"></script>
+
+		<script src="tabs.js"></script>
+		<script src="format.js"></script>
+		<script src="finish.js"></script>
+		<script src="popup.js"></script>
+
+		<script src="listener.js"></script>
+
+	</body>
+</html>

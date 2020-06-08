@@ -61,28 +61,6 @@ let CitationObject = {
 
 
 
-// Web popup list format
-
-<div class="citation-ext-list">
-	<button id="citation-ext-listadd">Add Item</button>
-
-	<div class="citation-ext-listnode">
-		<button class="citation-ext-itemtoggle">Item 1</button>
-		<div class="citation-ext-listdata citation-ext-listhidden">
-			// First item data
-		</div>
-	</div>
-
-	<div class="citation-ext-listnode">
-		<button class="citation-ext-itemtoggle">Item 2</button>
-		<div class="citation-ext-listdata citation-ext-listhidden">
-			// Second item data
-		</div>
-	</div>
-</div>
-
-
-
 // Citation parsing & storage syntax
 
 /*
@@ -129,6 +107,9 @@ let CitationObject = {
 	  - (4) The last name of any author (recursive)
 	  - (5) Get a specific author
 	     - (n) Get the (n)th author
+		    - (0) Get the first name abbreviation
+			- (1) Get the middle name abbreviation
+			- (2) Get the last name abbreviation
 	 publishers:
 	  - (0) Only the first publisher
 	  - (1) Get a specific publisher
@@ -204,7 +185,7 @@ let CitationObject = {
 	 Arrays - Surrounded by brackets, use comma separated values
 
 
-	Example History File (with added newlines):
+	Example History File (with added line breaks):
 	 HISTORY v.00.00.00
 	 #:My container name;
 	 #:Second container;

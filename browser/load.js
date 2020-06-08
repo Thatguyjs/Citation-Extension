@@ -6,6 +6,6 @@ window.addEventListener('load', async () => {
 
 	Main.init();
 
-	Finish.init();
+	Stats.init();
 	Create.init();
 });

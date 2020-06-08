@@ -1,21 +1,7 @@
-// Connect to receive citation format
-window.citation_connection = chrome.runtime.connect({ name: "Citation-Extension" });
+// Loads files to be injected
 
 
-/*
-	IDEA: A popup (like font ninja) appears, asks for document information, then
-	click the extension again -> "Finish Citation" -> connect to page and get
-	data from localStorage
-*/
-
-/*
-	Use 'onclick' to get where a citation element (author, publisher,
-	date published) and 'onselect' to get the order of items (author firstname,
-	lastname, initial).
-*/
-
-
-// @description: Inject a script from the extension into an html page
+// Loads a script into the page
 async function loadScript(path, callback) {
 	let element = document.createElement('script');
 	element.className = "citation-ext-script";
@@ -32,18 +18,17 @@ async function loadScript(path, callback) {
 }
 
 
-// @description: Inject multiple scripts synchronously
+// Loads multiple scripts, one at a time
 async function loadScripts(scripts, callback) {
 	for(let s in scripts) {
 		await loadScript(scripts[s]);
 	}
 
-	if(typeof callback === 'function')
-		callback();
+	if(typeof callback === 'function') callback();
 }
 
 
-// @description: Inject a stylesheet from the extension into an html page
+// Loads a stylesheet into the page
 async function loadStyle(path, callback) {
 	let element = document.createElement("link");
 	element.rel = "stylesheet";
@@ -61,59 +46,60 @@ async function loadStyle(path, callback) {
 }
 
 
-// @description: Inject multiple scripts synchronously
+// Loads multiple stylesheets, one at a time
 async function loadStyles(sheets, callback) {
 	for(let s in sheets) {
 		await loadStyle(sheets[s]);
 	}
 
-	if(typeof callback === 'function')
-		callback();
+	if(typeof callback === 'function') callback();
 }
 
 
-// Popup hasn't been injected
-if(!document.getElementsByClassName("citation-ext-titlebar").length) {
-
-	// Wait for the format message
-	window.citation_connection.onMessage.addListener((message) => {
-		sessionStorage.setItem("citationExtFormat", message.format);
-		delete window.citation_connection;
-
-		// Inject stylesheets
-		loadStyles([
-			// List styles
-			"inject/css/list.css",
-
-			// Popup style
-			"inject/css/popup.css"
-		]);
+// Loads all content
+(function() {
+	'use strict';
 
 
-		// Inject scripts
-		loadScripts([
-			// Storage handlers
-			"inject/storage.js",
+	// Check if a popup already exists
+	if(document.getElementById('citation-ext-container') !== null) {
+		window.CitationLogger.log("Popup already exists!");
+		return;
+	}
 
-			// Event listener handlers
-			"inject/listen.js",
 
-			// General citation helper functions & objects
-			"inject/setup.js",
-
-			// Parse data into citation elements
-			"inject/parse.js",
-
-			// Load the citation-creating scripts
-			"inject/cite.js",
-
-			// Load the citation-editing scripts
-			"inject/edit.js",
-
-			// Create an in-page popup for getting citation data
-			"inject/popup.js"
-		]);
-
+	// Connect to the extension
+	window['citation-ext-connection'] = chrome.runtime.connect({
+		name: "Citation-Extension"
 	});
 
-}
+
+	// Get citation data, create popup
+	window['citation-ext-connection'].onMessage.addListener(async (message) => {
+		sessionStorage.setItem('citation-ext-format', message.format);
+		sessionStorage.setItem('citation-ext-popup-path', chrome.runtime.getURL('inject/popup/popup.html'));
+
+		// TODO: Check if a citation needs to be created or sent back
+
+		// Load stylesheets
+		loadStyles([
+			"inject/general/general.css",
+
+			"inject/popup/container.css"
+		]);
+
+		// Load scripts
+		loadScripts([
+			"inject/general/log.js",
+			"inject/general/message.js",
+
+			"inject/popup/load.js",
+			"inject/window.js",
+
+			"inject/popup/drag.js"
+		]);
+
+		delete window['citation-ext-connection'];
+	});
+
+}());

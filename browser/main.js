@@ -5,7 +5,7 @@ const Main = {
 	// List of all pages
 	_pages: {
 		'home': { inline: true },
-		'finish': { inline: true },
+		'stats': { inline: true },
 		'create': { inline: true },
 		'history': { inline: false, url: '../history/index.html' }
 	},

@@ -1,0 +1,24 @@
+/* General popup styling */
+
+:root {
+	--ext-header: rgb(41, 42, 45);
+	--ext-outline: rgb(60, 62, 67);
+	--ext-background: rgb(32, 33, 36);
+
+	--ext-content: rgb(42, 43, 47);
+
+	--ext-text-primary: rgb(200, 202, 206);
+	--ext-text-secondary: rgb(140, 142, 148);
+
+	--ext-affirmative: rgb(30, 140, 80);
+	--ext-negative: rgb(130, 30, 50);
+}
+
+
+button:hover:not(.button-disabled) {
+	cursor: pointer;
+}
+
+.button-disabled {
+	cursor: not-allowed;
+}

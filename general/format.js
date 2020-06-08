@@ -261,9 +261,9 @@ const Formatter = {
 		let result = "";
 
 		let months = [
-			'Jan', 'Feb', 'Mar', 'Apr',
-			'May', 'Jun', 'Jul', 'Aug',
-			'Sep', 'Oct', 'Nov', 'Dec'
+			'January', 'February', 'March', 'April',
+			'May', 'June', 'July', 'August',
+			'September', 'October', 'November', 'December'
 		];
 
 		if(!properties) {
@@ -317,7 +317,7 @@ const Formatter = {
 
 		// Get the format
 		let activeFormat = this._formats[citation.format];
-		if(!activeFormat) return "Format Error";
+		if(!activeFormat) return "Format Error: Unknown citation format";
 
 		// Reset the result
 		this._result = activeFormat.indent ? "\t" : "";

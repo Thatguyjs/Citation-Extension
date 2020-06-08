@@ -54,10 +54,9 @@ const Create = {
 	// Choose a format & launch the popup
 	start: function(format) {
 
-		// Load a script into the website
-		chrome.tabs.executeScript({
-			file: "inject/load.js"
-		});
+		// Load popup scripts
+		chrome.tabs.executeScript({ file: "inject/general/log.js" });
+		chrome.tabs.executeScript({ file: "inject/load.js" });
 
 		// Give the popup the selected format
 		chrome.runtime.onConnect.addListener((client) => {

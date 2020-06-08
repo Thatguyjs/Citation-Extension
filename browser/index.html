@@ -9,7 +9,7 @@
 
 		<!-- Page-specific stylesheets -->
 		<link rel="stylesheet" href="home.css">
-		<link rel="stylesheet" href="finish.css">
+		<link rel="stylesheet" href="stats.css">
 		<link rel="stylesheet" href="create.css">
 	</head>
 	<body>
@@ -22,9 +22,9 @@
 
 		<!-- Home page -->
 		<div class="page page-home">
-			<div class="tab redirect-finish">
-				<h2>Finish Citation</h2>
-				<p>Finish the current citation</p>
+			<div class="tab redirect-stats">
+				<h2>Your Statistics</h2>
+				<p>Work in progress</p>
 			</div>
 			<div class="tab redirect-create">
 				<h2>New Citation</h2>
@@ -37,26 +37,9 @@
 		</div>
 
 
-		<!-- Finish a citation -->
-		<div class="page page-finish hidden">
-			<div class="finish-error hidden">
-				<h1>No citation to finish!</h1>
-				<button class="redirect-home">Back</button>
-			</div>
-			<div class="finish-success">
-				<div id="finish-container">
-					<input class="finish-name" type="text" placeholder="Citation Name">
-					<h2 class="finish-format">Loading...</h2>
-
-					<pre class="finish-data">Loading...</pre>
-
-					<div id="finish-container-footer">
-						<button class="finish-edit">Edit</button>
-						<button class="finish-copy">Copy</button>
-						<button class="finish-save">Save</button>
-					</div>
-				</div>
-			</div>
+		<!-- Citation Stats -->
+		<div class="page page-stats hidden">
+			<p>Work in progress</p>
 		</div>
 
 
@@ -74,7 +57,7 @@
 		<script src="main.js"></script>
 
 		<script src="home.js"></script>
-		<script src="finish.js"></script>
+		<script src="stats.js"></script>
 		<script src="create.js"></script>
 
 		<script src="load.js"></script>

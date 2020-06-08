@@ -1,0 +1,79 @@
+/* Style for foldable lists */
+
+
+.list-add {
+	width: 140px;
+	height: 25px;
+
+	color: var(--ext-text-primary);
+
+	background: rgba(50, 110, 255, 0.3);
+	border: 2px solid rgb(30, 70, 140);
+}
+
+
+.fold-list {
+	display: block;
+
+	width: 100%;
+	height: auto;
+}
+
+
+.fold-list-hidden > .fold-list-data {
+	display: none;
+}
+
+
+.fold-list-node {
+	display: block;
+
+	width: 100%;
+}
+
+
+.fold-list-toggle {
+	width: 85%;
+	height: 30px;
+
+	color: var(--ext-text-secondary);
+	text-align: left;
+
+	background: var(--ext-content);
+	border: 2px solid var(--ext-outline);
+
+	transition: color 0.2s;
+}
+
+.fold-list-toggle:hover {
+	color: var(--ext-text-primary);
+}
+
+
+.fold-list-remove {
+	width: 12%;
+	height: 24px;
+
+	margin-left: 1.5%;
+
+	color: var(--ext-text-secondary);
+
+	background: rgba(255, 100, 100, 0.15);
+	border: 2px solid var(--ext-negative);
+	border-radius: 2px;
+
+	transition: color 0.2s;
+}
+
+.fold-list-remove:hover {
+	color: var(--ext-text-primary);
+}
+
+
+.fold-list-data input {
+	width: 90%;
+	height: 22px;
+
+	background: rgb(210, 210, 210);
+	border: 1px solid rgb(150, 150, 150);
+}

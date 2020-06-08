@@ -1,0 +1,5 @@
+.page-stats p {
+	color: var(--text-primary-dark);
+	text-align: center;
+	font-size: 15px;
+}
