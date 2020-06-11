@@ -1,7 +1,7 @@
 /* Style for individual tabs */
 
 
-/* All tabs */
+/* Individual tabs */
 .content-tab {
 	display: none;
 
@@ -14,23 +14,41 @@
 }
 
 
+/* Dynamic textareas */
+.content-tab textarea {
+	width: 90%;
+	min-height: 18px;
+
+	font-size: 15px;
+
+	overflow-y: hidden;
+	resize: none;
+}
+
+
+/* Dates */
+.content-tab .date input {
+	margin-bottom: 3px;
+
+	width: 60%;
+	height: 20px;
+
+	font-size: 14px;
+}
+
+
 /* Active tab */
 .active-tab {
 	display: block;
 }
 
 
-/* Finish */
-#tab-Finish p {
-	color: var(--ext-text-secondary);
-	font-size: 15px;
-}
+/* Finish tab */
+#tab-Finish input {
+	margin-left: 10px;
 
-#tab-Finish code {
-	padding: 0 3px;
+	width: 80%;
+	height: 22px;
 
-	font-size: 15px;
-
-	background: rgba(255, 255, 255, 0.06);
-	border-radius: 2px;
+	font-size: 14px;
 }

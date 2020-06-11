@@ -4,7 +4,7 @@
 /* Default styles for all citation elements */
 .citation-ext {
 	all: initial;
-	font-family: system-ui;
+	font-family: system-ui !important;
 }
 
 
@@ -52,16 +52,24 @@
 	float: right;
 
 	margin: 6px;
+	padding: 0;
 
 	width: 24px;
+	min-width: 0;
 	height: 24px;
+	min-height: 0;
+
+	box-sizing: content-box;
 
 	color: var(--ext-text-secondary);
 	font-size: 14px;
 	text-align: center;
 
 	background: rgb(53, 54, 58);
+	border: none;
 	border-radius: 3px;
+
+	box-shadow: none;
 
 	transition: color 0.2s, background 0.2s;
 }
@@ -80,6 +88,8 @@
 
 	width: 100%;
 	height: calc(100% - 37px);
+
+	vertical-align: baseline;
 
 	/* pointer-events set in drag.js */
 }

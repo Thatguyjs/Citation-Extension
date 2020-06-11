@@ -32,6 +32,9 @@ const CitationPopup = {
 			);
 		}
 
+		// Set up textareas
+		Textarea.addAll();
+
 		// Next tab / update citation
 		this._nextButton.addEventListener('click', () => {
 			CitationPopup.updateCitation(TabManager._tabIds[TabManager._tabIndex]);
