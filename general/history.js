@@ -3,9 +3,18 @@
 
 const HistoryFormatter = {
 
+	// Parse errors
+	errors: [
+		"",
+		"Invalid File Header",
+		"Invalid Date String",
+		"Invalid Array String"
+	],
+
+
 	// History file header
 	_fileHeader: "HISTORY v.",
-	_headerLength: 20,
+	_headerLength: 18,
 
 
 	// Available history versions
@@ -41,10 +50,16 @@ const HistoryFormatter = {
 
 	// Check & parse data
 	_loadFile: function(data) {
+		// Check for content first
+		if(data.length === this._headerLength) {
+			return { citations: [], containers: [] };
+		}
+
+		// Check file header
 		let accepted = false;
 
 		for(let v in this._allowedVersions) {
-			let matchString = this._fileHeader + this._allowedVersions[v] + '\r\n';
+			let matchString = this._fileHeader + this._allowedVersions[v];
 
 			if(data.slice(0, this._headerLength) === matchString) {
 				accepted = true;
@@ -53,8 +68,7 @@ const HistoryFormatter = {
 		}
 
 		if(!accepted) {
-			console.log("Invalid history file");
-			return; // TODO: Error Message
+			return { error: 1 };
 		}
 
 		// Parse data
@@ -64,8 +78,10 @@ const HistoryFormatter = {
 
 	// Parse history data (string)
 	_parseHistory: function(data) {
+		let error = 0;
 		let containers = [];
 		let citations = [];
+
 		let currentCitation = {}; // Current citation
 		let node = {}; // Current citation node
 
@@ -143,8 +159,8 @@ const HistoryFormatter = {
 			// Dates
 			else if(data[index] === '<') {
 				if(typeof node.value !== 'object') {
-					console.error("Parse Error");
-					break; // TODO: Parse Error
+					error = 2;
+					break;
 				}
 
 				index++;
@@ -161,8 +177,8 @@ const HistoryFormatter = {
 			// Array
 			else if(data[index] === '[') {
 				if(!Array.isArray(node.value)) {
-					console.error("TODO: Parse Error");
-					break; // TODO: Parse Error
+					error = 3;
+					break;
 				}
 
 				node.value = [];
@@ -228,9 +244,9 @@ const HistoryFormatter = {
 		}
 
 		return {
-			error: false,
-			containers: containers,
-			citations: citations
+			error,
+			containers,
+			citations
 		};
 	},
 
@@ -239,10 +255,12 @@ const HistoryFormatter = {
 	_stringifyHistory: function(object) {
 		let result = "";
 
+		// Add all containers
 		for(let c in object.containers) {
 			result += `#:${object.containers[c]};`;
 		}
 
+		// Add all citations
 		for(let c in object.citations) {
 			result += ':';
 

@@ -88,6 +88,10 @@ class CitationTab {
 	select(index, check=true) {
 		if(index < 0 || index >= this._citations.length) return -1;
 
+		// Check if it's already selected
+		if(this._selected.includes(index)) return -1;
+
+		// Chage the image, add it to the selected array
 		let img = this._element.children[index].querySelector('.citation-checkbox');
 		img.src = 'svg/checkbox_checked.svg';
 

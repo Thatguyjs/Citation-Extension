@@ -304,6 +304,12 @@ const CitationManager = {
 			reader.onload = () => {
 				let data = HistoryFormatter._loadFile(reader.result);
 
+				// Error checking
+				if(data.error) {
+					console.log(HistoryFormatter.errors[data.error]);
+					return;
+				}
+
 				CitationManager.createTab(name, true);
 				CitationManager.load(data.citations, data.containers);
 			}
