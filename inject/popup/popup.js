@@ -56,7 +56,6 @@ const CitationPopup = {
 			CitationPopup.updateCitation('Authors');
 
 			let authors = CitationFormatter._citation.authors;
-
 			authors.push(["", "", "", ""]);
 
 			CitationPopup.updateTabs('Authors', { authors });
@@ -66,7 +65,6 @@ const CitationPopup = {
 			CitationPopup.updateCitation('Publishers');
 
 			let publishers = CitationFormatter._citation.publishers;
-
 			publishers.push("");
 
 			CitationPopup.updateTabs('Publishers', { publishers });
@@ -217,6 +215,19 @@ const CitationPopup = {
 			case 'Authors':
 				ListManager.clear(tab.querySelector('.fold-list'));
 
+				// Remove empty authors
+				let aInd = citation.authors.length - 1;
+
+				while(aInd >= 0) {
+					if(citation.authors[aInd] === null) {
+						citation.authors.splice(aInd, 1);
+						continue;
+					}
+
+					aInd--;
+				}
+
+				// Create a list of authors
 				let authors = [];
 
 				for(let a in citation.authors) {
@@ -238,12 +249,27 @@ const CitationPopup = {
 					authors.push(item);
 				}
 
-				ListManager.appendItems(tab.querySelector('.fold-list'), authors);
+				ListManager.appendItems(tab.querySelector('.fold-list'), authors, (index) => {
+					citation.authors[index] = null;
+				});
 			break;
 
 			case 'Publishers':
 				ListManager.clear(tab.querySelector('.fold-list'));
 
+				// Remove empty publishers
+				let pInd = citation.publishers.length - 1;
+
+				while(pInd >= 0) {
+					if(citation.publishers[pInd] === null) {
+						citation.publishers.splice(pInd, 1);
+						continue;
+					}
+
+					pInd--;
+				}
+
+				// Create a list of publishers
 				let publishers = [];
 
 				for(let p in citation.publishers) {
@@ -256,7 +282,9 @@ const CitationPopup = {
 					publishers.push(item);
 				}
 
-				ListManager.appendItems(tab.querySelector('.fold-list'), publishers);
+				ListManager.appendItems(tab.querySelector('.fold-list'), publishers, (index) => {
+					citation.publishers[index] = null;
+				});
 			break;
 
 			case 'Publish_Date':

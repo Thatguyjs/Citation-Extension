@@ -83,7 +83,7 @@ const ListManager = {
 
 
 	// Append list items to a list
-	appendItems: function(list, items=[]) {
+	appendItems: function(list, items=[], callback=new Function) {
 		if(!Array.isArray(items)) items = [items];
 
 		for(let i in items) {
@@ -91,6 +91,7 @@ const ListManager = {
 
 			html.querySelector('.fold-list-remove').addEventListener('click', () => {
 				list.removeChild(html);
+				callback(i);
 			});
 
 			html.querySelector('.fold-list-toggle').addEventListener('click', () => {
