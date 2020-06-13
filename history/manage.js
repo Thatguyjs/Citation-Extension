@@ -199,13 +199,7 @@ const CitationManager = {
 
 		// Switch tabs if the current tab is closed
 		if(this._activeTab._id == tabId) {
-			this._activeTab = this._tabs[tabId - 1];
-
-			this._activeTab._element.classList.add('citation-tab-active');
-			this._activeTab._header.classList.add('tab-header-active');
-
-			// Check for selected citations
-			this.updateAllSelected();
+			this.setTab(tabId - 1);
 		}
 
 		// Remove the header
@@ -218,8 +212,10 @@ const CitationManager = {
 		this._tabs[tabId] = null;
 
 		// Remove null tabs
-		while(this._tabs.slice(-1)[0] === null) {
-			this._tabs.length--;
+		tabId = this._tabs.length - 1;
+
+		while(this._tabs[tabId] === null) {
+			this._tabs.pop();
 		}
 	},
 
@@ -268,7 +264,7 @@ const CitationManager = {
 				let index = this._activeTab._selected[c];
 
 				citations.push(this._activeTab._citations[index]);
-				elements.push(this._activeTab._element.querySelector('#citation-num-' + c));
+				elements.push(this._activeTab._element.querySelector('.citation-num-' + c));
 			}
 		}
 
@@ -279,7 +275,7 @@ const CitationManager = {
 					let index = this._tabs[t]._selected[c];
 
 					citations.push(this._tabs[t]._citations[index]);
-					elements.push(this._tabs[t]._element.querySelector('#citation-num-' + c));
+					elements.push(this._tabs[t]._element.querySelector('.citation-num-' + c));
 				}
 			}
 		}

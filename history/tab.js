@@ -34,8 +34,7 @@ class CitationTab {
 
 		for(let c in citations) {
 			let element = document.createElement('div');
-			element.id = "citation-num-" + c;
-			element.className = "citation";
+			element.className = "citation citation-num-" + c;
 			element.innerHTML = CitationManager._citationHTML;
 
 			let formatted = Formatter.format(citations[c]);
@@ -64,7 +63,7 @@ class CitationTab {
 			// Dragging citations
 			element.querySelector('.citation-section-right').addEventListener(
 				'mousedown', (event) => {
-					CitationManager._eventCallback('drag', Number(c));
+					CitationManager._eventCallback('drag', Number(c), event);
 					event.preventDefault();
 				}
 			);

@@ -132,7 +132,7 @@ window.CitationMessenger = {
 		index = this._listeners.length - 1;
 
 		while(this._listeners[index] === null) {
-			this._listeners.length--;
+			this._listeners.pop();
 			index--;
 		}
 	},

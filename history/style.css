@@ -21,9 +21,6 @@ body {
 
 
 /* Tab toolbars */
-.tab-toolbar {
-	/* background: rgba(255, 0, 0, 0.15); */
-}
 .tab-toolbar button:first-child {
 	margin-left: 11px;
 }

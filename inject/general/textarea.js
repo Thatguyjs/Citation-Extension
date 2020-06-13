@@ -44,7 +44,7 @@ const Textarea = {
 		index = this._textareas.length - 1;
 
 		while(this._textareas[index] === null) {
-			this._textareas.length--;
+			this._textareas.pop();
 			index--;
 		}
 	}

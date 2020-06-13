@@ -36,16 +36,63 @@ const Main = {
 
 
 	// General event callback
-	eventCallback: function(type, id) {
+	eventCallback: function(type, id, event) {
+		let citation = CitationManager._activeTab._element.querySelector('.citation-num-' + id);
+
 		switch(type) {
 
 			case 'drag':
-			return 0;
+			return Main.dragCitation(citation, event);
 
 			case 'show-containers':
-			return Main.showContainers(id);
+			return Main.showContainers(citation);
 
 		}
+	},
+
+
+	// Callback to start dragging a citation
+	dragCitation: function(citation, event) {
+		let bounds = citation.getBoundingClientRect();
+		citation.style.position = 'fixed';
+
+
+		let start = Drag.start(citation, {
+			offset: {
+				x: bounds.x - event.clientX,
+				y: bounds.y - event.clientY
+			},
+
+			bounds: {
+				x: [0, window.innerWidth],
+				y: [0, window.innerHeight]
+			}
+		});
+
+		document.addEventListener('mouseup', () => {
+			Drag.end(start);
+
+			let citations = Array.from(CitationManager._activeTab._element.getElementsByClassName('citation'));
+			bounds = citation.getBoundingClientRect();
+
+			citation.style.position = 'inherit';
+			citation.style.left = '';
+			citation.style.top = '';
+
+			for(let c in citations) {
+				let y = citations[c].getBoundingClientRect().y;
+
+				if(bounds.y < y) {
+					let index = Number(c);
+
+					CitationManager._activeTab._element.insertBefore(citation, citations[c]);
+					return;
+				}
+			}
+
+			// Insert at the end
+			CitationManager._activeTab._element.appendChild(citation);
+		}, { once: true })
 	},
 
 
