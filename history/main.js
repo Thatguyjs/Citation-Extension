@@ -143,7 +143,7 @@ const Main = {
 
 	// Callback for clicking a citation context menu button
 	citationMenuClick: function(text, container) {
-		let index = container.id.slice(container.id.lastIndexOf('-') + 1);
+		let index = container.className.slice(container.className.lastIndexOf('num-') + 4);
 
 		switch(text) {
 
