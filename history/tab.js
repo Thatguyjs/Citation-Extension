@@ -91,7 +91,9 @@ class CitationTab {
 		if(this._selected.includes(index)) return -1;
 
 		// Chage the image, add it to the selected array
-		let img = this._element.children[index].querySelector('.citation-checkbox');
+		let img = this._element.querySelector('.citation-num-' + index);
+		img = img.querySelector('.citation-checkbox');
+
 		img.src = 'svg/checkbox_checked.svg';
 
 		this._selected.push(index);
@@ -106,7 +108,9 @@ class CitationTab {
 		if(index < 0 || index >= this._citations.length) return -1;
 		if(!this._selected.includes(index)) return -1;
 
-		let img = this._element.children[index].querySelector('.citation-checkbox');
+		let img = this._element.querySelector('.citation-num-' + index);
+		img = img.querySelector('.citation-checkbox');
+
 		img.src = 'svg/checkbox_blank.svg';
 
 		this._selected.splice(this._selected.indexOf(index), 1);

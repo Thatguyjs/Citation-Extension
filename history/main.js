@@ -54,7 +54,9 @@ const Main = {
 	// Callback to start dragging a citation
 	dragCitation: function(citation, event) {
 		let bounds = citation.getBoundingClientRect();
+
 		citation.style.position = 'fixed';
+		citation.style.zIndex = 2;
 
 
 		let start = Drag.start(citation, {
@@ -75,7 +77,8 @@ const Main = {
 			let citations = Array.from(CitationManager._activeTab._element.getElementsByClassName('citation'));
 			bounds = citation.getBoundingClientRect();
 
-			citation.style.position = 'inherit';
+			citation.style.position = '';
+			citation.style.zIndex = 0;
 			citation.style.left = '';
 			citation.style.top = '';
 
