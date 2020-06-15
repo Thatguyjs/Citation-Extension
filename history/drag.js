@@ -60,6 +60,9 @@ const Drag = {
 
 			if(!lock.x) this._active[i].element.style.left = x + 'px';
 			if(!lock.y) this._active[i].element.style.top = y + 'px';
+
+			// Optional callback
+			if(options.move) options.move(x, y);
 		}
 	},
 

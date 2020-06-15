@@ -119,6 +119,43 @@ body {
 }
 
 
+/* Citation drag element */
+.drag-helper {
+	position: fixed;
+
+	height: 45px;
+
+	background: var(--content-background-dark);
+	box-shadow: 1px 1px 4px rgb(6, 8, 9);
+
+	border-radius: 3px;
+
+	pointer-events: all;
+	cursor: grabbing;
+}
+
+.drag-helper h2 {
+	display: inline-block;
+
+	margin: 0;
+	padding: 10px 0 0 12px;
+
+	color: var(--text-primary-dark);
+}
+
+.drag-helper img {
+	display: inline-block;
+	vertical-align: top;
+
+	margin: 0;
+	padding: 10px 4px;
+
+	height: 24px;
+
+	filter: invert(0.4);
+}
+
+
 /* Citation tab headers */
 #tab-headers {
 	position: absolute;

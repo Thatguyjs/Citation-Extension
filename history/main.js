@@ -53,42 +53,87 @@ const Main = {
 
 	// Callback to start dragging a citation
 	dragCitation: function(citation, event) {
-		let bounds = citation.getBoundingClientRect();
+		// Create a draggable element
+		let clone = document.createElement('div');
+		clone.className = 'drag-helper';
 
-		citation.style.position = 'fixed';
-		citation.style.zIndex = 2;
+		let name = document.createElement('h2');
+		name.innerText = citation.querySelector('.citation-name').innerText;
 
+		let handle = document.createElement('img');
+		handle.src = "svg/drag_handle.svg";
 
-		let start = Drag.start(citation, {
+		clone.appendChild(name);
+		clone.appendChild(handle);
+
+		document.body.appendChild(clone);
+
+		// Active tab & scrolling status
+		let tab = citation.parentNode;
+		let scrollDir = 0;
+		let updateScroll = true;
+
+		// Start dragging the element
+		let drag = Drag.start(clone, {
 			offset: {
-				x: bounds.x - event.clientX,
-				y: bounds.y - event.clientY
+				x: -clone.clientWidth + 15,
+				y: -clone.clientHeight / 2
 			},
 
 			bounds: {
 				x: [0, window.innerWidth],
 				y: [0, window.innerHeight]
+			},
+
+			move: (x, y) => {
+				if(y < 150) {
+					scrollDir = -1;
+				}
+				else if(y > window.innerHeight - 90) {
+					scrollDir = 1;
+				}
+				else if(scrollDir !== 0) {
+					scrollDir = 0;
+				}
 			}
 		});
 
+		// Scroll through the tab
+		function doScroll() {
+			if(scrollDir < 0) {
+				tab.scrollBy(0, -10);
+			}
+			else if(scrollDir > 0) {
+				tab.scrollBy(0, 10);
+			}
+
+			if(updateScroll) window.requestAnimationFrame(doScroll);
+		}
+
+		doScroll();
+
+		// Stop scrolling
 		document.addEventListener('mouseup', () => {
-			Drag.end(start);
+			Drag.end(drag);
+			updateScroll = false;
 
-			let citations = Array.from(CitationManager._activeTab._element.getElementsByClassName('citation'));
-			bounds = citation.getBoundingClientRect();
+			// Get citation elements & update bounds
+			let container = CitationManager._activeTab._element;
 
-			citation.style.position = '';
-			citation.style.zIndex = 0;
-			citation.style.left = '';
-			citation.style.top = '';
+			let citations = Array.from(container.getElementsByClassName('citation'));
+			let bounds = clone.getBoundingClientRect();
 
+			// Remove the drag element
+			document.body.removeChild(clone);
+
+			// Choose the new position
 			for(let c in citations) {
-				let y = citations[c].getBoundingClientRect().y;
+				let position = citations[c].getBoundingClientRect();
 
-				if(bounds.y < y) {
+				if((bounds.y + bounds.height / 2) < (position.y - position.height / 2)) {
 					let index = Number(c);
 
-					CitationManager._activeTab._element.insertBefore(citation, citations[c]);
+					container.insertBefore(citation, citations[index - 1]);
 					return;
 				}
 			}

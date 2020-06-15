@@ -115,7 +115,7 @@
 	border-top-right-radius: 5px;
 	border-bottom-right-radius: 5px;
 
-	cursor: ns-resize;
+	cursor: grab;
 }
 
 .citation-drag {

@@ -3,7 +3,6 @@
 
 class CitationTab {
 	constructor(id, headerElement, tabElement) {
-
 		// Tab id
 		this._id = id;
 
@@ -17,7 +16,6 @@ class CitationTab {
 
 		// Selected citations
 		this._selected = [];
-
 	}
 
 

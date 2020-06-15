@@ -61,6 +61,7 @@ window['citation-ext-links'] = {
 	// Block links
 	block: function() {
 		for(let l in this.links) {
+			if(!this.links[l].elem) continue;
 			this.links[l].elem.href = "javascript:void(0);";
 		}
 	},
@@ -69,6 +70,7 @@ window['citation-ext-links'] = {
 	// Allow links
 	allow: function() {
 		for(let l in this.links) {
+			if(!this.links[l].elem) continue;
 			this.links[l].elem.href = this.links[l].url;
 		}
 	}
@@ -150,7 +152,10 @@ window.CitationMessenger.listen((type, data, ...options) => {
 						response = 'CITE1' + document.title;
 					}
 					else {
-						response = 'CITE2' + document.body.querySelector('h1').innerText;
+						response = document.body.querySelector('h1');
+
+						if(response) response = 'CITE2' + response.innerText;
+						else response = 'CITE2' + document.title;
 					}
 				break;
 
