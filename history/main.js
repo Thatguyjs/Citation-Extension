@@ -42,7 +42,7 @@ const Main = {
 		switch(type) {
 
 			case 'drag':
-			return Main.dragCitation(citation, event);
+			return Main.dragCitation(citation);
 
 			case 'show-containers':
 			return Main.showContainers(citation);
@@ -52,7 +52,7 @@ const Main = {
 
 
 	// Callback to start dragging a citation
-	dragCitation: function(citation, event) {
+	dragCitation: function(citation) {
 		// Create a draggable element
 		let clone = document.createElement('div');
 		clone.className = 'drag-helper';
@@ -161,7 +161,9 @@ const Main = {
 					"Copy",
 					"Open Link",
 					"#break",
+					"Rename",
 					"Edit",
+					"#break",
 					"Delete"
 				], (index, text) => {
 					this.citationMenuClick(text, event.path[e].parentNode);
@@ -206,16 +208,34 @@ const Main = {
 				window.open(citation.url);
 			break;
 
+			case 'Rename':
+				let name = prompt("Enter a Name:");
+
+				if(name === null) break;
+				if(name === '') name = "New Citation";
+
+				container.querySelector('.citation-name').innerText = name;
+				CitationManager._activeTab._citations[index].name = name;
+
+				// Save name
+				ExtStorage.get("citation-storage", (data) => {
+					data['citation-storage'][Number(index)].name = name;
+
+					ExtStorage.set(data);
+				});
+			break;
+
 			case 'Edit':
 				alert("Editing is not implemented yet");
 			break;
 
 			case 'Delete':
 				if(confirm("Delete the citation?")) {
+
+					// TODO: Fix deletion bug
 					ExtStorage.get("citation-storage", (data) => {
 						data['citation-storage'].splice(Number(index), 1);
 
-						// TEMP COMMENT
 						ExtStorage.set(data);
 					});
 
