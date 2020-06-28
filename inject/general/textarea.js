@@ -32,6 +32,12 @@ const Textarea = {
 	},
 
 
+	// Update a textarea
+	update: function(element) {
+		this._update({ target: element });
+	},
+
+
 	// Remove a textarea
 	remove: function(index) {
 		if(index < 0 || index >= this._textareas.length) return;

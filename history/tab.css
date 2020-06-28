@@ -38,15 +38,22 @@
 
 /* Citation tab headers */
 #tab-headers {
-	position: absolute;
-	bottom: -1px;
-
 	width: calc(100% - 3px);
 	height: 32px;
 
 	background: rgb(26, 27, 29);
 	border: 1px solid rgb(14, 18, 20);
-	border-bottom: none;
+}
+
+.tab-headers-top {
+	border-top: none !important;
+}
+
+.tab-headers-bottom {
+	position: absolute;
+	bottom: -1px;
+
+	border-bottom: none !important;
 }
 
 .tab-header {

@@ -210,6 +210,8 @@ const CitationPopup = {
 
 			case 'Title':
 				tab.querySelector('textarea').value = citation.title;
+				
+				Textarea.update(tab.querySelector('textarea'));
 			break;
 
 			case 'Authors':

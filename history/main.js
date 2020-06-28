@@ -2,7 +2,6 @@ const Main = {
 
 	// Initialize the main object
 	init: function() {
-
 		// Create the initial tab
 		CitationManager.createTab("My Citations", true);
 
