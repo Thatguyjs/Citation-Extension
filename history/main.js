@@ -1,7 +1,27 @@
 const Main = {
 
+	// Active keys
+	_keys: [],
+
+
 	// Initialize the main object
 	init: function() {
+		// Listen for key presses
+		window.addEventListener('keydown', (event) => {
+			if(!Main._keys.includes(event.key)) {
+				Main._keys.push(event.key);
+			}
+		});
+
+		// Listen for key releases
+		window.addEventListener('keyup', (event) => {
+			let index = Main._keys.indexOf(event.key);
+
+			if(index > -1) {
+				Main._keys.splice(index, 1);
+			}
+		});
+
 		// Create the initial tab
 		CitationManager.createTab("My Citations", true);
 

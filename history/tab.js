@@ -14,8 +14,9 @@ class CitationTab {
 		this._citations = [];
 		this._containers = [];
 
-		// Selected citations
+		// Selected citations / last toggled
 		this._selected = [];
+		this._lastToggled = -1;
 	}
 
 
@@ -50,7 +51,10 @@ class CitationTab {
 
 			// Selecting citations
 			element.querySelector('.citation-checkbox').addEventListener('click', (event) => {
-				if(CitationManager._activeTab.isSelected(Number(c))) {
+				if(Main._keys.includes('Shift')) {
+					CitationManager._activeTab.toggleRange(Number(c));
+				}
+				else if(CitationManager._activeTab.isSelected(Number(c))) {
 					CitationManager._activeTab.deselect(Number(c));
 				}
 				else {
@@ -95,6 +99,7 @@ class CitationTab {
 		img.src = 'svg/checkbox_checked.svg';
 
 		this._selected.push(index);
+		this._lastToggled = index;
 
 		// Update the CitationManager's selected state
 		if(check) CitationManager.updateAllSelected();
@@ -112,6 +117,26 @@ class CitationTab {
 		img.src = 'svg/checkbox_blank.svg';
 
 		this._selected.splice(this._selected.indexOf(index), 1);
+		this._lastToggled = index;
+
+		// Update the CitationManager's selected state
+		if(check) CitationManager.updateAllSelected();
+	}
+
+
+	// Toggle a range selection
+	toggleRange(endIndex, check=true) {
+		if(endIndex < 0 || endIndex >= this._citations.length) return -1;
+
+		let min = Math.min(this._lastToggled, endIndex);
+		let max = Math.max(this._lastToggled, endIndex + 1);
+
+		let select = this._selected.includes(this._lastToggled);
+
+		for(let i = min; i < max; i++) {
+			if(select) this.select(i, false);
+			else this.deselect(i, false);
+		}
 
 		// Update the CitationManager's selected state
 		if(check) CitationManager.updateAllSelected();

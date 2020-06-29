@@ -32,7 +32,7 @@ const Options = {
 	},
 
 
-	// Apply a single options
+	// Apply a single option
 	apply: function(option) {
 		switch(option) {
 
