@@ -58,8 +58,18 @@ const Main = {
 				}
 			}
 		}
+
+		// Open in new tab (or same tab if url is browser://newtab/)
 		else {
-			chrome.tabs.create({ url: this._pages[name].url });
+			chrome.tabs.query({ active: true }, (tabs) => {
+				if(tabs[0].url === 'chrome://newtab/') {
+					chrome.tabs.update(null, { url: Main._pages[name].url });
+					window.close();
+				}
+				else {
+					chrome.tabs.create({ url: Main._pages[name].url });
+				}
+			});
 		}
 	}
 
