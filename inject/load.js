@@ -97,7 +97,9 @@ async function loadStyles(sheets, callback) {
 			"inject/window.js",
 
 			"inject/popup/drag.js"
-		]);
+		], () => {
+			loadScript("inject/init.js");
+		});
 
 		delete window['citation-ext-connection'];
 	});

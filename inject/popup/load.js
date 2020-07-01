@@ -40,5 +40,5 @@
 
 	// Log load message
 	window.CitationLogger.log("Loaded popup");
-	
+
 })();

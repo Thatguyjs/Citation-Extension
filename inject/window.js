@@ -118,9 +118,8 @@ window['citation-ext-links'].init();
 window['citation-ext-links'].block();
 
 
-// Init the message handler & iframe
+// Load message handler
 window.CitationMessenger.init(window['citation-ext-popup']);
-window.CitationMessenger.send('init', sessionStorage.getItem('citation-ext-format'));
 
 
 // Message handler
