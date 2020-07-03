@@ -1,15 +1,15 @@
-// Send and receive messages from iframes
+// Handle communication between a parent window and iframe
 
 
 window.CitationMessenger = {
 
-	// Message queue
-	_queue: [],
+	// Channels
+	PARENT: 0,
+	IFRAME: 1,
 
 
-	// Where the messages be sent to / received from
-	_channel: null,
-	_loaded: false,
+	// Message channel
+	_channel: { id: -1, to: null },
 
 
 	// Message listeners
@@ -18,129 +18,92 @@ window.CitationMessenger = {
 
 	// Receive a message event
 	_onmessage: function(event) {
-		let params = event.data;
-
 		for(let l in this._listeners) {
-			if(this._listeners[l] === null) continue;
+			if(!this._listeners[l]) continue;
 
-			// Call then remove
-			if(this._listeners[l].once) {
-				this._listeners[l].callback.apply(globalThis, params);
-				this._listeners[l] = null;
-			}
+			this._listeners[l].callback(event.data);
+			if(this._listeners[l].once) this._listeners[l] = null;
+		}
 
-			// Call, don't remove
-			else {
-				this._listeners[l].callback.apply(globalThis, params);
-			}
+		// Delete removed listeners
+		let index = this._listeners.length;
+
+		while(this._listeners[--index] === null) {
+			this._listeners.pop();
 		}
 	},
 
 
-	// Calls _onmessage with the correct context
-	_messageCaller: function(event) {
+	// Change namespace and redirect the message
+	_messageRedirect: function(event) {
 		window.CitationMessenger._onmessage(event);
 	},
 
 
-	// Set variables & listeners
-	init: function(channel) {
-
-		// From an iframe
-		if(channel === null) {
-			this._channel = 'iframe';
-
-			this._loaded = true;
+	// Initialize the messenger
+	init: function(channel, data) {
+		if(channel === this.PARENT) {
+			this._channel.id = this.PARENT;
+			this._channel.to = data.contentWindow;
+		}
+		else if(channel === this.IFRAME) {
+			this._channel.id = this.IFRAME;
+			this._channel.to = null;
 		}
 
-		// From the parent window
-		else {
-			this._channel = channel.contentWindow;
+		window.addEventListener('message', this._messageRedirect);
+	},
 
-			channel.addEventListener('load', () => {
-				this._loaded = true;
 
-				// Go through the queue
-				for(let i in this._queue) {
-					this.send.apply(this, this._queue[i]);
-				}
-			}, { once: true });
-		}
-
-		// Listen for messages
-		window.addEventListener('message', this._messageCaller);
+	// Destroy the messenger data
+	destroy: function() {
+		window.removeEventListener('message', this._messageRedirect);
 	},
 
 
 	// Send a message
 	send: function(...args) {
-		// Add to queue if the target is not loaded
-		if(!this._loaded) {
-			this._queue.push(args);
-			return;
+		if(this._channel.id === this.PARENT) {
+			this._channel.to.postMessage(args, '*');
 		}
-
-		// Send to parent window
-		if(this._channel === 'iframe') {
+		else {
 			window.parent.postMessage(args, '*');
 		}
-
-		// Send to iframe
-		else {
-			this._channel.postMessage(args, '*');
-		}
 	},
 
 
-	// Receive a message
-	receive: function(callback) {
-		if(!callback) {
-			return new Promise((resolve, reject) => {
-				this._listeners.push({
-					once: true,
-					callback: (...data) => {
-						resolve(data);
-					}
-				});
-			});
-		}
-		else {
+	// Recieve a single message through a promise
+	receive: function() {
+		return new Promise((resolve, reject) => {
 			this._listeners.push({
 				once: true,
-				callback
+				callback: resolve
 			});
-		}
+		});
 	},
 
 
-	// Add a listener for messages
-	listen: function(callback) {
+	// Add a message listener
+	addListener: function(callback, once=false) {
 		return this._listeners.push({
-			once: false,
-			callback: callback
+			callback,
+			once
 		}) - 1;
 	},
 
 
-	// Remove a listener
-	remove: function(index) {
+	// Remove a message listener
+	removeListener: function(index) {
 		if(index < 0 || index >= this._listeners.length) return -1;
 
 		this._listeners[index] = null;
 
-		// Remove null listeners
-		index = this._listeners.length - 1;
+		// Delete removed listeners
+		index = this._listeners.length;
 
-		while(this._listeners[index] === null) {
+		while(this._listeners[--index] === null) {
 			this._listeners.pop();
-			index--;
 		}
-	},
-
-
-	// Clean up listeners
-	destroy: function() {
-		window.removeEventListener('message', this._messageCaller);
 	}
 
 };

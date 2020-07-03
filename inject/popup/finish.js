@@ -26,6 +26,8 @@ const CitationFinisher = {
 
 	// Finish the citation
 	finish: function(citation) {
+		window.CitationLogger.log("Finished citation:", citation);
+
 		this._raw = citation;
 		this._formatted = Formatter.format(citation);
 

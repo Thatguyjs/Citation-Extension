@@ -7,6 +7,22 @@ const CitationPopup = {
 	_format: null,
 
 
+	// Active citation
+	_citation: {
+		type: "Website",
+		format: "",
+
+		title: "",
+		url: "",
+
+		authors: [],
+		publishers: [],
+
+		publishdate: { day: null, month: null, year: null },
+		accessdate: { day: null, month: null, year: null }
+	},
+
+
 	// Back / Copy / Next buttons
 	_backButton: document.getElementById('button-back'),
 	_copyButton: document.getElementById('button-copy'),
@@ -20,6 +36,7 @@ const CitationPopup = {
 
 		// Set variables
 		this._format = format;
+		this._citation.format = format;
 		CitationFormatter.init(format);
 
 		// Get automatic elements & update the popup
@@ -28,7 +45,7 @@ const CitationPopup = {
 
 			this.updateCitation(
 				CitationFormatter._format.automatic[e],
-				CitationFormatter._citation
+				this._citation
 			);
 		}
 
@@ -55,7 +72,7 @@ const CitationPopup = {
 		document.getElementById('add-author').addEventListener('click', () => {
 			CitationPopup.updateCitation('Authors');
 
-			let authors = CitationFormatter._citation.authors;
+			let authors = CitationPopup._citation.authors;
 			authors.push(["", "", "", ""]);
 
 			CitationPopup.updateTabs('Authors', { authors });
@@ -64,7 +81,7 @@ const CitationPopup = {
 		document.getElementById('add-publisher').addEventListener('click', () => {
 			CitationPopup.updateCitation('Publishers');
 
-			let publishers = CitationFormatter._citation.publishers;
+			let publishers = CitationPopup._citation.publishers;
 			publishers.push("");
 
 			CitationPopup.updateTabs('Publishers', { publishers });
@@ -96,7 +113,7 @@ const CitationPopup = {
 			this._copyButton.style.display = "inline-block";
 
 			window.CitationMessenger.send('click', 'stop');
-			CitationFinisher.finish(CitationFormatter._citation);
+			CitationFinisher.finish(this._citation);
 		}
 	},
 
@@ -121,15 +138,45 @@ const CitationPopup = {
 
 
 	// Choose text for a citation element
-	choose: function(text) {
-		CitationFormatter.setElement(TabManager._tabIds[TabManager._tabIndex], text);
+	choose: function(tab, string, data) {
+		if(tab === null) tab = TabManager._tabIds[TabManager._tabIndex];
+		let result = CitationFormatter.formatElement(tab, string, data);
+
+		switch(tab) {
+
+			case 'Title':
+				this._citation.title = result;
+				break;
+
+			case 'Url':
+				this._citation.url = result;
+				break;
+
+			case 'Authors':
+				this._citation.authors.push(result);
+				break;
+
+			case 'Publishers':
+				this._citation.publishers.push(result);
+				break;
+
+			case 'Access_Date':
+				this._citation.accessdate = result;
+				break;
+
+			case 'Publish_Date':
+				this._citation.publishdate = result;
+				break;
+
+		}
+
+		this.updateTabs(tab, this._citation);
 	},
 
 
 	// Update the citation from popup tabs
 	updateCitation: function(name) {
 		let tab = TabManager.getTab(name);
-		let citation = CitationFormatter._citation;
 
 		let months = [
 			'January', 'February', 'March', 'April',
@@ -140,18 +187,18 @@ const CitationPopup = {
 		switch(name) {
 
 			case 'Title':
-				citation.title = tab.querySelector('textarea').value;
+				this._citation.title = tab.querySelector('textarea').value;
 			break;
 
 			case 'Authors':
 				let authors = Array.from(tab.querySelectorAll('.fold-list-node'));
 
-				citation.authors = [];
+				this._citation.authors = [];
 
 				for(let a in authors) {
 					let props = authors[a].querySelectorAll('input');
 
-					citation.authors.push([
+					this._citation.authors.push([
 						props[0].value,
 						props[1].value,
 						props[2].value,
@@ -163,17 +210,17 @@ const CitationPopup = {
 			case 'Publishers':
 				let publishers = Array.from(tab.querySelectorAll('.fold-list-node'));
 
-				citation.publishers = [];
+				this._citation.publishers = [];
 
 				for(let p in publishers) {
-					citation.publishers.push(publishers[p].querySelector('input').value);
+					this._citation.publishers.push(publishers[p].querySelector('input').value);
 				}
 			break;
 
 			case 'Publish_Date':
 				let pDate = Array.from(tab.querySelector('.date').children);
 
-				citation.publishdate = {
+				this._citation.publishdate = {
 					day: Number(pDate[0].value),
 					month: months.indexOf(pDate[1].value) + 1,
 					year: Number(pDate[2].value)
@@ -183,7 +230,7 @@ const CitationPopup = {
 			case 'Access_Date':
 				let aDate = Array.from(tab.querySelector('.date').children);
 
-				citation.accessdate = {
+				this._citation.accessdate = {
 					day: Number(aDate[0].value),
 					month: months.indexOf(aDate[1].value) + 1,
 					year: Number(aDate[2].value)
@@ -191,8 +238,6 @@ const CitationPopup = {
 			break;
 
 		}
-
-		CitationFormatter._citation = citation;
 	},
 
 

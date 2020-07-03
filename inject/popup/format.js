@@ -1,9 +1,9 @@
-// Format different parts of the citation
+// Format parts of citations from string data
 
 
 const CitationFormatter = {
 
-	// A list of formats
+	// Possible formats
 	_formats: {
 		"MLA8": {
 			manual: ['Authors', 'Publishers', 'Publish_Date'],
@@ -20,51 +20,28 @@ const CitationFormatter = {
 	},
 
 
-	// The current format object
+	// Active citation format
 	_format: null,
 
 
-	// The current citation object
-	_citation: {},
-
-
-	// Init the formatter
+	// Load a format
 	init: function(format) {
 		if(!this._formats[format]) {
 			window.CitationMessenger.send('error', 'Unknown Citation Format');
 			return;
 		}
 
-		// Set the active format / element
 		this._format = this._formats[format];
-
-		// Set up the citation
-		this._citation = {
-			type: "Website",
-			format: format,
-
-			title: "",
-			url: "",
-
-			authors: [],
-			publishers: [],
-
-			publishdate: {},
-			accessdate: {}
-		};
 	},
 
 
-	// Get & format a citation element
-	setElement: function(name, data) {
-		this._citation = this['_format_' + name](this._citation, data);
-
-		// Update content of the popup tabs
-		CitationPopup.updateTabs(name, this._citation);
+	// Format part of a citation
+	formatElement: function(name, string, data=null) {
+		return this['_format_' + name](string, data);
 	},
 
 
-	// General formatting
+	// General string formatting
 	_doFormat: function(data, options={}) {
 		if(!data) return "";
 
@@ -101,84 +78,66 @@ const CitationFormatter = {
 
 
 	// Format the title
-	_format_Title: function(citation, data) {
-		data.trim();
+	_format_Title: function(string, data) {
+		string = string.trim();
 
-		if(data.slice(0, 5) === 'CITE2') {
-			data = data.slice(5);
+		if(string.includes('-')) {
+			string = string.slice(0, string.indexOf('-'));
 		}
-		else if(data.slice(0, 5) === 'CITE1') {
-			if(data.includes('-') || data.includes('|')) {
-				window.CitationMessenger.send('get', 'Title', '2');
-				return citation;
-			}
-
-			data = data.slice(5);
+		else if(string.includes('|')) {
+			string = string.slice(0, string.indexOf('|'));
 		}
 
-		citation.title = data;
-
-		return citation;
+		return string;
 	},
 
 
 	// Format the URL
-	_format_Url: function(citation, data) {
-		if(data.includes('?')) data = data.slice(0, data.indexOf('?'));
-		else if(data.includes('&')) data = data.slice(0, data.indexOf('&'));
+	_format_Url: function(string, data) {
+		if(string.includes('?')) {
+			string = string.slice(0, string.lastIndexOf('?'));
+		}
+		else if(string.includes('&')) {
+			string = string.slice(0, string.lastIndexOf('&'));
+		}
 
-		citation.url = data;
-
-		return citation;
+		return string;
 	},
 
 
 	// Format an author
-	_format_Authors: function(citation, data) {
-		data = this._doFormat(data, {
+	_format_Authors: function(string, data) {
+		string = this._doFormat(string, {
 			remove: [',', 'by', 'published']
 		});
 
-		data = data.split(' ');
+		string = string.split(' ');
 
-		let node = {
-			prefix: "",
-			firstname: "",
-			middlename: "",
-			lastname: ""
-		};
+		let author = ["", string[0] || "", "", ""];
 
-		node.firstname = data[0] || "";
-
-		if(data.length === 3) {
-			node.middlename = data[1] || "";
-			node.lastname = data[2] || "";
+		if(string.length === 4) {
+			author = string;
+		}
+		else if(string.length === 3) {
+			author[2] = string[1] || "";
+			author[3] = string[2] || "";
 		}
 		else {
-			node.lastname = data[1] || "";
+			author[3] = string[1] || "";
 		}
 
-		citation.authors.push([
-			node.prefix,
-			node.firstname,
-			node.middlename,
-			node.lastname
-		]);
-
-		return citation;
+		return author;
 	},
 
 
 	// Format a publisher
-	_format_Publishers: function(citation, data) {
-		citation.publishers.push(data);
-
-		return citation;
+	_format_Publishers: function(string, data) {
+		return string.trim();
 	},
 
 
 	// Format the publish date
-	_format_Publish_Date: function(citation, data) {
+	_format_Publish_Date: function(string, data) {
 		data = this._doFormat(data, {
 			remove: [',', 'published', 'am', 'pm']
 		});
@@ -193,47 +152,45 @@ const CitationFormatter = {
 			'sep', 'oct', 'nov', 'dec'
 		];
 
-		let node = {
+		let date = {
 			day: null,
 			month: null,
 			year: null
 		};
 
 		// Day
-		let match = data.match(/\d{1,2}\b/);
-		if(match) node.day = match[0].trim();
+		let match = string.match(/\d{1,2}\b/);
+		if(match) date.day = match[0].trim();
 
 		// Month
-		match = data.match(/(january|february|march|april|may|june|july|august|september|october|november|december)/i);
-		if(!match) match = data.match(/(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)/i);
+		match = string.match(/(january|february|march|april|may|june|july|august|september|october|november|december)/i);
+		if(!match) match = string.match(/(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)/i);
 		if(match) {
 			match = match[0].slice(0, 3).toLowerCase();
-			node.month = String(months.indexOf(match) + 1);
+			date.month = String(months.indexOf(match) + 1);
 		}
 
 		// Year
-		match = data.match(/\d{4}/);
-		if(match) node.year = match[0].trim();
+		match = string.match(/\d{4}/);
+		if(match) date.year = match[0].trim();
 
-		citation.publishdate = node;
-		return citation;
+		return date;
 	},
 
 
 	// Format the access date
-	_format_Access_Date: function(citation, data) {
-		if(this._format.automatic.includes('Access_Date') && typeof data !== 'string') {
-			citation.accessdate = {
-				day: data.getDate(),
-				month: data.getMonth() + 1,
-				year: data.getFullYear()
+	_format_Access_Date: function(string, data) {
+		if(data === 'automatic') {
+			let date = new Date();
+
+			return {
+				day: date.getDate(),
+				month: date.getMonth() + 1,
+				year: date.getFullYear()
 			};
 		}
-		else {
-			citation.accessdate = this._format_Publish_Date(citation, data).publishdate;
-		}
 
-		return citation;
+		return this._format_Publish_Date(string, data);
 	}
 
 };

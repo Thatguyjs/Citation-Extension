@@ -11,7 +11,7 @@ const Drag = {
 	_active: [],
 
 
-	// Recieve a mousemove event
+	// Receive a mousemove event
 	_move: function(event) {
 		Drag.update(event.clientX, event.clientY);
 	},

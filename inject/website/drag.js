@@ -62,4 +62,28 @@
 		}
 	});
 
+
+	// Contrain a value
+	function constrain(val, min, max) {
+		if(val < min) return min;
+		if(val > max) return max;
+		return val;
+	}
+
+
+	// Check position after resizing the window
+	window.addEventListener('resize', () => {
+		let newPos = {
+			x: constrain(pos.x, 0, window.innerWidth - pos.width),
+			y: constrain(pos.y, 0, window.innerHeight - pos.height)
+		};
+
+		// Set position
+		window['citation-ext-container'].style.left = newPos.x + 'px';
+		window['citation-ext-container'].style.top = newPos.y + 'px';
+
+		// Update variables
+		pos = window['citation-ext-container'].getBoundingClientRect();
+	});
+
 })();

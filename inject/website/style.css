@@ -1,4 +1,4 @@
-/* Style for the citation container */
+/* Style for the popup container */
 
 
 /* Default styles for all citation elements */
@@ -47,7 +47,7 @@
 	user-select: none;
 }
 
-#citation-ext-close {
+#citation-ext-header button {
 	display: inline-block;
 	float: right;
 
@@ -74,7 +74,7 @@
 	transition: color 0.2s, background 0.2s;
 }
 
-#citation-ext-close:hover {
+#citation-ext-header button:hover {
 	color: var(--ext-text-primary);
 
 	background: rgb(71, 72, 76);

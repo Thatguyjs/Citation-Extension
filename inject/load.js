@@ -1,107 +1,95 @@
-// Loads files to be injected
+// Load all popup scripts
 
 
-// Loads a script into the page
-async function loadScript(path, callback) {
-	let element = document.createElement('script');
-	element.className = "citation-ext-script";
-	element.src = chrome.runtime.getURL(path);
-
-	document.body.appendChild(element);
-
-	return new Promise((resolve, reject) => {
-		element.onload = () => {
-			if(typeof callback === 'function') callback();
-			resolve();
-		}
-	});
-}
-
-
-// Loads multiple scripts, one at a time
-async function loadScripts(scripts, callback) {
-	for(let s in scripts) {
-		await loadScript(scripts[s]);
-	}
-
-	if(typeof callback === 'function') callback();
-}
-
-
-// Loads a stylesheet into the page
-async function loadStyle(path, callback) {
-	let element = document.createElement("link");
-	element.rel = "stylesheet";
-	element.className = "citation-ext-style";
-	element.href = chrome.runtime.getURL(path);
-
-	document.body.appendChild(element);
-
-	return new Promise((resolve, reject) => {
-		element.onload = () => {
-			if(typeof callback === 'function') callback();
-			resolve();
-		}
-	});
-}
-
-
-// Loads multiple stylesheets, one at a time
-async function loadStyles(sheets, callback) {
-	for(let s in sheets) {
-		await loadStyle(sheets[s]);
-	}
-
-	if(typeof callback === 'function') callback();
-}
-
-
-// Loads all content
-(function() {
+(async function() {
 	'use strict';
 
-
-	// Check if a popup already exists
+	// Check if the popup already exists
 	if(document.getElementById('citation-ext-container') !== null) {
 		window.CitationLogger.log("Popup already exists!");
 		return;
 	}
 
 
-	// Connect to the extension
-	window['citation-ext-connection'] = chrome.runtime.connect({
-		name: "Citation-Extension"
-	});
+	// Load a single script
+	async function loadScript(name) {
+		let script = document.createElement('script');
+		script.className = 'citation-ext-file';
+		script.src = chrome.runtime.getURL(name);
 
-
-	// Get citation data, create popup
-	window['citation-ext-connection'].onMessage.addListener(async (message) => {
-		sessionStorage.setItem('citation-ext-format', message.format);
-		sessionStorage.setItem('citation-ext-popup-path', chrome.runtime.getURL('inject/popup/popup.html'));
-
-		// TODO: Check if a citation needs to be created or sent back
-
-		// Load stylesheets
-		loadStyles([
-			"inject/general/general.css",
-
-			"inject/popup/container.css"
-		]);
-
-		// Load scripts
-		loadScripts([
-			"inject/general/log.js",
-			"inject/general/message.js",
-
-			"inject/popup/load.js",
-			"inject/window.js",
-
-			"inject/popup/drag.js"
-		], () => {
-			loadScript("inject/init.js");
+		return new Promise((resolve, reject) => {
+			script.addEventListener('load', resolve, { once: true });
+			document.body.appendChild(script);
 		});
+	}
 
-		delete window['citation-ext-connection'];
+
+	// Load multiple scripts
+	async function loadScripts(names) {
+		for(let n in names) {
+			await loadScript(names[n]);
+		}
+	}
+
+
+	// Load a single stylesheet
+	async function loadSheet(name) {
+		let sheet = document.createElement('link');
+		sheet.className = 'citation-ext-file';
+		sheet.rel = 'stylesheet';
+		sheet.href = chrome.runtime.getURL(name);
+
+		return new Promise((resolve, reject) => {
+			sheet.addEventListener('load', resolve, { once: true });
+			document.body.appendChild(sheet);
+		});
+	}
+
+
+	// Loads multiple stylesheets
+	async function loadSheets(names) {
+		for(let n in names) {
+			await loadSheet(names[n]);
+		}
+	}
+
+
+	// Connect to the extension & get the active format
+	let connection = chrome.runtime.connect({ name: "Citation-Extension" });
+
+	connection.onMessage.addListener((message) => {
+		sessionStorage.setItem('citation-ext-format', message.format);
+		window.dispatchEvent(new Event('citation-ext-format-loaded'));
 	});
+
+
+	// Store popup path
+	sessionStorage.setItem(
+		'citation-ext-path',
+		chrome.runtime.getURL('inject/popup/index.html')
+	);
+
+
+	// Load main stylesheets
+	await loadSheets([
+		"inject/general/general.css",
+
+		"inject/website/style.css"
+	]);
+
+
+	// Load main scripts
+	loadScripts([
+		"inject/general/log.js",
+		"inject/general/message.js",
+
+		"inject/website/load.js",
+		"inject/website/remove.js",
+
+		"inject/website/main.js",
+		"inject/website/listener.js",
+
+		"inject/website/drag.js"
+	]);
 
 }());

@@ -1,3 +1,7 @@
 *.xcf
 
-inject_old
+# First popup version (old)
+inject_direct
+
+# Second popup version (old)
+inject_iframe

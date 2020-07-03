@@ -1,6 +1,3 @@
-// Fancy logging for the extension
-
-
 window.CitationLogger = {
 
 	// Log a citation-formatted string
@@ -8,7 +5,7 @@ window.CitationLogger = {
 		let args = Array.from(arguments);
 
 		args.unshift('color: rgb(70, 140, 175);');
-		args.unshift('%c[Citation Extension]:');
+		args.unshift('%c[Citation Extension]');
 
 		console.log.apply(globalThis, args);
 	}
