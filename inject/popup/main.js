@@ -9,7 +9,7 @@ const CitationPopup = {
 
 	// Active citation
 	_citation: {
-		type: "Website",
+		type: "Article",
 		format: "",
 
 		title: "",
@@ -39,12 +39,12 @@ const CitationPopup = {
 		this._citation.format = format;
 		CitationFormatter.init(format);
 
-		// Get automatic elements & update the popup
-		for(let e in CitationFormatter._format.automatic) {
-			window.CitationMessenger.send('get', CitationFormatter._format.automatic[e]);
+		// Get all possible elements & update the popup
+		for(let e in CitationFormatter.elements) {
+			window.CitationMessenger.send('get', CitationFormatter.elements[e]);
 
 			this.updateCitation(
-				CitationFormatter._format.automatic[e],
+				CitationFormatter.elements[e],
 				this._citation
 			);
 		}
@@ -278,7 +278,10 @@ const CitationPopup = {
 				let authors = [];
 
 				for(let a in citation.authors) {
-					let item = ListManager.createItem(citation.authors[a][1] || "[No Name]");
+					let item = ListManager.createItem(
+						citation.authors[a].join(' ').trim() ||
+						"[No Name]"
+					);
 
 					item.add('input', citation.authors[a][0], { html: {
 						placeholder: "Prefix"

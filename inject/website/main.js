@@ -1,6 +1,38 @@
 // General popup management
 
 
+// Document metadata
+window['citation-ext-meta'] = {
+
+	// Meta elements
+	_elements: Array.from(document.getElementsByTagName('meta')),
+
+
+	// Get an element's content
+	get: function(name, attr=null) {
+		if(!attr) {
+			for(let e in this._elements) {
+				let elemName = this._elements[e].getAttribute('property');
+
+				if(elemName === 'article:' + name || elemName === 'og:' + name || elemName === 'twitter:' + name) {
+					return this._elements[e].getAttribute('content');
+				}
+			}
+		}
+		else {
+			for(let e in this._elements) {
+				if(this._elements[e].getAttribute(attr) === name) {
+					return this._elements[e].getAttribute('content');
+				}
+			}
+		}
+
+		return null;
+	}
+
+};
+
+
 // Get a citation element
 window['citation-ext-get'] = function(element) {
 	let response = "";
@@ -9,13 +41,25 @@ window['citation-ext-get'] = function(element) {
 
 		// Title
 		case 'Title':
-			response = document.title;
+			response = window['citation-ext-meta'].get('title') || document.title;
 			break;
 
 
 		// Url
 		case 'Url':
 			response = window.location.href;
+			break;
+
+
+		// Author
+		case 'Authors':
+			response = window['citation-ext-meta'].get('author', 'name');
+			break;
+
+
+		// Publisher
+		case 'Publishers':
+			response = window['citation-ext-meta'].get('site_name');
 			break;
 
 
@@ -26,7 +70,7 @@ window['citation-ext-get'] = function(element) {
 
 	}
 
-	if(response.length) window.CitationMessenger.send('set', element, response);
+	if(response) window.CitationMessenger.send('set', element, response);
 }
 
 

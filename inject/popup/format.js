@@ -3,6 +3,14 @@
 
 const CitationFormatter = {
 
+	// All citation elements
+	elements: [
+		"Title", "Url",
+		"Authors", "Publishers",
+		"Access_Date", "Publish_Date"
+	],
+
+
 	// Possible formats
 	_formats: {
 		"MLA8": {
@@ -88,7 +96,7 @@ const CitationFormatter = {
 			string = string.slice(0, string.indexOf('|'));
 		}
 
-		return string;
+		return string.trim();
 	},
 
 
@@ -138,12 +146,12 @@ const CitationFormatter = {
 
 	// Format the publish date
 	_format_Publish_Date: function(string, data) {
-		data = this._doFormat(data, {
+		string = this._doFormat(string, {
 			remove: [',', 'published', 'am', 'pm']
 		});
 
 		// Remove time
-		data = data.replace(/\d\:\d\d/, '');
+		string = string.replace(/\d\:\d\d/, '');
 
 		// List of months
 		let months = [
