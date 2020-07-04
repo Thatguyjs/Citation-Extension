@@ -89,11 +89,11 @@ const CitationFormatter = {
 	_format_Title: function(string, data) {
 		string = string.trim();
 
-		if(string.includes('-')) {
-			string = string.slice(0, string.indexOf('-'));
+		if(string.includes(' - ')) {
+			string = string.slice(0, string.lastIndexOf(' - '));
 		}
 		else if(string.includes('|')) {
-			string = string.slice(0, string.indexOf('|'));
+			string = string.slice(0, string.lastIndexOf(' | '));
 		}
 
 		return string.trim();

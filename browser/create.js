@@ -53,19 +53,26 @@ const Create = {
 
 	// Choose a format & launch the popup
 	start: function(format) {
+		chrome.tabs.query({ active: true }, (tabs) => {
 
-		// Load popup scripts
-		chrome.tabs.executeScript({ file: "inject/general/log.js" });
-		chrome.tabs.executeScript({ file: "inject/load.js" });
-
-		// Give the popup the selected format
-		chrome.runtime.onConnect.addListener((client) => {
-			if(client.name === this.name) {
-				client.postMessage({ format: format });
-
-				// Close the citation window
-				window.close();
+			// Block on non-http(s) urls
+			if(tabs[0].url.slice(0, 4) !== 'http') {
+				return;
 			}
+
+			// Load popup scripts
+			chrome.tabs.executeScript({ file: "inject/general/log.js" });
+			chrome.tabs.executeScript({ file: "inject/load.js" });
+
+			// Give the popup the selected format
+			chrome.runtime.onConnect.addListener((client) => {
+				if(client.name === this.name) {
+					client.postMessage({ format: format });
+
+					// Close the citation window
+					window.close();
+				}
+			});
 		});
 	}
 

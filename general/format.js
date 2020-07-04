@@ -295,7 +295,7 @@ const Formatter = {
 		if(!properties) {
 			result += (
 				citation.accessdate.day + " " +
-				this._months[citation.accessdate.month] + " " +
+				this._months[citation.accessdate.month - 1] + " " +
 				citation.accessdate.year
 			);
 		}
@@ -303,7 +303,7 @@ const Formatter = {
 			result += citation.accessdate.day.toString();
 		}
 		else if(properties[0] === 1) {
-			result += this._months[citation.accessdate.month];
+			result += this._months[citation.accessdate.month - 1];
 		}
 		else if(properties[0] === 2) {
 			result += citation.accessdate.year.toString();
