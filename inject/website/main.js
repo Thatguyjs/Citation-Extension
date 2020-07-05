@@ -41,7 +41,7 @@ window['citation-ext-get'] = function(element) {
 
 		// Title
 		case 'Title':
-			response = window['citation-ext-meta'].get('title') || document.title;
+			response = document.title || window['citation-ext-meta'].get('title');
 			break;
 
 

@@ -46,6 +46,13 @@ const Main = {
 				data['citation-storage'] = [];
 			}
 
+			data['citation-storage'] = data['citation-storage'].filter(
+				citation => citation !== null
+			);
+
+			// Update storage
+			ExtStorage.set(data);
+
 			// Load into the default tab
 			CitationManager.setTab(0);
 			CitationManager.clearTab();
@@ -253,8 +260,16 @@ const Main = {
 
 					// TODO: Fix deletion bug
 					ExtStorage.get("citation-storage", (data) => {
-						data['citation-storage'].splice(Number(index), 1);
+						data['citation-storage'][Number(index)] = null;
 
+						// Delete removed citations
+						index = data['citation-storage'].length;
+
+						while(data['citation-storage'][--index] === null) {
+							data['citation-storage'].pop();
+						}
+
+						// Update storage
 						ExtStorage.set(data);
 					});
 
