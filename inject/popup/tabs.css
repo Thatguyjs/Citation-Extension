@@ -1,0 +1,54 @@
+/* Style for individual tabs */
+
+
+/* Individual tabs */
+.content-tab {
+	display: none;
+
+	width: 95%;
+	height: 305px;
+
+	margin-left: 5%;
+
+	overflow-y: scroll;
+}
+
+
+/* Dynamic textareas */
+.content-tab textarea {
+	width: 90%;
+	min-height: 18px;
+
+	font-size: 15px;
+
+	overflow-y: hidden;
+	resize: none;
+}
+
+
+/* Dates */
+.content-tab .date input {
+	margin-bottom: 3px;
+
+	width: 60%;
+	height: 20px;
+
+	font-size: 14px;
+}
+
+
+/* Active tab */
+.active-tab {
+	display: block;
+}
+
+
+/* Finish tab */
+#tab-Finish input {
+	margin-left: 10px;
+
+	width: 80%;
+	height: 22px;
+
+	font-size: 14px;
+}

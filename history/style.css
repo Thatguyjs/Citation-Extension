@@ -4,6 +4,12 @@ body {
 }
 
 
+/* Show the "Not Allowed" cursor */
+.disabled {
+	cursor: not-allowed;
+}
+
+
 /* All Content */
 #content {
 	width: 100%;
@@ -21,9 +27,6 @@ body {
 
 
 /* Tab toolbars */
-.tab-toolbar {
-	/* background: rgba(255, 0, 0, 0.15); */
-}
 .tab-toolbar button:first-child {
 	margin-left: 11px;
 }
@@ -84,159 +87,40 @@ body {
 }
 
 
-/* Citation Tabs */
-#citation-tabs {
-	position: relative;
-}
+/* Citation drag element */
+.drag-helper {
+	position: fixed;
 
-.citation-tab {
-	display: none;
+	height: 45px;
 
-	height: calc(100% - 32px);
-	overflow-y: scroll;
-}
+	background: var(--content-background-dark);
+	box-shadow: 1px 1px 4px rgb(6, 8, 9);
 
-.citation-tab-active {
-	display: block;
-}
-
-
-/* "No citations" message */
-#citations-empty {
-	display: block;
-	position: relative;
-
-	width: 100%;
-	height: 40px;
-}
-#citations-empty p {
-	position: absolute;
-	margin: 0;
-
-	top: 50%;
-	left: 325px; /* Half the search bar width */
-	transform: translate(-50%, -50%);
-
-	color: var(--text-secondary-dark);
-	font-size: 17px;
-}
-
-
-/* Citation tab headers */
-#tab-headers {
-	position: absolute;
-	bottom: -1px;
-
-	width: calc(100% - 3px);
-	height: 32px;
-
-	background: rgb(26, 27, 29);
-	border: 1px solid rgb(14, 18, 20);
-	border-bottom: none;
-}
-
-.tab-header {
-	position: relative;
-	display: inline-block;
-
-	width: 180px;
-	min-width: 110px;
-	height: 100%;
-
-	background: Transparent;
-	border-left: 3px solid Transparent;
-	border-right: 1px solid rgb(14, 18, 21);
-}
-
-.tab-header span {
-	position: absolute;
-	top: 6px;
-	left: 10px;
-
-	width: 130px;
-
-	font-size: 14px;
-	color: rgb(100, 103, 108);
-
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-
-	cursor: default;
-}
-
-.tab-header button {
-	position: absolute;
-	top: 6px;
-	right: 8px;
-
-	padding: 3px;
-
-	width: 20px;
-	height: 20px;
-
-	background: rgb(45, 46, 49);
-	border: none;
-	border-radius: 2px;
-}
-
-.tab-header:first-child button {
-	cursor: not-allowed;
-}
-
-.tab-header button img {
-	width: 100%;
-	height: 100%;
-
-	filter: invert(0.4);
-}
-
-.tab-header-active {
-	background: var(--background-dark);
-	border-left-color: rgb(30, 100, 140);
-}
-
-.tab-header-active span {
-	color: rgb(210, 215, 222);
-}
-
-
-/* New tab (import) */
-#import-tab {
-	display: inline-block;
-	position: relative;
-
-	margin: 5px;
-
-	height: 22px;
-	width: 22px;
-
-	background: Transparent;
 	border-radius: 3px;
 
-	transition: background 0.2s;
+	pointer-events: all;
+	cursor: grabbing;
 }
 
-#import-tab:hover {
-	background: var(--content-background-dark);
+.drag-helper h2 {
+	display: inline-block;
 
-	cursor: pointer;
+	margin: 0;
+	padding: 10px 0 0 12px;
+
+	color: var(--text-primary-dark);
 }
 
-#import-tab img {
-	position: absolute;
-	left: 1px;
-	top: 1px;
+.drag-helper img {
+	display: inline-block;
+	vertical-align: top;
 
-	width: 20px;
+	margin: 0;
+	padding: 10px 4px;
+
+	height: 24px;
 
 	filter: invert(0.4);
-}
-
-
-/* Hidden import area */
-#import-area {
-	display: none;
 }
 
 

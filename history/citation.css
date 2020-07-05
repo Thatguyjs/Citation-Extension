@@ -34,8 +34,14 @@
 	border-bottom-left-radius: 5px;
 }
 
-.citation-drag {
-	margin-left: calc(50% - 12px);
+.citation-checkbox {
+	position: absolute;
+
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+
+	cursor: pointer;
 }
 
 
@@ -109,15 +115,13 @@
 	border-top-right-radius: 5px;
 	border-bottom-right-radius: 5px;
 
-	cursor: ns-resize;
+	cursor: grab;
 }
 
-.citation-checkbox {
+.citation-drag {
 	position: absolute;
 
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
-
-	cursor: pointer;
 }

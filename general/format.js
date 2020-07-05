@@ -3,6 +3,14 @@
 
 const Formatter = {
 
+	// Month names
+	_months: [
+		'January', 'February', 'March', 'April',
+		'May', 'June', 'July', 'August',
+		'September', 'October', 'November', 'December'
+	],
+
+
 	// Format file header
 	_fileHeader: "FORMAT v.",
 	_headerLength: 19,
@@ -260,16 +268,10 @@ const Formatter = {
 	_formatPublishDate: function(properties, citation) {
 		let result = "";
 
-		let months = [
-			'Jan', 'Feb', 'Mar', 'Apr',
-			'May', 'Jun', 'Jul', 'Aug',
-			'Sep', 'Oct', 'Nov', 'Dec'
-		];
-
 		if(!properties) {
 			result += (
 				citation.publishdate.day + " " +
-				months[citation.publishdate.month - 1] + " " +
+				this._months[citation.publishdate.month - 1] + " " +
 				citation.publishdate.year
 			);
 		}
@@ -277,7 +279,7 @@ const Formatter = {
 			result += citation.publishdate.day.toString();
 		}
 		else if(properties[0] === 1) {
-			result += months[citation.publishdate.month - 1];
+			result += this._months[citation.publishdate.month - 1];
 		}
 		else if(properties[0] === 2) {
 			result += citation.publishdate.year.toString();
@@ -293,7 +295,7 @@ const Formatter = {
 		if(!properties) {
 			result += (
 				citation.accessdate.day + " " +
-				citation.accessdate.month + " " +
+				this._months[citation.accessdate.month - 1] + " " +
 				citation.accessdate.year
 			);
 		}
@@ -301,7 +303,7 @@ const Formatter = {
 			result += citation.accessdate.day.toString();
 		}
 		else if(properties[0] === 1) {
-			result += citation.accessdate.month;
+			result += this._months[citation.accessdate.month - 1];
 		}
 		else if(properties[0] === 2) {
 			result += citation.accessdate.year.toString();
@@ -317,7 +319,7 @@ const Formatter = {
 
 		// Get the format
 		let activeFormat = this._formats[citation.format];
-		if(!activeFormat) return "Format Error";
+		if(!activeFormat) return "Format Error: Unknown citation format";
 
 		// Reset the result
 		this._result = activeFormat.indent ? "\t" : "";

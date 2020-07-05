@@ -1,0 +1,95 @@
+/* Style for the popup container */
+
+
+/* Default styles for all citation elements */
+.citation-ext {
+	all: initial;
+	font-family: system-ui !important;
+}
+
+
+/* Container */
+#citation-ext-container {
+	position: fixed;
+	display: block;
+
+	top: 20px;
+	right: 32px;
+
+	width: 320px;
+	height: 460px;
+
+	background: var(--ext-background);
+	border-radius: 8px;
+	box-shadow: 6px 8px 14px rgba(0, 0, 0, 0.6);
+
+	overflow: hidden;
+	z-index: 2147483647; /* Max z-index */
+}
+
+
+/* Container header */
+#citation-ext-header {
+	display: block;
+
+	width: 100%;
+	height: 36px;
+
+	background: var(--ext-header);
+	border-bottom: 1px solid var(--ext-outline);
+}
+
+#citation-ext-header span {
+	display: inline-block;
+	padding: 6px 12px;
+
+	color: var(--ext-text-primary);
+	user-select: none;
+}
+
+#citation-ext-header button {
+	display: inline-block;
+	float: right;
+
+	margin: 6px;
+	padding: 0;
+
+	width: 24px;
+	min-width: 0;
+	height: 24px;
+	min-height: 0;
+
+	box-sizing: content-box;
+
+	color: var(--ext-text-secondary);
+	font-size: 14px;
+	text-align: center;
+
+	background: rgb(53, 54, 58);
+	border: none;
+	border-radius: 3px;
+
+	box-shadow: none;
+
+	transition: color 0.2s, background 0.2s;
+}
+
+#citation-ext-header button:hover {
+	color: var(--ext-text-primary);
+
+	background: rgb(71, 72, 76);
+}
+
+
+/* Popup content */
+#citation-ext-popup {
+	margin: 0;
+	padding: 0;
+
+	width: 100%;
+	height: calc(100% - 37px);
+
+	vertical-align: baseline;
+
+	/* pointer-events set in drag.js */
+}

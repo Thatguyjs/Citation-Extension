@@ -1,7 +1,26 @@
 const Main = {
 
+	// Active keys
+	_keys: [],
+
+
 	// Initialize the main object
 	init: function() {
+		// Listen for key presses
+		window.addEventListener('keydown', (event) => {
+			if(!Main._keys.includes(event.key)) {
+				Main._keys.push(event.key);
+			}
+		});
+
+		// Listen for key releases
+		window.addEventListener('keyup', (event) => {
+			let index = Main._keys.indexOf(event.key);
+
+			if(index > -1) {
+				Main._keys.splice(index, 1);
+			}
+		});
 
 		// Create the initial tab
 		CitationManager.createTab("My Citations", true);
@@ -27,6 +46,13 @@ const Main = {
 				data['citation-storage'] = [];
 			}
 
+			data['citation-storage'] = data['citation-storage'].filter(
+				citation => citation !== null
+			);
+
+			// Update storage
+			ExtStorage.set(data);
+
 			// Load into the default tab
 			CitationManager.setTab(0);
 			CitationManager.clearTab();
@@ -36,16 +62,111 @@ const Main = {
 
 
 	// General event callback
-	eventCallback: function(type, id) {
+	eventCallback: function(type, id, event) {
+		let citation = CitationManager._activeTab._element.querySelector('.citation-num-' + id);
+
 		switch(type) {
 
 			case 'drag':
-			return 0;
+			return Main.dragCitation(citation);
 
 			case 'show-containers':
-			return Main.showContainers(id);
+			return Main.showContainers(citation);
 
 		}
+	},
+
+
+	// Callback to start dragging a citation
+	dragCitation: function(citation) {
+		// Create a draggable element
+		let clone = document.createElement('div');
+		clone.className = 'drag-helper';
+
+		let name = document.createElement('h2');
+		name.innerText = citation.querySelector('.citation-name').innerText;
+
+		let handle = document.createElement('img');
+		handle.src = "svg/drag_handle.svg";
+
+		clone.appendChild(name);
+		clone.appendChild(handle);
+
+		document.body.appendChild(clone);
+
+		// Active tab & scrolling status
+		let tab = citation.parentNode;
+		let scrollDir = 0;
+		let updateScroll = true;
+
+		// Start dragging the element
+		let drag = Drag.start(clone, {
+			offset: {
+				x: -clone.clientWidth + 15,
+				y: -clone.clientHeight / 2
+			},
+
+			bounds: {
+				x: [0, window.innerWidth],
+				y: [0, window.innerHeight]
+			},
+
+			move: (x, y) => {
+				if(y < 150) {
+					scrollDir = -1;
+				}
+				else if(y > window.innerHeight - 90) {
+					scrollDir = 1;
+				}
+				else if(scrollDir !== 0) {
+					scrollDir = 0;
+				}
+			}
+		});
+
+		// Scroll through the tab
+		function doScroll() {
+			if(scrollDir < 0) {
+				tab.scrollBy(0, -10);
+			}
+			else if(scrollDir > 0) {
+				tab.scrollBy(0, 10);
+			}
+
+			if(updateScroll) window.requestAnimationFrame(doScroll);
+		}
+
+		doScroll();
+
+		// Stop scrolling
+		document.addEventListener('mouseup', () => {
+			Drag.end(drag);
+			updateScroll = false;
+
+			// Get citation elements & update bounds
+			let container = CitationManager._activeTab._element;
+
+			let citations = Array.from(container.getElementsByClassName('citation'));
+			let bounds = clone.getBoundingClientRect();
+
+			// Remove the drag element
+			document.body.removeChild(clone);
+
+			// Choose the new position
+			for(let c in citations) {
+				let position = citations[c].getBoundingClientRect();
+
+				if((bounds.y + bounds.height / 2) < (position.y - position.height / 2)) {
+					let index = Number(c);
+
+					container.insertBefore(citation, citations[index - 1]);
+					return;
+				}
+			}
+
+			// Insert at the end
+			CitationManager._activeTab._element.appendChild(citation);
+		}, { once: true })
 	},
 
 
@@ -66,7 +187,9 @@ const Main = {
 					"Copy",
 					"Open Link",
 					"#break",
+					"Rename",
 					"Edit",
+					"#break",
 					"Delete"
 				], (index, text) => {
 					this.citationMenuClick(text, event.path[e].parentNode);
@@ -96,7 +219,7 @@ const Main = {
 
 	// Callback for clicking a citation context menu button
 	citationMenuClick: function(text, container) {
-		let index = container.id.slice(container.id.lastIndexOf('-') + 1);
+		let index = container.className.slice(container.className.lastIndexOf('num-') + 4);
 
 		switch(text) {
 
@@ -111,16 +234,42 @@ const Main = {
 				window.open(citation.url);
 			break;
 
+			case 'Rename':
+				let name = prompt("Enter a Name:");
+
+				if(name === null) break;
+				if(name === '') name = "New Citation";
+
+				container.querySelector('.citation-name').innerText = name;
+				CitationManager._activeTab._citations[index].name = name;
+
+				// Save name
+				ExtStorage.get("citation-storage", (data) => {
+					data['citation-storage'][Number(index)].name = name;
+
+					ExtStorage.set(data);
+				});
+			break;
+
 			case 'Edit':
 				alert("Editing is not implemented yet");
 			break;
 
 			case 'Delete':
 				if(confirm("Delete the citation?")) {
-					ExtStorage.get("citation-storage", (data) => {
-						data['citation-storage'].splice(Number(index), 1);
 
-						// TEMP COMMENT
+					// TODO: Fix deletion bug
+					ExtStorage.get("citation-storage", (data) => {
+						data['citation-storage'][Number(index)] = null;
+
+						// Delete removed citations
+						index = data['citation-storage'].length;
+
+						while(data['citation-storage'][--index] === null) {
+							data['citation-storage'].pop();
+						}
+
+						// Update storage
 						ExtStorage.set(data);
 					});
 
