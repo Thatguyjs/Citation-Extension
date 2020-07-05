@@ -4,6 +4,12 @@ body {
 }
 
 
+/* Show the "Not Allowed" cursor */
+.disabled {
+	cursor: not-allowed;
+}
+
+
 /* All Content */
 #content {
 	width: 100%;

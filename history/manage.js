@@ -226,6 +226,8 @@ const CitationManager = {
 
 		this._activeTab.selectAll();
 		this._allSelected = true;
+
+		this.updateExport();
 	},
 
 
@@ -235,20 +237,36 @@ const CitationManager = {
 
 		this._activeTab.deselectAll();
 		this._allSelected = false;
+
+		this.updateExport();
 	},
 
 
 	// Check if all citations are selected in the active tab
 	updateAllSelected: function() {
-		let all = this._activeTab._selected.length === this._activeTab._citations.length;
+		let selectNum = this._activeTab._selected.length;
+		let all = selectNum === this._activeTab._citations.length;
 
-		if(all) {
+		if(all && selectNum > 0) {
 			this._selectAllElem.children[0].src = 'svg/checkbox_checked.svg';
 			this._allSelected = true;
 		}
 		else {
 			this._selectAllElem.children[0].src = 'svg/checkbox_blank.svg';
 			this._allSelected = false;
+		}
+
+		this.updateExport();
+	},
+
+
+	// Update the "Export Selected" button
+	updateExport: function() {
+		if(!this.getSelected().citations.length) {
+			Toolbar._buttons['export'].classList.add('disabled');
+		}
+		else {
+			Toolbar._buttons['export'].classList.remove('disabled');
 		}
 	},
 

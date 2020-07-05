@@ -61,6 +61,8 @@ const Toolbar = {
 
 			// Export selected citations
 			case 'export':
+				if(!selected.citations.length) return;
+
 				let historyString = HistoryFormatter.export({
 					citations: selected.citations,
 					containers: [] // TODO
