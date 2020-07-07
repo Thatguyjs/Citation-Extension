@@ -23,6 +23,14 @@ const CitationPopup = {
 	},
 
 
+	// Whether the active tab's content has been changed
+	_tabContentChanged: false,
+
+
+	// Tab reset button
+	_resetButton: document.getElementById('tab-reset'),
+
+
 	// Back / Copy / Next buttons
 	_backButton: document.getElementById('button-back'),
 	_copyButton: document.getElementById('button-copy'),
@@ -30,9 +38,10 @@ const CitationPopup = {
 
 
 	// Init popup buttons & other data
-	init: function(format) {
-		ExtStorage.init();
+	init: async function(format, domain) {
+		await ExtStorage.init();
 		Formatter.init();
+		PathStorage.init(domain);
 
 		// Set variables
 		this._format = format;
@@ -50,7 +59,12 @@ const CitationPopup = {
 		}
 
 		// Set up textareas
-		Textarea.addAll();
+		Textarea.addAll(this.updateContent);
+
+		// Reset the active tab's content
+		this._resetButton.addEventListener('click', () => {
+			CitationPopup.resetTab();
+		});
 
 		// Next tab / update citation
 		this._nextButton.addEventListener('click', () => {
@@ -107,6 +121,7 @@ const CitationPopup = {
 		}
 
 		TabManager.nextTab();
+		this._tabContentChanged = false;
 
 		if(TabManager.isLastTab()) {
 			this._nextButton.innerText = "Save";
@@ -130,6 +145,7 @@ const CitationPopup = {
 		}
 
 		TabManager.previousTab();
+		this._tabContentChanged = false;
 
 		if(TabManager.isFirstTab()) {
 			this._backButton.classList.add('button-disabled');
@@ -137,10 +153,50 @@ const CitationPopup = {
 	},
 
 
+	// Reset the active tab
+	resetTab: function() {
+		let tabName = TabManager._tabIds[TabManager._tabIndex];
+		let tab = TabManager.getTab(tabName);
+
+		// Clear tab data
+		switch(tabName) {
+
+			case 'Title':
+				tab.querySelector('textarea').value = "";
+
+				Textarea.update(tab.querySelector('textarea'));
+				break;
+
+			case 'Authors':
+			case 'Publishers':
+				ListManager.clear(tab.querySelector('.fold-list'));
+				break;
+
+			case 'Publish_Date':
+			case 'Access_Date':
+				let date = tab.querySelector('.date').children;
+
+				date[0].value = "";
+				date[1].value = "";
+				date[2].value = "";
+				break;
+
+		}
+
+		// Get original tab data
+		window.CitationMessenger.send('get', tabName);
+		this.updateCitation(tabName, this._citation);
+
+		// Tell the popup that content has changed
+		this._tabContentChanged = true;
+		this.updateContent();
+	},
+
+
 	// Choose text for a citation element
-	choose: function(tab, string, data) {
+	choose: function(tab, string, options) {
 		if(tab === null) tab = TabManager._tabIds[TabManager._tabIndex];
-		let result = CitationFormatter.formatElement(tab, string, data);
+		let result = CitationFormatter.formatElement(tab, string, options);
 
 		switch(tab) {
 
@@ -171,6 +227,20 @@ const CitationPopup = {
 		}
 
 		this.updateTabs(tab, this._citation);
+	},
+
+
+	// Signal that tab content has been updated
+	updateContent: function() {
+		if(this._tabContentChanged) return;
+
+		let tab = TabManager._tabIds[TabManager._tabIndex];
+
+		if(PathStorage.get(tab)) {
+			PathStorage.remove(tab);
+		}
+
+		this._tabContentChanged = true;
 	},
 
 
@@ -257,7 +327,7 @@ const CitationPopup = {
 				tab.querySelector('textarea').value = citation.title;
 
 				Textarea.update(tab.querySelector('textarea'));
-			break;
+				break;
 
 			case 'Authors':
 				ListManager.clear(tab.querySelector('.fold-list'));
@@ -279,8 +349,8 @@ const CitationPopup = {
 
 				for(let a in citation.authors) {
 					let item = ListManager.createItem(
-						citation.authors[a].join(' ').trim() ||
-						"[No Name]"
+						citation.authors[a].join(' ').trim() || "[No Name]",
+						CitationPopup.updateContent
 					);
 
 					item.add('input', citation.authors[a][0], { html: {
@@ -301,8 +371,9 @@ const CitationPopup = {
 
 				ListManager.appendItems(tab.querySelector('.fold-list'), authors, (index) => {
 					citation.authors[index] = null;
+					CitationPopup.updateContent();
 				});
-			break;
+				break;
 
 			case 'Publishers':
 				ListManager.clear(tab.querySelector('.fold-list'));
@@ -323,7 +394,10 @@ const CitationPopup = {
 				let publishers = [];
 
 				for(let p in citation.publishers) {
-					let item = ListManager.createItem(citation.publishers[p] || "[No Name]");
+					let item = ListManager.createItem(
+						citation.publishers[p] || "[No Name]",
+						CitationPopup.updateContent
+					);
 
 					item.add('input', citation.publishers[p], { html: {
 						placeholder: "Publisher"
@@ -334,8 +408,9 @@ const CitationPopup = {
 
 				ListManager.appendItems(tab.querySelector('.fold-list'), publishers, (index) => {
 					citation.publishers[index] = null;
+					CitationPopup.updateContent();
 				});
-			break;
+				break;
 
 			case 'Publish_Date':
 				let pDate = Array.from(tab.querySelector('.date').children);
@@ -343,7 +418,7 @@ const CitationPopup = {
 				pDate[0].value = citation.publishdate.day || "";
 				pDate[1].value = months[citation.publishdate.month - 1] || "";
 				pDate[2].value = citation.publishdate.year || "";
-			break;
+				break;
 
 			case 'Access_Date':
 				let aDate = Array.from(tab.querySelector('.date').children);
@@ -351,7 +426,7 @@ const CitationPopup = {
 				aDate[0].value = citation.accessdate.day || "";
 				aDate[1].value = months[citation.accessdate.month - 1] || "";
 				aDate[2].value = citation.accessdate.year || "";
-			break;
+				break;
 
 		}
 	}

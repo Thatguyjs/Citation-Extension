@@ -33,8 +33,36 @@ window['citation-ext-meta'] = {
 };
 
 
+// Get an element from a path
+window['citation-ext-path'] = function(element, path) {
+	if(path[1] === 'none') {
+		window.CitationMessenger.send(
+			'set',
+			element,
+			document.querySelector(path[0]).innerText
+		);
+	}
+	else if(path[1] === 'id') {
+		window.CitationMessenger.send(
+			'set',
+			element,
+			document.querySelector(path[0] + '#' + path[2]).innerText
+		);
+	}
+	else if(path[1] === 'class') {
+		let classes = path[2].replace(/\s/g, '.');
+
+		window.CitationMessenger.send(
+			'set',
+			element,
+			document.querySelector(path[0] + '.' + classes).innerText
+		);
+	}
+}
+
+
 // Get a citation element
-window['citation-ext-get'] = function(element) {
+window['citation-ext-get'] = function(element, path="") {
 	let response = "";
 
 	switch(element) {
@@ -81,11 +109,23 @@ window['citation-ext-click'] = {
 	_listening: false,
 
 
+	// Tag names to ignore when clicked
+	_ignoreTags: ['HTML', 'HEAD', 'BODY'],
+
+
 	// User clicks
 	_callback: function(event) {
-		if(event.path.includes(window['citation-ext']._popup)) return;
+		if(window['citation-ext-click']._ignoreTags.includes(event.target.tagName)) return;
+		if(event.path.includes(window['citation-ext']._container)) return;
 
 		window.CitationMessenger.send('click', event.target.innerText);
+
+		// Send the path of the element
+		let path = [event.target.tagName, 'id', event.target.id];
+		if(!path[2]) path = [event.target.tagName, 'class', event.target.className];
+		if(!path[2]) path[1] = 'none';
+
+		window.CitationMessenger.send('path', path);
 	},
 
 

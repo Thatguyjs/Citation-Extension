@@ -15,7 +15,7 @@ window.CitationMessenger.addListener((message) => {
 		// Initialize the popup
 		case 'init':
 			loaded = true;
-			CitationPopup.init(message[1]);
+			CitationPopup.init(message[1], message[2]);
 			break;
 
 
@@ -28,6 +28,12 @@ window.CitationMessenger.addListener((message) => {
 		// Set a citation element
 		case 'set':
 			CitationPopup.choose(message[1], message[2], message[3]);
+			break;
+
+
+		// Store the location of an element
+		case 'path':
+			PathStorage.set(TabManager._tabIds[TabManager._tabIndex], message[1]);
 			break;
 
 	}

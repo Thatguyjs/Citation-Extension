@@ -21,14 +21,20 @@ window.CitationMessenger.addListener(async (message) => {
 				let format = await window['citation-ext']._format;
 				window.CitationLogger.log("Using format:", format);
 
-				window.CitationMessenger.send('init', format);
+				window.CitationMessenger.send('init', format, window.location.host);
 			}
+			break;
+
+
+		// Get elements from paths
+		case 'path':
+			window['citation-ext-path'](message[1], message[2]);
 			break;
 
 
 		// Get elements automatically
 		case 'get':
-			window['citation-ext-get'](message[1]);
+			window['citation-ext-get'](message[1], message[2]);
 			break;
 
 

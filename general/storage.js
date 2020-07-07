@@ -90,6 +90,12 @@ const ExtStorage = {
 	},
 
 
+	// Remove items from storage
+	remove: function(items, callback) {
+		this._handler.remove(items, callback);
+	},
+
+
 	// Read a file
 	readFile: function(filename, callback) {
 		let request = new XMLHttpRequest();

@@ -44,8 +44,8 @@ const CitationFormatter = {
 
 
 	// Format part of a citation
-	formatElement: function(name, string, data=null) {
-		return this['_format_' + name](string, data);
+	formatElement: function(name, string, options=null) {
+		return this['_format_' + name](string, options);
 	},
 
 
@@ -92,7 +92,7 @@ const CitationFormatter = {
 		if(string.includes(' - ')) {
 			string = string.slice(0, string.lastIndexOf(' - '));
 		}
-		else if(string.includes('|')) {
+		else if(string.includes(' | ')) {
 			string = string.slice(0, string.lastIndexOf(' | '));
 		}
 

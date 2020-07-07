@@ -8,11 +8,44 @@ body {
 }
 
 
+/* Tab header */
+header {
+	margin-left: 5%;
+
+	width: 90%;
+	height: 64px;
+}
+
+
 /* Name of the active tab */
 #tab-name {
-	margin: 16px 24px;
+	float: left;
+	margin: 16px 0;
 
 	color: var(--ext-text-primary);
+}
+
+
+/* Tab reset button */
+#tab-reset {
+	float: right;
+
+	margin: 18px 25px;
+
+	width: 60px;
+	height: 28px;
+
+	color: rgb(160, 160, 160);
+
+	background: rgba(255, 100, 100, 0.12);
+	border: 2px solid var(--ext-negative);
+	border-radius: 3px;
+
+	transition: color 0.2s;
+}
+
+#tab-reset:hover {
+	color: rgb(210, 210, 210);
 }
 
 

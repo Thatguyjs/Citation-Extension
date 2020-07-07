@@ -41,6 +41,9 @@ const CitationFinisher = {
 
 		let date = new Date();
 
+		// Save element paths
+		PathStorage.save();
+
 		// Create citation metadata
 		citation.created = {
 			day: date.getDate(),
@@ -53,7 +56,7 @@ const CitationFinisher = {
 
 		citation.containers = [];
 
-		// Add it to storage
+		// Add the citation to storage
 		ExtStorage.get("citation-storage", (data) => {
 			if(!Array.isArray(data['citation-storage'])) {
 				data['citation-storage'] = [];

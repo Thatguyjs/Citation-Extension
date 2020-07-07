@@ -2,10 +2,11 @@
 
 
 class ListItem {
-	constructor(name) {
+	constructor(name, callback) {
 		this.name = name;
-
 		this.contents = [];
+
+		this.callback = callback || null;
 	}
 
 	// Add an element
@@ -14,6 +15,10 @@ class ListItem {
 
 		if(name === 'input' || name === 'textarea') {
 			elem.value = value;
+
+			if(this.callback) {
+				elem.addEventListener('input', this.callback);
+			}
 		}
 		else {
 			elem.innerText = value;
@@ -77,8 +82,8 @@ const ListManager = {
 
 
 	// Create a new ListItem
-	createItem: function(name) {
-		return new ListItem(name);
+	createItem: function(name, callback) {
+		return new ListItem(name, callback);
 	},
 
 

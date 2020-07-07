@@ -15,18 +15,19 @@ const Textarea = {
 
 
 	// Add all textareas in the current document
-	addAll: function() {
+	addAll: function(callback=null) {
 		let elements = Array.from(document.getElementsByTagName('textarea'));
 
 		for(let e in elements) {
-			this.add(elements[e]);
+			this.add(elements[e], callback);
 		}
 	},
 
 
 	// Add a new textarea
-	add: function(element) {
+	add: function(element, callback=null) {
 		element.addEventListener('input', this._update, false);
+		if(callback) element.addEventListener('input', callback, false);
 
 		return this._textareas.push(element) - 1;
 	},
