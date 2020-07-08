@@ -188,8 +188,7 @@ const CitationPopup = {
 		this.updateCitation(tabName, this._citation);
 
 		// Tell the popup that content has changed
-		this._tabContentChanged = true;
-		this.updateContent();
+		this.updateContent(true);
 	},
 
 
@@ -231,12 +230,12 @@ const CitationPopup = {
 
 
 	// Signal that tab content has been updated
-	updateContent: function() {
+	updateContent: function(forceRemove=false) {
 		if(this._tabContentChanged) return;
 
 		let tab = TabManager._tabIds[TabManager._tabIndex];
 
-		if(PathStorage.get(tab)) {
+		if(forceRemove === true || PathStorage.get(tab)) {
 			PathStorage.remove(tab);
 		}
 

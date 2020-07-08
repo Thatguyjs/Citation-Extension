@@ -59,7 +59,29 @@ const PathStorage = {
 
 	// Remove an element path
 	remove: function(tab) {
-		delete this._paths[tab];
+		if(this._paths[tab]) {
+			delete this._paths[tab];
+		}
+		else {
+			ExtStorage.get('autofill-domain-' + this._index, (data) => {
+				data = data['autofill-domain-' + PathStorage._index];
+				if(!data) return;
+
+				delete data[tab];
+
+				// Delete the website from storage
+				if(!Object.keys(data).length) {
+					ExtStorage.remove('autofill-domain-' + PathStorage._index);
+					return;
+				}
+
+				// Save the updated paths
+				let paths = {};
+				paths['autofill-domain-' + PathStorage._index] = data;
+
+				ExtStorage.set(paths);
+			});
+		}
 	},
 
 
