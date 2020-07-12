@@ -291,7 +291,7 @@ const CitationPopup = {
 
 				this._citation.publishdate = {
 					day: Number(pDate[0].value),
-					month: months.indexOf(pDate[1].value) + 1,
+					month: (months.indexOf(pDate[1].value) + 1) || Number(pDate[1].value),
 					year: Number(pDate[2].value)
 				};
 			break;
@@ -301,7 +301,7 @@ const CitationPopup = {
 
 				this._citation.accessdate = {
 					day: Number(aDate[0].value),
-					month: months.indexOf(aDate[1].value) + 1,
+					month: (months.indexOf(aDate[1].value) + 1) || Number(aDate[1].value),
 					year: Number(aDate[2].value)
 				};
 			break;

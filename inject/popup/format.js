@@ -134,6 +134,13 @@ const CitationFormatter = {
 			author[3] = string[1] || "";
 		}
 
+		// Correct capitalization
+		for(let a in author) {
+			if(author[a] && author[a].toUpperCase() === author[a]) {
+				author[a] = author[a][0].toUpperCase() + author[a].slice(1).toLowerCase();
+			}
+		}
+
 		return author;
 	},
 
