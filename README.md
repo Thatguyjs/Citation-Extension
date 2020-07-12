@@ -2,9 +2,26 @@
 
 [Open Alpha] A Chrome Extension for citing websites in various formats
 
-**The extension will be published on the Chrome Web Store  
-after a stable beta version is released.**  
-  
-When it is published, it will be called `Cite!` and will be free to use.
+## Q & A
 
-Feedback is appreciated, whether it's about the code or a suggestion for a new feature.
+### Where's the webstore link?
+The extension isn't published yet
+
+### What browsers are supported?
+Chrome, maybe the new Edge *(not tested)*
+
+### Will Firefox be supported?
+After the Chrome version is published, I'll consider it.
+
+### How do you install it?
+- Download source
+- Unzip
+- Go to Chrome (or new Edge)
+- chrome://extensions (or edge://extensions)
+- Turn on developer mode
+- Load unpacked
+- Choose the folder you unzipped
+- Done
+
+### Why?
+I hate subscription fees and ads
