@@ -8,10 +8,10 @@
 The extension isn't published yet
 
 ### What browsers are supported?
-Chrome, maybe the new Edge *(not tested)*
+Chrome, maybe the new Edge *(not fully tested)*
 
 ### Will Firefox be supported?
-After the Chrome version is published, I'll consider it.
+After the Chrome version is published, I'll consider it
 
 ### How do you install it?
 - Download source

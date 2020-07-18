@@ -41,22 +41,17 @@ const Main = {
 
 	// Load local citations
 	loadCitations: function() {
-		ExtStorage.get("citation-storage", (data) => {
-			if(!Array.isArray(data['citation-storage'])) {
-				data['citation-storage'] = [];
+		ExtStorage.getPreset(['citations', 'containers'], (error, data) => {
+			// Delete removed citations
+			if(data.citations.includes(null)) {
+				data.citations = data.citations.filter(citation => citation !== null);
+				ExtStorage.setPreset('citations', data.citations);
 			}
-
-			data['citation-storage'] = data['citation-storage'].filter(
-				citation => citation !== null
-			);
-
-			// Update storage
-			ExtStorage.set(data);
 
 			// Load into the default tab
 			CitationManager.setTab(0);
 			CitationManager.clearTab();
-			CitationManager.load(data['citation-storage'], []);
+			CitationManager.load(data.citations, data.containers);
 		});
 	},
 
@@ -244,10 +239,10 @@ const Main = {
 				CitationManager._activeTab._citations[index].name = name;
 
 				// Save name
-				ExtStorage.get("citation-storage", (data) => {
-					data['citation-storage'][Number(index)].name = name;
+				ExtStorage.getPreset('citations', (error, citations) => {
+					citations[Number(index)].name = name;
 
-					ExtStorage.set(data);
+					ExtStorage.setPreset('citations', citations);
 				});
 			break;
 
@@ -257,20 +252,18 @@ const Main = {
 
 			case 'Delete':
 				if(confirm("Delete the citation?")) {
-
-					// TODO: Fix deletion bug
-					ExtStorage.get("citation-storage", (data) => {
-						data['citation-storage'][Number(index)] = null;
+					ExtStorage.getPreset('citations', (error, citations) => {
+						citations[Number(index)] = null;
 
 						// Delete removed citations
-						index = data['citation-storage'].length;
+						index = citations.length;
 
-						while(data['citation-storage'][--index] === null) {
-							data['citation-storage'].pop();
+						while(citations[--index] === null) {
+							citations.pop();
 						}
 
 						// Update storage
-						ExtStorage.set(data);
+						ExtStorage.setPreset('citations', citations);
 					});
 
 					CitationManager._activeTab._element.removeChild(container);

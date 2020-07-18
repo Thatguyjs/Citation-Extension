@@ -32,9 +32,8 @@ const PathStorage = {
 	init: function(domain) {
 		this._domain = domain;
 
-		ExtStorage.get('autofill-domains', (list) => {
-			list = list['autofill-domains'];
-			if(!list) return;
+		ExtStorage.getPreset('domains', (list) => {
+			if(!list.length) return;
 
 			let index = list.indexOf(domain);
 			if(index === -1) return;
@@ -89,21 +88,20 @@ const PathStorage = {
 	save: function() {
 		window.CitationLogger.log("Saving paths:", this._paths);
 
-		ExtStorage.get('autofill-domains', (data) => {
-			if(!data['autofill-domains']) {
-				data['autofill-domains'] = [];
-			}
-
-			let index = data['autofill-domains'].indexOf(PathStorage._domain);
+		ExtStorage.getPreset('domains', (error, list) => {
+			let index = list.indexOf(PathStorage._domain);
 
 			if(index === -1) {
-				index = data['autofill-domains'].length;
-				data['autofill-domains'].push(PathStorage._domain);
+				list.push(PathStorage._domain);
+				index = list.length - 1;
+
+				ExtStorage.setPreset('domains', list);
 			}
 
-			data['autofill-domain-' + index] = PathStorage._paths;
+			let paths = {};
+			paths['autofill-domain-' + index] = PathStorage._paths;
 
-			ExtStorage.set(data);
+			ExtStorage.set(paths);
 		});
 	}
 

@@ -124,6 +124,7 @@ const CitationPopup = {
 		this._tabContentChanged = false;
 
 		if(TabManager.isLastTab()) {
+			this._resetButton.style.display = "none";
 			this._nextButton.innerText = "Save";
 			this._copyButton.style.display = "inline-block";
 
@@ -138,6 +139,7 @@ const CitationPopup = {
 		if(TabManager.isFirstTab()) return;
 
 		if(TabManager.isLastTab()) {
+			this._resetButton.style.display = "block";
 			this._nextButton.innerText = "Next";
 			this._copyButton.style.display = "none";
 

@@ -18,7 +18,8 @@ const Formatter = {
 
 	// Available format file versions
 	_allowedVersions: [
-		"00.00.01"
+		"00.00.01",
+		"00.00.02"
 	],
 
 
@@ -91,11 +92,18 @@ const Formatter = {
 		let length = data.length;
 		let index = 0;
 
+		let specialChars = [this._elementMarker, ';', '<', '>'];
+
+		// Parse formats
 		while(index < length && index >= 0) {
 
 			// Escaped character
 			if(data[index] === '\\') {
-				currentFormat.data.push(data[index + 1]);
+				currentFormat.data.push({
+					type: 'string',
+					data: data[index + 1]
+				});
+
 				index += 2;
 			}
 
@@ -120,7 +128,7 @@ const Formatter = {
 				let match = data.slice(index).match(/\d+/);
 				if(!match) return; // TODO: Error message
 
-				let node = { element: Number(match[0]) };
+				let node = { type: 'element', element: Number(match[0]) };
 
 				index += match[0].length;
 
@@ -141,6 +149,40 @@ const Formatter = {
 				currentFormat.data.push(node);
 			}
 
+			// Include characters after an element
+			else if(data[index] === '<') {
+				let nodes = [];
+
+				let ind = currentFormat.data.length;
+
+				while(currentFormat.data[--ind].type === 'string') {
+					nodes.unshift(currentFormat.data.pop().data);
+				}
+
+				currentFormat.data.push({
+					type: 'optional',
+					mode: 'after',
+					data: nodes.join('')
+				});
+
+				index++;
+			}
+
+			// Include characters before an element
+			else if(data[index] === '>') {
+				let text = "";
+
+				while(data[++index] !== this._elementMarker) {
+					text += data[index];
+				}
+
+				currentFormat.data.push({
+					type: 'optional',
+					mode: 'before',
+					data: text
+				});
+			}
+
 			// End of a format
 			else if(data[index] === ';') {
 				formatList.push(currentFormat);
@@ -153,12 +195,15 @@ const Formatter = {
 			else {
 				let text = "";
 
-				while(data[index] !== this._elementMarker && data[index] !== ';') {
+				while(!specialChars.includes(data[index])) {
 					text += data[index];
 					index++;
 				}
 
-				currentFormat.data.push(text);
+				currentFormat.data.push({
+					type: 'string',
+					data: text
+				});
 			}
 
 		}
@@ -196,6 +241,8 @@ const Formatter = {
 
 
 	_formatAuthors: function(properties, citation) {
+		if(!citation.authors.length) return "";
+
 		let authors = [];
 		let lastIndex = 0;
 
@@ -244,6 +291,8 @@ const Formatter = {
 
 
 	_formatPublishers: function(properties, citation) {
+		if(!citation.publishers.length) return "";
+
 		let result = "";
 
 		if(!properties) {
@@ -266,6 +315,8 @@ const Formatter = {
 
 
 	_formatPublishDate: function(properties, citation) {
+		if(!citation.publishdate.month) return "";
+
 		let result = "";
 
 		if(!properties) {
@@ -290,6 +341,8 @@ const Formatter = {
 
 
 	_formatAccessDate: function(properties, citation) {
+		if(!citation.accessdate.month) return "";
+
 		let result = "";
 
 		if(!properties) {
@@ -321,6 +374,10 @@ const Formatter = {
 		let activeFormat = this._formats[citation.format];
 		if(!activeFormat) return "Format Error: Unknown citation format";
 
+		// Element state & optional text
+		let elementFound = false;
+		let nextOptional = "";
+
 		// Reset the result
 		this._result = activeFormat.indent ? "\t" : "";
 
@@ -328,16 +385,38 @@ const Formatter = {
 		for(let e in activeFormat.data) {
 
 			// Call the correct citation function
-			if(typeof activeFormat.data[e] === 'object') {
-				this._result += this[
+			if(activeFormat.data[e].type === 'element') {
+				let formattedElement = this[
 					"_format" + this._elements[activeFormat.data[e].element]
 				](activeFormat.data[e].properties, citation);
+
+				elementFound = !!formattedElement;
+
+				if(nextOptional && elementFound) {
+					this._result += nextOptional;
+					nextOptional = "";
+				}
+
+				this._result += formattedElement;
+			}
+
+			// Add an optional string
+			else if(activeFormat.data[e].type === 'optional') {
+				if(activeFormat.data[e].mode === 'before') {
+					nextOptional = activeFormat.data[e].data;
+				}
+				else if(elementFound) {
+					this._result += activeFormat.data[e].data;
+				}
 			}
 
 			// Add the string to the result
-			else {
-				this._result += activeFormat.data[e];
+			else if(activeFormat.data[e].type === 'string') {
+				this._result += activeFormat.data[e].data;
 			}
+
+			// Unknown node
+			else return "Format Error: Unknown format node";
 		}
 
 		return this._result;

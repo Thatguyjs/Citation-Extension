@@ -1,10 +1,5 @@
 /*
 	Generic Formatting Standards
-
-	Next Up:
-	 - User-defined title for citation on finish page
-	 - Clean up popup code
-	 - Finish IEEE format
 */
 
 
@@ -49,13 +44,13 @@ let CitationObject = {
 	publishdate: {
 		day: 1, // Start at 1
 		month: "January",
-		year: "2020"
+		year: 2020
 	},
 
 	accessdate: {
-		day: 5,
-		month: "February",
-		year: "2020"
+		day: 26,
+		month: "August",
+		year: 2020
 	}
 };
 
@@ -80,6 +75,9 @@ let CitationObject = {
 	   to mark citation elements
 	 - To get a property of an element, add a colon (:) and property
 	   number. This works recursively; properties of properties are allowed
+	 - To mark characters that should only appear when a citation element is
+	   present, use the right angle bracket (>) before the property marker, or
+	   the left angle bracket (<) after the property marker
 	 - Escape any formatting characters with a backslash (\) prefixing
 	   them. This also applies to escaping backslashes (\\)
 
@@ -89,8 +87,8 @@ let CitationObject = {
 	 1: url
 	 2: authors
 	 3: publishers
-	 4: publishdate
-	 5: accessdate
+	 4: publish date
+	 5: access date
 
 
 	Element properties:
@@ -107,9 +105,6 @@ let CitationObject = {
 	  - (4) The last name of any author (recursive)
 	  - (5) Get a specific author
 	     - (n) Get the (n)th author
-		    - (0) Get the first name abbreviation
-			- (1) Get the middle name abbreviation
-			- (2) Get the last name abbreviation
 	 publishers:
 	  - (0) Only the first publisher
 	  - (1) Get a specific publisher
