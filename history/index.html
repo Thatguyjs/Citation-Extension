@@ -4,142 +4,111 @@
 		<meta charset="utf-8">
 		<title>Citation History</title>
 
-		<link rel="stylesheet" href="../general/general.css">
+		<link rel="stylesheet" href="/general/general.css">
 
-		<link rel="stylesheet" href="citation.css">
-		<link rel="stylesheet" href="tab.css">
+		<script src="/general/icons.js" defer></script>
+		<script src="/general/theme.js"></script>
+
+		<link rel="stylesheet" href="menu/contextmenu.css">
+
+		<link rel="stylesheet" href="tabs/tab.css">
+		<link rel="stylesheet" href="toolbar/toolbar.css">
+		<link rel="stylesheet" href="citation/citation.css">
+
+		<link rel="stylesheet" href="search/search.css">
+
 		<link rel="stylesheet" href="style.css">
 	</head>
 	<body>
-		<!-- Header -->
-		<header>
+		<div id="svg-icons" class="hidden"></div>
+
+		<input id="file-upload" class="hidden" type="file" accept=".chf" multiple>
+
+
+		<!-- Nav bar -->
+		<nav id="nav-heading">
 			<h1>Citation History</h1>
-		</header>
+
+			<!-- Search bar -->
+			<div id="main-search-bar" class="search-bar">
+				<svg class="search-bar-icon">
+					<use href="#icon-search" fill="#888"/>
+				</svg>
+
+				<input class="search-bar-input" spellcheck="false">
+
+				<svg class="search-bar-filter">
+					<use href="#icon-filter" fill="#888"/>
+				</svg>
+			</div>
+		</nav>
 
 
-		<!-- Page Content -->
-		<table id="content">
-			<tr class="content-row" height="50px">
-				<!-- Extra Margin -->
-				<td></td>
+		<!-- Main content -->
+		<main>
+			<div id="section-left">
+				<h1>Containers</h1>
 
-				<!-- Search Bar -->
-				<td>
-					<input id="searchbar" type="text" placeholder="Search">
+				<div id="container-list"></div>
+			</div>
+			<div id="section-center">
 
-					<!-- Search filtering -->
-					<div id="filter-search">
-						<img src="svg/filter_search.svg">
-					</div>
-				</td>
-			</tr>
-			<tr class="content-row" height="40px">
-				<!-- Extra Margin -->
-				<td></td>
+				<!-- Tab headers -->
+				<div id="tab-headers">
+					<button id="tab-create">
+						<svg><use href="#icon-create"/></svg>
+					</button>
+				</div>
 
-				<!-- Main toolbar -->
-				<td>
-					<div id="main-toolbar" class="tab-toolbar">
+				<!-- Toolbar -->
+				<div id="toolbar">
+					<button name="select-all" id="toolbar-button-select-all" title="Select all">
+						<svg><use href="#icon-checkbox-blank"/></svg>
+					</button>
+					<button name="copy" id="toolbar-button-copy" title="Copy selected">
+						<svg><use href="#icon-copy"/></svg>
+					</button>
+					<button name="export" id="toolbar-button-export" title="Export selected">
+						<svg><use href="#icon-export"/></svg>
+					</button>
 
-						<!-- Select all citations in the current tab -->
-						<button id="select-all" title="Select All">
-							<img src="svg/checkbox_blank.svg">
-						</button>
+					<button id="tab-selection-state" title="Single tab">
+						<svg><use href="#icon-tabs-single"/></svg>
+					</button>
+				</div>
 
-						<!-- Copy selected citations -->
-						<button id="copy-selected" title="Copy Selected">
-							<img src="svg/copy.svg">
-						</button>
-
-						<!-- Delete selected citations -->
-						<button id="delete-selected" title="Delete Selected">
-							<img src="svg/delete.svg">
-						</button>
-
-						<!-- Export selected citations -->
-						<button id="export-selected" title="Export Selected">
-							<img src="svg/export.svg">
-						</button>
-
-						<!-- Single / all tab selection -->
-						<button id="selection-type">
-							<img src="svg/tabs_active.svg">
-						</button>
-
-					</div>
-				</td>
-
-				<!-- Extra margin -->
-				<td></td>
-			</tr>
-			<tr class="content-row">
-				<!-- Left Menu & tab containers -->
-				<td id="left-menu">
-					<div id="tab-containers">
-						<span>Containers</span>
-
-						<!-- Containers are dynamically loaded -->
-						<div id="tab-container-list"></div>
-					</div>
-				</td>
-
-
-				<!-- Citation List -->
-				<td id="citation-tabs">
-					<!-- Citations are dynamically loaded -->
-
-					<!-- Shown if no citations exist -->
-					<div id="citations-empty">
-						<p>No citations found</p>
-					</div>
-
-					<!-- Headers for citation tabs -->
-					<div id="tab-headers">
-
-						<!-- Import citations into a new tab -->
-						<div id="import-tab">
-							<img src="svg/tabs_new.svg">
-						</div>
-
-					</div>
-
-					<!-- Hidden import area -->
-					<input id="import-area" type="file" accept=".chf">
-				</td>
-
-
-				<!-- Right Menu -->
-				<td id="right-menu">
-
-					<!-- Social Media -->
-					<div id="social-links">
-						<a href="https://instagram.com/thatguy.js" target="_blank" rel="noreferrer">
-							<img src="images/ig_logo.png">
-						</a>
-						<a href="https://github.com/Thatguyjs" target="_blank" rel="noreferrer">
-							<img src="images/github_logo.png">
-						</a>
-					</div>
-
-				</td>
-			</tr>
-		</table>
+				<!-- Tab contents -->
+				<div id="tab-contents"></div>
+			</div>
+			<div id="section-right">
+				<div id="social-icons">
+					<a href="https://github.com/Thatguyjs" target="_blank" rel="noreferrer">
+						<img src="images/github_logo.png">
+					</a>
+					<a href="https://instagram.com/Thatguy.js" target="_blank" rel="noreferrer">
+						<img src="images/ig_logo.png">
+					</a>
+				</div>
+			</div>
+		</main>
 
 
 		<!-- Scripts -->
-		<script src="../general/storage.js"></script>
-		<script src="../general/history.js"></script>
-		<script src="../general/format.js"></script>
-		<script src="../general/contextmenu.js"></script>
+		<script src="/general/storage.js"></script>
+		<script src="/general/format.js"></script>
+		<script src="/general/history.js"></script>
 
-		<script src="options.js"></script>
-		<script src="drag.js"></script>
-		
-		<script src="tab.js"></script>
-		<script src="manage.js"></script>
-		<script src="toolbar.js"></script>
+		<script src="menu/contextmenu.js"></script>
+		<script src="search/search.js"></script>
+
+		<script src="citation/citation.js"></script>
+
+		<script src="tabs/tab.js"></script>
+		<script src="tabs/manager.js"></script>
+
+		<script src="toolbar/toolbar.js"></script>
+
 		<script src="main.js"></script>
-
 		<script src="load.js"></script>
 	</body>
 </html>

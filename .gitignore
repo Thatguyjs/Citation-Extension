@@ -1,4 +1,11 @@
+# Raw image files
 *.xcf
+
+# Unused fonts
+general/fonts/*/unused
+
+# First history page (old)
+history_old
 
 # First popup version (old)
 inject_direct

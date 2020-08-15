@@ -1,0 +1,36 @@
+#toolbar {
+	position: relative;
+	margin: 10px 18px 12px 12px;
+
+	min-width: 508px;
+	max-width: 783px;
+	height: 36px;
+}
+
+
+#toolbar > button {
+	margin-left: 8px;
+	padding-top: 4px;
+
+	width: 55px;
+	height: 100%;
+
+	background: var(--toolbar-button-background);
+	box-shadow: 1px 1px 4px rgb(20, 22, 26);
+
+	border-radius: 3px;
+	border: none;
+	outline: none;
+}
+
+#toolbar > button > svg {
+	width: 24px;
+	height: 24px;
+
+	fill: var(--toolbar-button-icon);
+}
+
+
+#tab-selection-state {
+	float: right;
+}

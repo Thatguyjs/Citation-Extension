@@ -22,6 +22,10 @@
 // Citation Object Format
 
 let CitationObject = {
+	name: "New Citation", // User-defined citation name
+
+	containers: ["Container 1"], // List of containers (similar to groups or folders)
+
 	type: "Material Type", // Type of material, e.g. "Online" or "E-book"
 	format: "Citation Format",
 

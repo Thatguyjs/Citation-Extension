@@ -1,0 +1,152 @@
+.citation {
+	display: flex;
+	align-items: stretch;
+}
+
+.citation.display-compact {
+	height: 44px;
+
+	overflow: hidden;
+}
+
+.citation.display-tiles {
+	margin: 0 0 12px 20px;
+
+	max-width: 775px;
+	min-width: 500px;
+}
+
+
+.citation > div {
+	display: inline-block;
+
+	background: var(--citation-background);
+	box-shadow: 1px 3px 6px var(--citation-shadow-color);
+}
+
+.citation > div:not(.citation-data-area) {
+	position: relative;
+
+	min-width: 55px;
+}
+
+.citation > div > svg {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+
+	transform: translate(-50%, -50%);
+}
+
+
+/* Selection area */
+.citation-select-area {
+	border-top-left-radius: 5px;
+	border-bottom-left-radius: 5px;
+
+	cursor: pointer;
+}
+
+
+/* Data area */
+.citation-data-area {
+	position: relative;
+
+	margin: 0 4px;
+	padding: 10px;
+
+	height: 100%;
+}
+
+.citation-data-area h2 {
+	color: var(--text-primary);
+}
+
+.citation-title {
+	display: inline-block;
+	margin: 0 0 0 10px;
+
+	width: 70%;
+
+	text-overflow: ellipsis;
+
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+.citation-format {
+	float: right;
+
+	display: inline-block;
+	margin: 0 10px 0 0;
+
+	width: 20%;
+
+	text-align: right;
+	text-overflow: ellipsis;
+
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+.citation-data-area pre {
+	display: block;
+
+	padding: 0 15px;
+	margin-bottom: 20px;
+
+	white-space: pre-wrap;
+	word-break: break-all;
+
+	color: var(--text-secondary);
+}
+
+.citation-date {
+	float: left;
+	display: block;
+
+	margin: 2px 0 2px 10px;
+
+	width: 90px;
+
+	font-size: 14px;
+	color: var(--text-primary);
+	text-overflow: ellipsis;
+
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+.citation-container-preview {
+	float: right;
+
+	width: 80%;
+	height: 24px;
+
+	background: var(--citation-container-background);
+	border-radius: 3px;
+
+	overflow: hidden;
+}
+
+.citation-container-view {
+	float: right;
+	padding: 0;
+
+	width: 35px;
+	height: 100%;
+
+	background: var(--citation-container-view);
+
+	border: none;
+	outline: none;
+}
+
+
+/* Drag area */
+.citation-drag-area {
+	border-top-right-radius: 5px;
+	border-bottom-right-radius: 5px;
+
+	cursor: grab;
+}

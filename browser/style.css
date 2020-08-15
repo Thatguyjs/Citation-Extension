@@ -1,15 +1,14 @@
-/* More specific (but still general) style */
+/* More specific style */
+
+body {
+	width: 480px;
+	height: 270px;
+}
 
 
 /* Default styles */
 .menu {
 	display: block;
-	
-	background: var(--background-dark);
-}
 
-
-/* Hide specific menus */
-.hidden {
-	display: none;
+	background: var(--background);
 }

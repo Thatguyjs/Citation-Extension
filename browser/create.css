@@ -18,7 +18,7 @@
 
 	width: 90%;
 
-	background: var(--content-background-dark);
+	background: var(--content-background);
 	border-radius: 4px;
 	box-shadow: 1px 1px 3px black;
 
@@ -29,5 +29,5 @@
 	padding: 4px 0;
 
 	font-size: 16px;
-	color: var(--text-secondary-dark);
+	color: var(--text-secondary);
 }

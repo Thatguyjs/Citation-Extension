@@ -16,12 +16,12 @@ After the Chrome version is published, I'll consider it
 ### How do you install it?
 - Download source
 - Unzip
-- Go to Chrome (or new Edge)
-- chrome://extensions (or edge://extensions)
-- Turn on developer mode
+- Open Chrome (or the new Edge)
+- Go to chrome://extensions (or edge://extensions)
+- Turn on developer mode if needed
 - Load unpacked
-- Choose the folder you unzipped
+- Choose the unzipped folder
 - Done
 
 ### Why?
-I hate subscription fees and ads
+I hate ~~Chegg Services~~ subscription fees and ads

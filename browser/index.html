@@ -4,8 +4,12 @@
 		<meta charset="utf-8">
 
 		<!-- Main stylesheets -->
-		<link rel="stylesheet" href="../general/general.css">
+		<link rel="stylesheet" href="/general/general.css">
 		<link rel="stylesheet" href="style.css">
+
+		<!-- Icons / themes -->
+		<script src="/general/icons.js" defer></script>
+		<script src="/general/theme.js"></script>
 
 		<!-- Page-specific stylesheets -->
 		<link rel="stylesheet" href="home.css">
@@ -13,11 +17,13 @@
 		<link rel="stylesheet" href="create.css">
 	</head>
 	<body>
+		<div id="svg-icons" class="hidden"></div>
+
 		<!-- Header -->
-		<header>
+		<nav id="nav-heading">
 			<h1 id="title">Home</h1>
 			<button id="back" class="redirect-home hidden">Back</button>
-		</header>
+		</nav>
 
 
 		<!-- Home page -->
@@ -26,10 +32,12 @@
 				<h2>New Citation</h2>
 				<p>Create a new citation on the current page</p>
 			</div>
+
 			<div class="tab redirect-history">
 				<h2>History</h2>
 				<p>View your citation history</p>
 			</div>
+
 			<div class="tab redirect-stats">
 				<h2>Statistics</h2>
 				<p>Work in progress</p>

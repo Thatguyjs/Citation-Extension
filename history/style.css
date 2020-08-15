@@ -4,218 +4,99 @@ body {
 }
 
 
-/* Show the "Not Allowed" cursor */
-.disabled {
-	cursor: not-allowed;
-}
+/* Content sections */
+main {
+	display: flex;
 
-
-/* All Content */
-#content {
 	width: 100%;
-	height: var(--body-height);
-}
-.content-row {
-	vertical-align: top;
+	height: calc(100% - var(--heading-height));
 }
 
 
-/* Main toolbar */
-#main-toolbar {
-	width: 690px;
+/* Left section */
+#section-left {
+	display: flex;
+	flex-direction: column;
+
+	width: 320px;
+	height: 100%;
+}
+
+#section-left h1 {
+	margin: 12px;
+
+	color: var(--text-primary);
+}
+
+#container-list {
+	margin-bottom: 20px;
+
+	width: 100%;
+	height: 100%;
+
+	overflow-y: scroll;
 }
 
 
-/* Tab toolbars */
-.tab-toolbar button:first-child {
-	margin-left: 11px;
-}
-.tab-toolbar button {
-	display: inline-block;
-	margin: 0 4px;
+/* Middle section */
+#section-center {
+	flex: 1;
 
-	min-width: 44px;
-	height: 34px;
+	display: flex;
+	flex-direction: column;
 
-	background: var(--content-background-dark);
-	border-radius: 2px;
+	max-width: calc(100% - 414px);
+	height: 100%;
 
-	box-shadow: 1px 1px 3px rgb(20, 20, 20);
-	border: none;
-}
-.tab-toolbar button > img {
-	filter: invert(0.4);
+	border-left: 2px solid var(--section-border);
+	border-right: 2px solid var(--section-border);
 }
 
+/* Tab contents */
+#tab-contents {
+	width: 100%;
+	height: 100%;
 
-/* Tab selection type */
-#selection-type {
-	float: right;
-	margin-right: 17px;
+	overflow: hidden;
 }
 
 
-/* Left Menu */
-#left-menu {
-	position: relative;
+/* Right section */
+#section-right {
+	display: flex;
+	flex-direction: column;
 
-	width: 20%;
+	justify-content: center;
+
+	width: 90px;
+	height: 100%;
 }
 
+#social-icons {
+	display: flex;
+	flex-direction: column;
 
-/* Containers from the active tab */
-#tab-containers {
-	margin-top: 20px;
-	margin-left: 10%;
+	align-items: center;
 
-	width: 80%;
-	min-height: 100px;
-
-	background: var(--content-background-dark);
-	border-radius: 4px;
-	box-shadow: 2px 2px 4px rgb(26, 27, 30);
+	width: 100%;
 }
 
-#tab-containers span {
-	display: inline-block;
+#social-icons a {
+	display: block;
+	margin: 12px 0;
 
-	margin: 6px 12px;
-
-	color: var(--text-primary-dark);
-	font-size: 16px;
-	font-family: system-ui;
+	width: 48px;
+	height: 48px;
 }
 
-
-/* Citation drag element */
-.drag-helper {
-	position: fixed;
-
-	height: 45px;
-
-	background: var(--content-background-dark);
-	box-shadow: 1px 1px 4px rgb(6, 8, 9);
-
-	border-radius: 3px;
-
-	pointer-events: all;
-	cursor: grabbing;
-}
-
-.drag-helper h2 {
-	display: inline-block;
-
-	margin: 0;
-	padding: 10px 0 0 12px;
-
-	color: var(--text-primary-dark);
-}
-
-.drag-helper img {
-	display: inline-block;
-	vertical-align: top;
-
-	margin: 0;
-	padding: 10px 4px;
-
-	height: 24px;
-
-	filter: invert(0.4);
-}
-
-
-/* Right Menu */
-#right-menu {
-	width: 80px;
-}
-
-#social-links {
-	position: absolute;
-
-	top: 50%;
-	right: 15px;
-	transform: translateY(-50%);
-
-	width: 50px;
-}
-#social-links a {
+#social-icons a > img {
 	display: block;
 
-	margin-bottom: 50%;
+	width: 48px;
+	height: 48px;
 
-	width: 50px;
-	height: 50px;
+	transition: filter 0.1s;
 }
-#social-links a:last-child {
-	margin-bottom: 0;
-}
-#social-links a img {
-	width: 100%;
-}
-#social-links a:hover {
+#social-icons a > img:hover {
 	filter: drop-shadow(2px 2px 1px rgb(20, 20, 20));
-
-	cursor: pointer;
-}
-
-
-/* Search Bar */
-#searchbar {
-	float: left;
-
-	margin: 8px 10px 0 10px;
-	padding: 2px 5px;
-
-	width: 650px;
-	height: 25px;
-
-	font-size: 14px;
-	font-family: system-ui;
-
-	border-radius: 3px;
-	border: 2px solid white;
-}
-
-/* Refresh citation list */
-#filter-search {
-	position: relative;
-
-	float: left;
-	margin-top: 8px;
-
-	padding: 0;
-
-	width: 40px;
-	height: 32px;
-
-	background: var(--content-background-dark);
-	box-shadow: 1px 1px 3px rgb(10, 12, 12);
-	border-radius: 2px;
-
-	cursor: pointer;
-}
-
-#filter-search img {
-	position: absolute;
-	left: 50%;
-	top: 50%;
-
-	transform: translate(-50%, -50%);
-
-	filter: invert(0.4);
-}
-
-
-/* Dropdown Menus */
-.dropdown-container:focus-within .dropdown {
-	opacity: 1;
-}
-
-.dropdown {
-	position: absolute;
-
-	opacity: 0;
-	transition: opacity 250ms;
-
-	z-index: 2;
 }

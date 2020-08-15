@@ -1,21 +1,130 @@
 /* General Page Styling */
 
 
+/*
+	Light palettes:
+
+	https://coolors.co/f4f3ee-02111b-537d8d-32996e
+	https://coolors.co/eee5e9-545e75-78cad2-62a8ac
+	https://coolors.co/eee5e9-545e75-c5d86d-f05d23
+	https://coolors.co/eee5e9-231f20-bb4430-7ebdc2
+	https://coolors.co/eee5e9-588b8b-f28f3b-c8553d
+	https://coolors.co/d5b0ac-cea0ae-684551-402e2a
+	https://coolors.co/e54b4b-ffa987-f7ebe8-444140
+	https://coolors.co/293132-f7f5fb-474044-44b5e7
+	https://coolors.co/f7f5fb-08415c-44b5e7-f4ac45
+	https://coolors.co/f7f5fb-08415c-a63446-f4ac45
+	https://coolors.co/f7f5fb-08415c-b388eb-f4ac45
+	https://coolors.co/f7f5fb-000500-b388eb-d36060
+*/
+
+/*
+	Dark palettes:
+
+	https://coolors.co/282c34-dbd4d3-d2cca1-6883ba
+	https://coolors.co/282c34-887880-88a096-bbab8b
+	https://coolors.co/282c34-0e9594-f9f5e3-e15554
+	https://coolors.co/282c34-f9f5e3-ce8964-0892a5
+	https://coolors.co/282c34-f9f5e3-70877f-cf5c36
+	https://coolors.co/282c34-b3af8f-66999b-ffc482
+	https://coolors.co/282c34-d7cdcc-ffffff-9c528b
+	https://coolors.co/231f20-bb4430-7ebdc2-f3dfa2
+	https://coolors.co/231f20-cf5c36-eee5e9-7c7c7c
+	https://coolors.co/231f20-ead94c-eee5e9-7c7c7c
+	https://coolors.co/231f20-92dce5-eee5e9-7c7c7c
+	https://coolors.co/231f20-3892d1-eee5e9-7c7c7c
+*/
+
+/*
+	High Contrast palettes:
+
+	https://coolors.co/010001-f7f5fb-e9b44c-44e5e7
+	https://coolors.co/010001-e8f1f2-fb9f89-637081
+	https://coolors.co/010001-e8f1f2-c97d60-1d70a2
+	https://coolors.co/010001-e8f1f2-9c7178-1d70a2
+	https://coolors.co/010001-6db1bf-ffeaec-f39a9d
+	https://coolors.co/010001-f7f5fb-e9b44c-7a918d
+	https://coolors.co/010001-f7f5fb-e9b44c-c3423f
+	https://coolors.co/010001-f7f5fb-9e768f-44b5e7
+	https://coolors.co/010001-f7f5fb-c58882-44b5e7
+*/
+
+
+@font-face {
+	font-family: "Varta";
+	src: url("/general/fonts/Varta/Varta-Light.ttf") format("truetype");
+}
+
+
+@font-face {
+	font-family: "Roboto";
+	src: url("/general/fonts/Roboto/Roboto-Regular.ttf") format("truetype");
+}
+
+
+@font-face {
+	font-family: "Mulish";
+	src: url("/general/fonts/Mulish/Mulish-Bold.ttf") format("truetype");
+}
+
+
+@font-face {
+	font-family: "Open Sans";
+	src: url("/general/fonts/Open_Sans/OpenSans-SemiBold.ttf") format("truetype");
+}
+
+
+* {
+	font-family: "Open Sans";
+}
+
+
 :root {
-	--header-height: 50px;
-	--body-height: calc(100vh - var(--header-height) - 1px);
+	--heading-height: 50px;
 
-	--header-dark: rgb(41, 42, 45);
-	--outline-dark: rgb(60, 62, 67);
-	--background-dark: rgb(32, 33, 36);
+	--header: rgb(41, 42, 45);
+	--outline: rgb(60, 62, 67);
+	--background: rgb(32, 33, 36);
 
-	--content-background-dark: rgb(42, 43, 47);
+	/* --search-bar-background: rgb(240, 240, 240); */
+	--search-bar-background: rgb(71, 72, 75);
+	--search-bar-action: rgb(215, 215, 215);
+	--search-bar-text: rgb(200, 200, 200);
 
-	--text-primary-dark: rgb(200, 202, 206);
-	--text-secondary-dark: rgb(140, 142, 148);
+	--section-border: rgb(38, 38, 40);
 
-	--affirmative-dark: rgb(30, 140, 80);
-	--negative-dark: rgb(220, 115, 110);
+	--tab-headers-background: rgb(28, 30, 34);
+	--tab-header-background: rgb(32, 33, 36);
+	--tab-header-border: rgb(18, 22, 25);
+	--tab-header-active-indicator: rgb(40, 90, 170);
+	--tab-header-title: rgb(115, 115, 115);
+	--tab-header-title-active: rgb(190, 190, 190);
+	--tab-header-close-background: rgb(43, 44, 49);
+	--tab-header-close-background-hover: rgb(55, 90, 160);
+	--tab-header-close-fill: rgb(90, 90, 90);
+	--tab-header-close-fill-hover: rgb(190, 190, 190);
+
+	--tab-create-background: Transparent;
+	--tab-create-background-hover: rgb(44, 45, 48);
+	--tab-create-fill: rgb(130, 130, 130);
+
+	--toolbar-button-background: rgb(42, 43, 47);
+	--toolbar-button-icon: rgb(140, 142, 147);
+
+	--content-background: rgb(42, 43, 47);
+
+	/* --citation-background: rgb(42, 43, 47); */
+	--citation-background: rgb(45, 46, 49);
+	--citation-shadow-color: rgb(18, 20, 24);
+	--citation-header-color: white; /* Unused */
+	--citation-container-background: rgb(55, 56, 59);
+	--citation-container-view: rgb(67, 68, 71);
+
+	--text-primary: rgb(205, 207, 211);
+	--text-secondary: rgb(155, 157, 162);
+
+	--affirmative: rgb(30, 140, 80);
+	--negative: rgb(220, 115, 110);
 }
 
 
@@ -29,29 +138,29 @@ body {
 	margin: 0;
 	padding: 0;
 
-	width: 480px;
-	height: 270px;
-
-	background: var(--background-dark);
+	background: var(--background);
 }
 
 
-header {
-	display: inline-block;
-
+#nav-heading {
 	width: 100%;
-	height: var(--header-height);
+	height: calc(var(--heading-height) - 1px);
 
-	background: var(--header-dark);
-	border-bottom: 1px solid var(--outline-dark);
+	background: var(--header);
+	border-bottom: 1px solid var(--outline);
 }
-header h1 {
+#nav-heading h1 {
+	display: inline-block;
+	float: left;
+
 	margin: 0;
 	padding: 8px 14px;
 
 	color: rgb(235, 230, 232);
+	font-family: "Mulish";
+	font-size: 24px;
 }
-header button {
+#nav-heading > button {
 	position: absolute;
 
 	right: 8px;
@@ -60,13 +169,13 @@ header button {
 	width: 70px;
 	height: 32px;
 
-	color: var(--negative-dark);
+	color: var(--negative);
 
 	background: Transparent;
-	border: 1px solid var(--outline-dark);
+	border: 1px solid var(--outline);
 	border-radius: 3px;
 }
-header button:hover {
+#nav-heading > button:hover {
 	background: rgba(255, 255, 255, 0.05);
 }
 
@@ -74,4 +183,9 @@ header button:hover {
 button {
 	border-width: 2px;
 	cursor: pointer;
+}
+
+
+.hidden {
+	display: none;
 }

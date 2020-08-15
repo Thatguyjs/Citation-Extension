@@ -1,4 +1,4 @@
-FORMAT v.00.00.01
+FORMAT v.00.00.02
 :MLA81:2. <"0" 3, >4, <1:0.<;
-:IEEE0:2, <"0," 1:1>, 4.< [Online]. Available: 1. [Accessed 5];
+:IEEE0:2, <"0," 1:1, >4. <[Online]. Available: 1. [Accessed 5];
 :BibTeX0:@misc{citation_name, title={0}, url={1}, publisher={3:0}, author={2}, year={4:2}, month={4:1}, day={4:0}};
