@@ -77,6 +77,7 @@ class Tab {
 
 		this._header = document.createElement('div');
 		this._header.className = `tab-header tab-header-${this.id}`;
+		this._header.setAttribute('draggable', 'true');
 
 		let title = document.createElement('span');
 		title.className = 'tab-title';

@@ -147,6 +147,12 @@
 .citation-drag-area {
 	border-top-right-radius: 5px;
 	border-bottom-right-radius: 5px;
+}
 
+.citation:not(.grabbing) .citation-drag-area {
 	cursor: grab;
+}
+
+.citation.grabbing {
+	cursor: grabbing;
 }

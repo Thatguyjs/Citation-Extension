@@ -13,6 +13,10 @@
 	overflow-y: hidden;
 }
 
+#tab-headers::-webkit-scrollbar {
+	display: none;
+}
+
 .tab-header {
 	flex: 1;
 
@@ -23,7 +27,7 @@
 
 	min-width: 100px;
 	max-width: 200px;
-	height: 100%;
+	width: 100%;
 
 	user-select: none;
 

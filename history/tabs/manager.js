@@ -94,6 +94,19 @@ const TabManager = {
 			event.preventDefault();
 		});
 
+		tab.header.addEventListener('dragstart', (event) => {
+			DragManager.drag(tab.header, event, {
+				direction: 'horizontal',
+				filter: '.tab-header',
+				callback: () => {
+					this._headerElement.appendChild(this._createTabButton);
+					this.setTab(tab.id);
+				}
+			});
+
+			event.preventDefault();
+		});
+
 		this._headerElement.insertBefore(tab.header, this._createTabButton);
 		this._bodyElement.appendChild(tab.body);
 		this._tabs.push(tab);

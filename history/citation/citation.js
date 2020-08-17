@@ -99,6 +99,20 @@ const CitationManager = {
 			selectArea.addEventListener('click', () => {
 				TabManager.getTab(tabId).toggleSelect(Number(c));
 			});
+
+			// Drag
+			let dragArea = citations[c].element.querySelector('.citation-drag-area');
+
+			dragArea.addEventListener('mousedown', (event) => {
+				citations[c].element.classList.add('grabbing');
+
+				DragManager.drag(citations[c].element, event, {
+					direction: 'vertical',
+					callback: () => {
+						citations[c].element.classList.remove('grabbing');
+					}
+				});
+			});
 		}
 	},
 
