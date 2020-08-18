@@ -6,6 +6,7 @@ const Main = {
 
 	init: function() {
 		this.homeTab = TabManager.createTab('My Citations', true, {
+			home: true,
 			removable: false
 		});
 

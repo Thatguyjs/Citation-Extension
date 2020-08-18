@@ -221,6 +221,13 @@ class Tab {
 	}
 
 
+	// Remove a citation
+	removeCitation(index) {
+		this.body.removeChild(this.citations[index].element);
+		this.citations[index].citation = null;
+	}
+
+
 	// Toggle a citation's selected state
 	toggleSelect(index, updateToolbar=true) {
 		let svg = this.citations[index].element.querySelector('.citation-select');

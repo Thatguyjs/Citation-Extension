@@ -28,6 +28,10 @@ const TabManager = {
 	_active: -1,
 
 
+	// Home tab id
+	_homeId: -1,
+
+
 	// Tab header context menu
 	_headerMenuId: null,
 
@@ -111,7 +115,9 @@ const TabManager = {
 		this._bodyElement.appendChild(tab.body);
 		this._tabs.push(tab);
 
+		if(permissions.home) this._homeId = tab.id;
 		if(active) this.setTab(tab.id);
+
 		return tab.id;
 	},
 
@@ -142,9 +148,9 @@ const TabManager = {
 	},
 
 
-	// Move a tab to a new position
-	moveTab: function(from, to) {
-		console.log("Todo: move tabs");
+	// Get the home tab
+	get homeTab() {
+		return this._tabs[this._homeId];
 	},
 
 

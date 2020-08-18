@@ -57,6 +57,8 @@ const CitationManager = {
 		return new Promise((resolve, reject) => {
 			ExtStorage.getPreset('citations', (error, citations) => {
 				this._citations = citations;
+				this.cleanLocal();
+
 				resolve();
 			});
 		});
@@ -143,7 +145,46 @@ const CitationManager = {
 				});
 				break;
 
+			case 'rename':
+				citation.citation.name = prompt("Enter a name:") || citation.citation.name;
+				citation.element.querySelector('.citation-title').innerText = citation.citation.name;
+
+				if(TabManager.active === TabManager.homeTab) {
+					CitationManager.saveLocal();
+				}
+				break;
+
+			case 'edit':
+				alert("Editing isn't implemented yet");
+				break;
+
+			case 'delete':
+				TabManager.active.removeCitation(id);
+
+				if(TabManager.active === TabManager.homeTab) {
+					CitationManager._citations[id] = null;
+					CitationManager.saveLocal(); // cleanLocal() messes up indexes
+				}
+				break;
+
 		}
+	},
+
+
+	// Clean and save local citations
+	cleanLocal: function() {
+		let originalLen = this._citations.length;
+		this._citations = this._citations.filter(item => item !== null);
+
+		if(originalLen !== this._citations.length) {
+			this.saveLocal();
+		}
+	},
+
+
+	// Save local citations
+	saveLocal: function() {
+		ExtStorage.setPreset('citations', this._citations);
 	},
 
 
