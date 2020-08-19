@@ -1,1 +1,64 @@
 THEME v.00.00.00
+{
+	"header": ["rgb", 41, 42, 45],
+	"outline": ["rgb", 60, 62, 67],
+
+	"search-bar": {
+		"background": ["rgb", 71, 72, 75],
+		"action": ["rgb", 215, 215, 215],
+		"text": ["rgb", 200, 200, 200]
+	},
+
+	"section-border": ["rgb", 38, 38, 40],
+
+	"tab-headers-background": ["rgb", 28, 30, 34],
+	"tab-header": {
+		"background": ["rgb", 32, 33, 36],
+		"border": ["rgb", 18, 22, 25],
+
+		"active-indicator": ["rgb", 40, 90, 170],
+
+		"title": ["rgb", 115, 115, 115],
+		"title-active": ["rgb", 190, 190, 190],
+
+		"save-background": ["rgb", 60, 90, 150],
+
+		"close": {
+			"background": ["rgb", 43, 44, 49],
+			"background-hover": ["rgb", 55, 90, 160],
+			"fill": ["rgb", 90, 90, 90],
+			"fill-hover": ["rgb", 190, 190, 190]
+		}
+	},
+
+	"tab-create": {
+		"background": ["none"],
+		"background-hover": ["rgb", 44, 45, 48],
+		"fill": ["rgb", 130, 130, 130]
+	},
+
+	"toolbar-button": {
+		"background": ["rgb", 42, 43, 47],
+		"fill": ["rgb", 140, 142, 147]
+	},
+
+	"content-background": ["rgb", 42, 43, 47],
+
+	"citation": {
+		"background": ["rgb", 45, 46, 49],
+		"shadow-color": ["rgb", 18, 20, 24],
+
+		"container": {
+			"background": ["rgb", 55, 56, 59],
+			"view": ["rgb", 67, 68, 71]
+		}
+	},
+
+	"text": {
+		"primary": ["rgb", 205, 207, 211],
+		"secondary": ["rgb", 155, 157, 162]
+	},
+
+	"affirmative": ["rgb", 30, 140, 80],
+	"negative": ["rgb", 220, 115, 110]
+}
