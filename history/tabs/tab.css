@@ -56,7 +56,7 @@
 	display: block;
 	margin: 9px 10px;
 
-	width: calc(100% - 50px);
+	width: calc(100% - 65px);
 
 	color: var(--tab-header-title);
 	font-family: "Varta";
@@ -69,6 +69,17 @@
 
 .tab-header.active .tab-title {
 	color: var(--tab-header-title-active);
+}
+
+.tab-save-indicator {
+	float: right;
+	margin: 14px 2px;
+
+	width: 8px;
+	height: 8px;
+
+	background: var(--tab-header-save-background);
+	border-radius: 100%;
 }
 
 .tab-close-button {

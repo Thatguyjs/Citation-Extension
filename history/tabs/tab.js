@@ -83,6 +83,9 @@ class Tab {
 		title.className = 'tab-title';
 		title.innerText = this.title;
 
+		let saveInd = document.createElement('div');
+		saveInd.className = 'tab-save-indicator hidden';
+
 		let closeBtn = document.createElement('button');
 		closeBtn.setAttribute('title', 'Close tab');
 		closeBtn.className = 'tab-close-button';
@@ -90,6 +93,7 @@ class Tab {
 
 		this._header.appendChild(title);
 		this._header.appendChild(closeBtn);
+		this._header.appendChild(saveInd);
 
 		this._header.addEventListener('click', (event) => {
 			if(event.path.includes(closeBtn)) {
@@ -225,6 +229,15 @@ class Tab {
 	removeCitation(index) {
 		this.body.removeChild(this.citations[index].element);
 		this.citations[index].citation = null;
+	}
+
+
+	// Set the save indicator's visibility
+	setSaveIndicator(visible=true) {
+		let element = this.header.querySelector('.tab-save-indicator');
+
+		if(visible) element.classList.remove('hidden');
+		else element.classList.add('hidden');
 	}
 
 

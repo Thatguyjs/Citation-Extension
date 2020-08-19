@@ -99,7 +99,7 @@ const CitationManager = {
 			let selectArea = citations[c].element.querySelector('.citation-select-area');
 
 			selectArea.addEventListener('click', () => {
-				TabManager.getTab(tabId).toggleSelect(Number(c));
+				TabManager.getTab(tabId).toggleSelect(+c);
 			});
 
 			// Drag
@@ -152,6 +152,7 @@ const CitationManager = {
 				if(TabManager.active === TabManager.homeTab) {
 					CitationManager.saveLocal();
 				}
+				else TabManager.active.setSaveIndicator(true);
 				break;
 
 			case 'edit':
@@ -159,12 +160,15 @@ const CitationManager = {
 				break;
 
 			case 'delete':
+				if(!confirm('Delete the citation?')) break;
+
 				TabManager.active.removeCitation(id);
 
 				if(TabManager.active === TabManager.homeTab) {
 					CitationManager._citations[id] = null;
 					CitationManager.saveLocal(); // cleanLocal() messes up indexes
 				}
+				else TabManager.active.setSaveIndicator(true);
 				break;
 
 		}

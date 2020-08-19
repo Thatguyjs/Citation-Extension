@@ -206,6 +206,19 @@ const TabManager = {
 		}
 
 		return citations;
+	},
+
+
+	// Set save indicator visibility for tabs
+	setSaveIndicator: function(visible=true, tabMode='single') {
+		if(tabMode === 'single') {
+			this.active.setSaveIndicator(visible);
+		}
+		else {
+			for(let t in this._tabs) {
+				this._tabs[t].setSaveIndicator(visible);
+			}
+		}
 	}
 
 };

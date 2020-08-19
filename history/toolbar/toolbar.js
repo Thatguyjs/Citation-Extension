@@ -45,8 +45,13 @@ const Toolbar = {
 				break;
 
 			case 'export':
-				CitationManager.exportCitations(TabManager.getSelected(this._tabState));
-				break;
+			{
+				let selected = TabManager.getSelected(this._tabState);
+				if(!selected.length) break;
+
+				CitationManager.exportCitations(selected);
+				TabManager.setSaveIndicator(false, this._tabState);
+			}	break;
 
 		}
 	},
