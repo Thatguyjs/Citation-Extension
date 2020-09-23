@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+	<head>
+		<meta charset="utf-8">
+		<title>Settings</title>
+
+		<link rel="stylesheet" href="/general/general.css">
+
+		<script src="/general/icons.js" defer></script>
+		<script src="/general/theme.js"></script>
+
+		<link rel="stylesheet" href="section.css">
+		<link rel="stylesheet" href="style.css">
+	</head>
+	<body>
+		<div id="svg-icons" class="hidden"></div>
+
+		<input id="upload-area" class="hidden" type="file">
+
+
+		<!-- Nav bar -->
+		<nav id="nav-heading">
+			<h1>Extension Settings</h1>
+		</nav>
+
+
+		<!-- Main content -->
+		<main>
+			<div id="section-headers">
+				<div class="section-header default" name="storage">
+					<h2>Storage</h2>
+				</div>
+				<div class="section-header" name="formats">
+					<h2>Formats</h2>
+				</div>
+				<div class="section-header" name="themes">
+					<h2>Themes</h2>
+				</div>
+			</div>
+
+			<div id="section-contents">
+				<div class="section-content hidden" id="section-storage">
+					<h2>Customize storage</h2>
+
+					<div class="setting-toggle setting">
+						<span>Store web resource locations</span>
+						<button><div></div></button>
+					</div>
+
+					<div class="setting-toggle setting">
+						<span>Keep citations after deleting</span>
+						<button><div></div></button>
+					</div>
+				</div>
+				<div class="section-content hidden" id="section-formats">
+					<h2>Manage formats</h2>
+
+					<div class="setting-upload setting">
+						<button>Upload a format file</button>
+					</div>
+				</div>
+				<div class="section-content hidden" id="section-themes">
+					<h2>Add or Remove themes</h2>
+
+					<div class="setting-upload setting">
+						<button>Upload a theme</button>
+					</div>
+
+					<div id="theme-list"></div>
+				</div>
+			</div>
+		</main>
+
+
+		<!-- Scripts -->
+		<script src="/general/storage.js"></script>
+
+		<script src="settings.js"></script>
+
+		<script src="main.js"></script>
+		<script src="load.js"></script>
+	</body>
+</html>

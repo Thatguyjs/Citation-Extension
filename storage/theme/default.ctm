@@ -54,11 +54,25 @@ THEME v.00.00.00
 		}
 	},
 
+	"setting": {
+		"toggle": {
+			"background": ["rgb", 42, 43, 47],
+			"border": ["rgb", 60, 62, 67],
+			"slider": ["rgb", 81, 82, 84],
+			"active": ["rgb", 30, 145, 80]
+		}
+	},
+
 	"text": {
 		"primary": ["rgb", 205, 207, 211],
 		"secondary": ["rgb", 155, 157, 162]
 	},
 
 	"affirmative": ["rgb", 30, 140, 80],
-	"negative": ["rgb", 220, 115, 110]
+	"negative": ["rgb", 220, 115, 110],
+
+	"section-header": {
+		"hover": ["rgb", 27, 28, 30],
+		"active": ["rgb", 40, 41, 44]
+	}
 }

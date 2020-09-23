@@ -7,7 +7,8 @@ const ExtStorage = {
 	_presets: {
 		'citations': ['citation-storage', []],
 		'containers': ['container-storage', []],
-		'domains': ['autofill-domain-list', []]
+		'domains': ['autofill-domain-list', []],
+		'settings': ['settings', {}]
 	},
 
 

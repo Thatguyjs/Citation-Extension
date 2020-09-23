@@ -155,11 +155,11 @@ body {
 	float: left;
 
 	margin: 0;
-	padding: 8px 14px;
+	padding: 9px 14px;
 
 	color: rgb(235, 230, 232);
 	font-family: "Mulish";
-	font-size: 24px;
+	font-size: 22px;
 }
 #nav-heading > button {
 	position: absolute;

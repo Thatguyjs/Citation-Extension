@@ -5,9 +5,9 @@ const Main = {
 	// List of all pages
 	_pages: {
 		'home': { inline: true },
-		'stats': { inline: true },
 		'create': { inline: true },
-		'history': { inline: false, url: '../history/index.html' }
+		'history': { inline: false, url: '/history/index.html' },
+		'settings': { inline: false, url: '/settings/index.html' }
 	},
 
 
