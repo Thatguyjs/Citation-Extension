@@ -23,8 +23,13 @@ class Tab {
 
 
 	// Set tab permissions
-	setPermissions(options) {
+	setPermissions(options=null) {
 		if(!options) return 0;
+
+		if(typeof options === 'number') {
+			this._permissions = options;
+			return options;
+		}
 
 		let bitField = 0;
 

@@ -75,7 +75,29 @@ const TabManager = {
 
 	// Recieve a tab context menu event
 	_tabMenuEvent: function(name, data) {
-		console.log("Tab menu event:", name);
+		if(name === 'close-other') {
+			let other = TabManager._tabs.filter(tab => tab.id !== data.id);
+
+			for(let o in other) {
+				TabManager.removeTab(other[o].id);
+			}
+		}
+		else if(name === 'close-all') {
+			let t = TabManager._tabs.length;
+
+			while(t-- > 0) {
+				TabManager.removeTab(t);
+			}
+		}
+		else if(name === 'merge') {
+			alert("Merging tabs isn't implemented yet");
+		}
+		else if(name === 'duplicate') {
+			let newId = TabManager.createTab(data.title + ' (copy)', true);
+
+			let citations = data.citations.map(citation => citation.citation);
+			TabManager.loadCitations(newId, citations);
+		}
 	},
 
 
