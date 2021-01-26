@@ -1,0 +1,29 @@
+#toolbar {
+	margin: 10px 0;
+	padding: 0;
+
+	width: 100%;
+	height: 35px;
+
+	/* background: rgba(255, 0, 0, 0.15); */
+}
+
+.toolbar-button {
+	margin-left: 6px;
+	padding: 4px 0;
+
+	width: 50px;
+	height: 100%;
+
+	background: rgb(32, 36, 42);
+	border-radius: 2px;
+	border: 1px solid var(--outline);
+	outline: none;
+}
+.toolbar-button > svg {
+	width: 100%;
+	height: 24px;
+}
+.toolbar-button > svg use[href="#icon-checkbox-checked"] {
+	fill: var(--highlight);
+}

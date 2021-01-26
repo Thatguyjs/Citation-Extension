@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+	<head>
+		<meta charset="utf-8">
+		<title>Citation Manager</title>
+
+		<link rel="stylesheet" href="/general/general.css">
+		<link rel="stylesheet" href="/general/dropdown.css">
+		<link rel="stylesheet" href="/general/popup/popup.css">
+
+		<script src="/general/icons.js" defer></script>
+		<script src="/general/theme.js"></script>
+
+		<link rel="stylesheet" href="menu/contextmenu.css">
+
+		<link rel="stylesheet" href="toolbar/toolbar.css">
+		<link rel="stylesheet" href="citation/citation.css">
+
+		<link rel="stylesheet" href="style.css">
+		<link rel="stylesheet" href="footer.css">
+	</head>
+	<body>
+		<div id="svg-icons" class="hidden"></div>
+
+		<input id="file-upload" class="hidden" type="file" accept=".chf" multiple>
+
+
+		<!-- Nav bar -->
+		<nav id="nav-heading">
+			<h1>Citation Manager</h1>
+		</nav>
+
+
+		<!-- Main content -->
+		<main>
+			<div id="section-left">
+				<div class="dropdown" id="create-dropdown">
+					<button id="create">+ New</button>
+					<div>
+						<button name="container" class="dropdown-button">Container</button>
+						<button name="citation" class="dropdown-button">Blank citation</button>
+						<span class="dropdown-separator"></span>
+						<div class="dropdown" id="import-dropdown">
+							<button class="dropdown-menu">
+								<p>History import</p>
+								<svg><use href="#icon-caret-right"/></svg>
+							</button>
+							<div>
+								<button name="import-current" class="dropdown-button">Current tab</button>
+								<button name="import-new" class="dropdown-button">New tab</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="section-center">
+				<div id="toolbar">
+					<button class="toolbar-button" name="select-all" title="Select all">
+						<svg fill="#999"><use href="#icon-checkbox-blank"/></svg>
+					</button>
+					<button class="toolbar-button" name="copy" title="Copy selected">
+						<svg fill="#999"><use href="#icon-copy"/></svg>
+					</button>
+					<button class="toolbar-button" name="export" title="Export selected">
+						<svg fill="#999"><use href="#icon-export"/></svg>
+					</button>
+				</div>
+
+				<!-- Citation list -->
+				<div id="citation-list"></div>
+
+				<!-- Default popup container -->
+				<div id="default-popups" name="default" class="popup-container"></div>
+			</div>
+			<div id="section-right">
+
+			</div>
+		</main>
+
+
+		<!-- Page footer -->
+		<footer>
+			<p id="citations-loaded"><span>0</span> citations loaded</p>
+		</footer>
+
+
+		<!-- Scripts -->
+		<script src="/general/date.js"></script>
+		<script src="/general/storage.js"></script>
+		<script src="/general/format.js"></script>
+		<script src="/general/history.js"></script>
+		<script src="/general/dropdown.js"></script>
+		<script src="/general/popup/popup.js"></script>
+
+		<script src="menu/contextmenu.js"></script>
+
+		<script src="toolbar/toolbar.js"></script>
+
+		<script src="citation/citation.js"></script>
+		<script src="citation/loader.js"></script>
+
+		<script src="main.js"></script>
+		<script src="load.js"></script>
+	</body>
+</html>

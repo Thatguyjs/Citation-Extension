@@ -3,371 +3,307 @@
 
 const HistoryFormatter = {
 
-	// Parse errors
+	// Error messages
 	errors: [
 		"",
-		"Invalid File Header",
-		"Invalid Date String",
-		"Invalid Array String"
+		"Invalid File Length",
+		"Invalid File Constant",
+		"Incompatible File Version"
 	],
 
 
-	// History file header
-	_fileHeader: "HISTORY v.",
-	_headerLength: 18,
+	// History file header constant
+	_headerConstant: "CHF+",
+	_headerConstantArray: new Uint8Array([67, 72, 70, 43]),
+	_headerConstantLength: 4,
+	_headerLength: 14,
 
 
-	// Available history versions
-	_allowedVersions: [
-		"00.00.00"
-	],
+	// Allowed file versions & current version
+	_minAllowedVersion: 0,
+	_maxAllowedVersion: 0,
+	_fileVersion: 0,
 
 
-	// Element marker (group separator)
-	_elementMarker: String.fromCharCode(29),
+	// Convert a string to a Uint8Array
+	_stringToArray: function(string) {
+		const arr = new Uint8Array(string.length);
 
-
-	// Different element numbers
-	_elements: [
-		["title", ""],
-		["url", ""],
-		["authors", []],
-		["publishers", []],
-		["publishdate", {}],
-		["accessdate", {}]
-	],
-
-
-	// Metadata property order
-	_metadata: [
-		["format", ""],
-		["name", ""],
-		["created", {}],
-		["modified", {}],
-		["containers", []]
-	],
-
-
-	// Check & parse data
-	_loadFile: function(data) {
-		// Check for content first
-		if(data.length === this._headerLength) {
-			return { citations: [], containers: [] };
+		for(let c in string) {
+			arr[c] = string.charCodeAt(c);
 		}
 
-		// Check file header
-		let accepted = false;
-
-		for(let v in this._allowedVersions) {
-			let matchString = this._fileHeader + this._allowedVersions[v];
-
-			if(data.slice(0, this._headerLength) === matchString) {
-				accepted = true;
-				break;
-			}
-		}
-
-		if(!accepted) {
-			return { error: 1 };
-		}
-
-		// Parse data
-		return this._parseHistory(data.slice(this._headerLength));
+		return arr;
 	},
 
 
-	// Parse history data (string)
-	_parseHistory: function(data) {
-		let error = 0;
-		let containers = [];
-		let citations = [];
+	// Convert an array to an element list
+	_arrayToElemList: function(array) {
+		if(!array.length) return new Uint8Array();
 
-		let currentCitation = {}; // Current citation
-		let node = {}; // Current citation node
-
-		let length = data.length;
+		const length = array.length;
+		const list = new Uint8Array(array.join('.').length + 1);
 		let index = 0;
 
-		let metadata = false; // Currently parsing metadata
-		let metadataIndex = 0;
+		for(let i = 0; i < length; i++) {
+			list[index] = array[i].length;
+			list.set(this._stringToArray(array[i]), index + 1);
 
-		while(index < length && index >= 0) {
+			index += list[index] + 1;
+		}
 
-			// Containers
-			if(data[index] === '#') {
-				index += 2; // Skip colon
-				let name = "";
+		return list;
+	},
 
-				while(data[index] !== ';') {
-					if(data[index] === '\\') {
-						index++;
-					}
 
-					name += data[index];
-					index++;
-				}
+	// Convert a list of authors to an element list
+	_authorsToElemList: function(authors) {
+		if(!authors.length) return new Uint8Array();
 
-				containers.push(name);
-				index++;
+		let names = [];
+
+		for(let a in authors) {
+			names.push(
+				authors[a].prefix,
+				authors[a].firstname,
+				authors[a].middlename,
+				authors[a].lastname,
+			);
+		}
+
+		return this._arrayToElemList(names);
+	},
+
+
+	// Check & parse data
+	_loadFile: function(buffer) {
+		const data = new Uint8Array(buffer);
+
+		// Check for content first
+		if(data.length < this._headerLength) {
+			return { error: 1 };
+		}
+		else if(data.length === this._headerLength) {
+			return { citations: [], containers: [] };
+		}
+
+		// Check file constant
+		for(let i = 0; i < this._headerConstantLength; i++) {
+			if(data[i] !== this._headerConstantArray[i]) {
+				return { error: 2 };
+			}
+		}
+
+		// Check version number
+		const version = (data[4] << 8) | data[5];
+		if(version < this._minAllowedVersion || version > this._maxAllowedVersion) {
+			return { error: 3 };
+		}
+
+		// Parse data
+		return this._parseHistory(data);
+	},
+
+
+	// Parse history data
+	_parseHistory: function(data) {
+		const decoder = new TextDecoder("utf-8");
+
+		let error = 0;
+		let citations = [];
+		let containers = [];
+
+		const length = data.length;
+		const dataStart = this._headerLength;
+
+		// Parse containers
+		const containerNum = (data[12] << 8) | data[13];
+		// Todo
+
+		// Parse citations
+		const citationNum = (data[10] << 8) | data[11];
+		let index = dataStart;
+		let citation = {};
+
+		for(let i = 0; i < citationNum; i++) {
+			citation = {};
+			let offset = index;
+
+			// Header
+			const totalLength = (data[offset] << 8) | data[offset + 1];
+			offset += 2;
+
+			const formatLen = data[offset];
+			citation.format = decoder.decode(data.slice(offset + 1, offset + 1 + formatLen));
+			offset += formatLen + 1;
+
+			const nameLen = data[offset];
+			citation.name = decoder.decode(data.slice(offset + 1, offset + 1 + nameLen));
+			offset += nameLen + 1;
+
+			citation.created = DateFormatter.parseDate(data.slice(offset, offset + 4));
+			offset += 4;
+
+			citation.modified = DateFormatter.parseDate(data.slice(offset, offset + 4));
+			offset += 4;
+
+			const containerNum = data[offset];
+			citation.containers = [];
+			offset++;
+
+			for(let i = 0; i < containerNum; i++) {
+				const len = data[offset];
+				citation.containers.push(decoder.decode(data.slice(offset + 1, offset + 1 + len)));
+
+				offset += len + 1;
 			}
 
-			// New / existing citation marker
-			else if(data[index] === ':') {
-				index++;
-				metadata = !metadata;
+			// Body
+			const titleLen = data[offset];
+			citation.title = decoder.decode(data.slice(offset + 1, offset + 1 + titleLen));
+			offset += titleLen + 1;
 
-				if(metadata) {
-					metadataIndex = -1;
-				}
+			const urlLen = ((data[offset] << 8) | (data[offset + 1] & 0xff)) / 8;
+			citation.url = decoder.decode(data.slice(offset + 2, offset + 2 + urlLen));
+			offset += urlLen + 2;
+
+			const authorNum = data[offset];
+			citation.authors = [];
+			offset++;
+
+			for(let i = 0; i < authorNum; i++) {
+				let author = {};
+
+				let len = data[offset];
+				author.prefix = decoder.decode(data.slice(offset + 1, offset + 1 + len));
+				offset += len + 1;
+
+				len = data[offset];
+				author.firstname = decoder.decode(data.slice(offset + 1, offset + 1 + len));
+				offset += len + 1;
+
+				len = data[offset];
+				author.middlename = decoder.decode(data.slice(offset + 1, offset + 1 + len));
+				offset += len + 1;
+
+				len = data[offset];
+				author.lastname = decoder.decode(data.slice(offset + 1, offset + 1 + len));
+				offset += len + 1;
+
+				citation.authors.push(author);
 			}
 
-			// Element marker
-			else if(data[index] === this._elementMarker) {
-				if(node.name) currentCitation[node.name] = node.value;
-				index++;
+			const publisherNum = data[offset];
+			citation.publishers = [];
+			offset++;
 
-				// Another metadata property
-				if(metadata) {
-					metadataIndex++;
+			for(let i = 0; i < publisherNum; i++) {
+				const len = data[offset];
+				citation.publishers.push(decoder.decode(data.slice(offset + 1, offset + 1 + len)));
 
-					node = {
-						name: this._metadata[metadataIndex][0],
-						value: this._metadata[metadataIndex][1]
-					};
-				}
-
-				// End of citation
-				else if(data[index] === ';') {
-					citations.push(currentCitation);
-					currentCitation = {};
-					node = {};
-					index++;
-				}
-
-				// Another citation property
-				else {
-					let number = Number(data[index]);
-					index += 2; // Skip colon
-
-					node = {
-						name: this._elements[number][0],
-						value: this._elements[number][1]
-					};
-				}
+				offset += len + 1;
 			}
 
-			// Dates
-			else if(data[index] === '<') {
-				if(typeof node.value !== 'object') {
-					error = 2;
-					break;
-				}
+			citation.publishdate = DateFormatter.parseDate(data.slice(offset, offset + 4));
+			offset += 4;
 
-				index++;
+			citation.accessdate = DateFormatter.parseDate(data.slice(offset, offset + 4));
+			offset += 4;
 
-				node.value = {
-					day: Number(data.slice(index, index + 2)),
-					month: Number(data.slice(index + 2, index + 4)),
-					year: Number(data.slice(index + 4, index + 8))
-				};
-
-				index += 9;
-			}
-
-			// Array
-			else if(data[index] === '[') {
-				if(!Array.isArray(node.value)) {
-					error = 3;
-					break;
-				}
-
-				node.value = [];
-
-				while(data[index] === '[') {
-					index++;
-
-					let result = [];
-					let current = "";
-
-					while(data[index] !== ']') {
-						if(data[index + 1] === ']') {
-							current += data[index];
-							result.push(current);
-						}
-
-						else if(data[index] === '\\') {
-							index++;
-							current += data[index];
-						}
-
-						else if(data[index] === ',') {
-							result.push(current);
-							current = "";
-						}
-
-						else {
-							current += data[index];
-						}
-
-						index++;
-					}
-
-					node.value.push(result);
-					index++;
-				}
-			}
-
-			// Whitespace
-			else if(data[index].match(/\s/)) {
-				index++;
-			}
-
-			// String
-			else {
-				if(typeof node.value !== 'string') {
-					console.error("TODO: Parse Error");
-					break; // TODO: Parse Error
-				}
-
-				node.value = "";
-
-				while(data[index] !== this._elementMarker) {
-					if(data[index] === '\\') {
-						index++;
-					}
-
-					node.value += data[index];
-					index++;
-				}
-			}
-
+			citations.push(citation);
+			index += totalLength / 8;
 		}
 
 		return {
 			error,
-			containers,
-			citations
+			citations,
+			containers
 		};
 	},
 
 
-	// Convert history data (object) to a string
-	_stringifyHistory: function(object) {
-		let result = "";
+	// Convert history data (object) to a buffer
+	_compileHistory: function(object) {
+		const citationNum = object.citations.length;
+		const containerNum = object.containers.length;
 
-		// Add all containers
-		for(let c in object.containers) {
-			result += `#:${object.containers[c]};`;
+		const header = new Uint8Array(14);
+		header.set(this._headerConstantArray, 0); // ID constant
+		header.set([this._fileVersion >>> 8, this._fileVersion & 0xff], 4); // Version number
+		header.set(DateFormatter.constructDate(new Date()), 6); // Creation date
+		header.set([citationNum >>> 8, citationNum & 0xff], 10);
+		header.set([containerNum >>> 8, containerNum & 0xff], 12);
+
+		// Compile citations
+		const citations = [];
+		let fileLength = header.length;
+
+		for(let i = 0; i < citationNum; i++) {
+			const citation = object.citations[i];
+			let array = [];
+			let citationLen = 208; // Minimum citation length (bits)
+
+			// Citation header
+			array.push(0, 0);
+			array.push(citation.format.length, this._stringToArray(citation.format));
+			array.push(citation.name.length, this._stringToArray(citation.name));
+			array.push(DateFormatter.constructDate(new Date()));
+			array.push(DateFormatter.constructDate(new Date()));
+			array.push(citation.containers.length, this._arrayToElemList(citation.containers));
+
+			citationLen += array[3].length * 8; // Format
+			citationLen += array[5].length * 8; // Name
+			citationLen += array[9].length * 8; // Containers
+
+			// Citation body
+			array.push(citation.title.length, this._stringToArray(citation.title));
+			array.push((citation.url.length * 8) >>> 8, (citation.url.length * 8) & 0xff);
+			array.push(this._stringToArray(citation.url));
+			array.push(citation.authors.length, this._authorsToElemList(citation.authors));
+			array.push(citation.publishers.length, this._arrayToElemList(citation.publishers));
+			array.push(DateFormatter.constructDate(citation.publishdate));
+			array.push(DateFormatter.constructDate(citation.accessdate));
+
+			citationLen += array[11].length * 8;
+			citationLen += array[14].length * 8;
+			citationLen += array[16].length * 8;
+			citationLen += array[18].length * 8;
+
+			array[0] = citationLen >>> 8;
+			array[1] = citationLen & 0xff;
+
+			let buf = new Uint8Array(citationLen / 8);
+			buf.set([
+				array[0], array[1], // Total length
+				array[2], ...array[3], // Format
+				array[4], ...array[5], // Name
+				...array[6], // Date created
+				...array[7], // Date modified
+				array[8], ...array[9], // Containers
+				array[10], ...array[11], // Title
+				array[12], array[13], ...array[14], // URL
+				array[15], ...array[16], // Authors
+				array[17], ...array[18], // Publishers
+				...array[19], // Publish date
+				...array[20] // Access date
+			], 0);
+
+			fileLength += buf.length;
+			citations.push(buf);
 		}
 
-		// Add all citations
-		for(let c in object.citations) {
-			result += ':';
+		// Construct the file buffer
+		const buffer = new Uint8Array(fileLength);
+		let index = header.length;
+		buffer.set(header, 0); // File header
 
-			for(let m in this._metadata) {
-				result += this._elementMarker;
-
-				let value = object.citations[c][this._metadata[m][0]];
-
-				// Arrays
-				if(Array.isArray(value)) {
-					if(Array.isArray(value[0])) {
-						let temp = [];
-
-						for(let v1 in value) {
-							let current = "";
-
-							for(let v2 in value[v1]) {
-								current += ',';
-								current += value[v1][v2].toString();
-							}
-
-							temp.push(current.slice(1));
-						}
-
-						value = '[' + temp.join('][') + ']';
-					}
-					else {
-						let temp = "";
-
-						for(let v in value) {
-							temp += ',';
-							temp += value[v].toString();
-						}
-
-						value = '[' + temp.slice(1) + ']';
-					}
-				}
-
-				// Dates
-				else if(typeof value === 'object') {
-					let temp = {
-						day: ('0' + value.day).slice(-2),
-						month: ('0' + value.month).slice(-2),
-						year: value.year.toString()
-					};
-
-					value = '<' + temp.day + temp.month + temp.year + '>';
-				}
-
-				result += value;
-			}
-
-			result += ':';
-
-			for(let e in this._elements) {
-				result += this._elementMarker + e + ':';
-
-				let value = object.citations[c][this._elements[e][0]];
-
-				// Arrays
-				if(Array.isArray(value)) {
-					if(Array.isArray(value[0])) {
-						let temp = [];
-
-						for(let v1 in value) {
-							let current = "";
-
-							for(let v2 in value[v1]) {
-								current += ',';
-								current += value[v1][v2].toString();
-							}
-
-							temp.push(current.slice(1));
-						}
-
-						value = '[' + temp.join('][') + ']';
-					}
-					else {
-						let temp = "";
-
-						for(let v in value) {
-							temp += ',';
-							temp += value[v].toString();
-						}
-
-						value = '[' + temp.slice(1) + ']';
-					}
-				}
-
-				// Dates
-				else if(typeof value === 'object') {
-					let temp = {
-						day: ('0' + value.day).slice(-2),
-						month: ('0' + value.month).slice(-2),
-						year: value.year.toString()
-					};
-
-					value = '<' + temp.day + temp.month + temp.year + '>';
-				}
-
-				result += value;
-			}
-
-			result += this._elementMarker + ';';
+		// Citations
+		for(let c in citations) {
+			buffer.set(citations[c], index);
+			index += citations[c].length;
 		}
 
-		return result;
+		return buffer;
 	},
 
 
@@ -377,7 +313,7 @@ const HistoryFormatter = {
 
 			// Import from a file
 			if(isFile) {
-				ExtStorage.readFile(filepath, (data) => {
+				ExtStorage.readFile(filepath, 'buffer', (data) => {
 					let result = this._loadFile(data);
 
 					if(result.error) reject(result);
@@ -399,12 +335,12 @@ const HistoryFormatter = {
 	},
 
 
-	// Export a history object as a string
+	// Export a history object as a downloadable URL
 	export: function(details) {
-		let result = this._fileHeader + this._allowedVersions[0] + '\r\n';
+		const buffer = this._compileHistory(details);
+		const url = URL.createObjectURL(new Blob([buffer.buffer], { type: 'application/octet-stream' }));
 
-		result += this._stringifyHistory(details);
-		return result;
+		return url;
 	}
 
 };

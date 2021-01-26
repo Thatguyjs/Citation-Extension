@@ -1,0 +1,54 @@
+.popup {
+	margin-top: 6px;
+
+	max-width: 100%;
+	min-height: 40px;
+	max-height: 40px;
+
+	background: var(--header);
+	border-radius: 4px;
+	border: 1px solid var(--outline);
+
+	overflow: hidden;
+	transition: opacity 0.25s, margin 0.5s;
+}
+.popup-fade {
+	opacity: 0;
+	margin-top: -40px;
+}
+
+.popup-color {
+	float: left;
+
+	width: 15px;
+	height: 100%;
+
+	clip-path: polygon(0 0, 15px 0, 10px 100%, 0 100%);
+}
+.popup-info .popup-color {
+	background: var(--grey-3);
+}
+.popup-success .popup-color {
+	background: var(--affirmative);
+}
+.popup-warning .popup-color {
+	background: var(--warning);
+}
+.popup-error .popup-color {
+	background: var(--negative);
+}
+
+.popup p {
+	margin: 0 0 0 20px;
+	padding: 10px 0 0 12px;
+
+	height: 100%;
+
+	color: var(--text-secondary);
+	font-family: "Mulish";
+	font-size: 15px;
+
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow-x: hidden;
+}

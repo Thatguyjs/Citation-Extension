@@ -1,14 +1,22 @@
 # Raw image files
 *.xcf
 
+# Unused icons
+icons/icon48.png
+
 # Unused fonts
 general/fonts/*/unused
 
-# First history page (old)
+# Palettes
+palettes
+
+# Old files
+*_old.*
+
+# Unused history pages (new to old)
+history_old (2)
 history_old
 
-# First popup version (old)
-inject_direct
-
-# Second popup version (old)
+# Unused popup versions (new to old)
 inject_iframe
+inject_direct

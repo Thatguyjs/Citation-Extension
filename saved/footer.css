@@ -1,0 +1,15 @@
+/* Style for the page footer */
+
+#citations-loaded {
+	display: inline-block;
+	margin: 7px 0 0 12px;
+
+	color: var(--text-secondary);
+	font-family: "Varta";
+	font-size: 14px;
+}
+
+#citations-loaded span {
+	all: inherit;
+	margin: 0;
+}

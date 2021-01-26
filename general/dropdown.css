@@ -1,0 +1,11 @@
+.dropdown {
+	position: relative;
+}
+
+.dropdown > div {
+	position: absolute;
+	display: none;
+}
+.dropdown:focus-within > div {
+	display: block;
+}

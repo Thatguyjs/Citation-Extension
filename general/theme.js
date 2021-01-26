@@ -86,6 +86,9 @@ const Theme = {
 				if(object[o][0] === 'rgb') {
 					colorString = `rgb(${object[o][1]}, ${object[o][2]}, ${object[o][3]})`;
 				}
+				else if(object[o][0] === 'hex') {
+					colorString = '#' + object[o][1];
+				}
 
 				document.documentElement.style.setProperty(name, colorString);
 			}

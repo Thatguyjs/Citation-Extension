@@ -171,17 +171,17 @@ const ExtStorage = {
 
 
 	// Read a file
-	readFile: function(filename, callback) {
-		// TODO: Use fetch instead? (chrome 42, edge 14, and firefox 39 / 52)
-
-		let request = new XMLHttpRequest();
-		request.open("GET", chrome.runtime.getURL(filename));
-
-		request.onload = () => {
-			callback(request.responseText);
+	readFile: function(filename, type, callback) {
+		if(!callback) {
+			callback = type;
+			type = 'text';
 		}
 
-		request.send();
+		fetch(chrome.runtime.getURL(filename)).then(async (res) => {
+			if(type === 'text') callback(await res.text());
+			else if(type === 'buffer') callback(await res.arrayBuffer());
+			else throw new Error("Unknown type: " + type);
+		});
 	},
 
 };

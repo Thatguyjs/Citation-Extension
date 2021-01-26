@@ -1,0 +1,153 @@
+main {
+	display: flex;
+	flex-direction: row;
+
+	max-width: 100%;
+	height: calc(100vh - 80px);
+}
+
+
+/* Left section */
+#section-left {
+	flex: 1;
+
+	min-width: 280px;
+	max-width: 280px;
+
+	background: var(--header);
+	border-right: 1px solid var(--outline);
+
+	z-index: 1;
+}
+
+#create {
+	width: 120px;
+	height: 38px;
+
+	font-size: 15px;
+	margin: 20px;
+
+	color: var(--text-primary);
+
+	background: var(--highlight);
+	border-radius: 3px;
+	border: none;
+
+	box-shadow: 2px 2px 4px var(--outline);
+	outline: none;
+}
+
+#create-dropdown > div {
+	left: 20px;
+	top: 58px;
+
+	padding: 4px 0;
+	width: 180px;
+
+	background: var(--grey-2);
+	box-shadow: 1px 1px 4px var(--outline);
+
+	border-radius: 4px;
+}
+#create-dropdown .dropdown-button, .dropdown-menu {
+	padding-left: 16px;
+
+	width: 100%;
+	height: 35px;
+
+	color: var(--text-secondary);
+	text-align: left;
+
+	background: var(--grey-2);
+	border: none;
+	outline: none;
+}
+#create-dropdown .dropdown-button:hover, .dropdown-menu:hover {
+	color: var(--text-primary);
+	background: var(--grey-3);
+}
+#create-dropdown .dropdown-separator {
+	display: block;
+	margin: 2px 0;
+
+	width: 100%;
+	height: 2px;
+
+	background: rgb(62, 65, 72);
+}
+#create-dropdown .dropdown-menu > p {
+	display: inline-block;
+
+	margin: 0;
+	padding-top: 2px;
+}
+#create-dropdown .dropdown-menu > svg {
+	float: right;
+
+	width: 24px;
+	height: 24px;
+
+	fill: var(--text-secondary);
+}
+
+#import-dropdown > div {
+	left: 100%;
+	top: 0;
+
+	padding: 4px 0;
+	width: 120px;
+
+	background: var(--grey-2);
+	box-shadow: 1px 1px 4px var(--outline);
+
+	border-radius: 4px;
+}
+
+
+/* Middle section */
+#section-center {
+	position: relative;
+	width: calc(100vw - 342px);
+}
+
+
+#default-popups {
+	display: flex;
+	flex-direction: column-reverse;
+
+	position: absolute;
+	right: 20px;
+	bottom: 20px;
+
+	width: 300px;
+	height: 200px;
+
+	overflow-y: auto;
+}
+#default-popups::-webkit-scrollbar {
+	width: 8px;
+
+	background: rgba(0, 0, 0, 0.3);
+}
+#default-popups::-webkit-scrollbar-thumb {
+	background: var(--grey-3);
+}
+
+
+/* Right section */
+#section-right {
+	min-width: 60px;
+	max-width: 60px;
+
+	background: var(--header);
+	border-left: 1px solid var(--outline);
+}
+
+
+footer {
+	width: 100%;
+	height: 30px;
+
+	background: var(--header);
+	border-top: 1px solid var(--outline);
+}

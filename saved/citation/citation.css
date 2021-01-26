@@ -1,0 +1,139 @@
+#citation-list {
+	width: 100%;
+	height: calc(100% - 55px);
+
+	overflow-y: scroll;
+}
+
+#citation-list::-webkit-scrollbar {
+	width: 8px;
+
+	background: var(--background);
+}
+
+#citation-list::-webkit-scrollbar-thumb {
+	background: rgba(255, 255, 255, 0.12);
+	border-radius: 3px;
+}
+
+
+.section:not(.section-default) {
+	margin-top: 16px;
+}
+
+.section-name {
+	margin: 0;
+	padding: 6px 20px;
+
+	height: 20px;
+
+	color: var(--text-secondary);
+	font-family: "Mulish";
+	font-size: 15px;
+
+	/* background: rgba(255, 0, 0, 0.15); */
+}
+
+
+.citation {
+	display: flex;
+	align-items: stretch;
+
+	max-width: 100%;
+	height: 45px;
+
+	background: rgb(32, 36, 42);
+	border-bottom: 1px solid var(--outline);
+
+	user-select: none;
+}
+
+.citation > div {
+	display: inline-block;
+}
+
+.citation > div:not(.citation-data-area) {
+	position: relative;
+}
+
+
+.citation-select-area {
+	width: 62px;
+	cursor: pointer;
+}
+.citation-select {
+	margin: 10px 0 0 19px;
+	width: 24px;
+}
+.citation-select use[href="#icon-checkbox-checked"] {
+	fill: var(--highlight);
+}
+
+
+.citation-data-area {
+	flex: 1;
+	min-width: 0;
+}
+.citation-data-area > * {
+	display: inline-block;
+	margin: 0;
+}
+
+.citation-name {
+	float: left;
+
+	margin: 12px 14px;
+	width: 280px;
+
+	color: var(--text-primary);
+	font-size: 15px;
+
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow-x: hidden;
+}
+.citation-preview {
+	margin: 13px 0 0 4px;
+	max-width: calc(100% - 560px);
+	min-width: 0;
+
+	color: var(--text-secondary);
+	font-family: "Open Sans";
+	font-size: 12px;
+
+	text-overflow: ellipsis;
+	overflow: hidden;
+}
+.citation-format {
+	float: right;
+
+	margin: 12px 18px 0 0;
+	width: 100px;
+
+	color: var(--text-primary);
+	font-size: 15px;
+	text-align: right;
+
+	text-overflow: ellipsis;
+	overflow-x: hidden;
+}
+.citation-date {
+	float: right;
+
+	margin: 13px 12px 0 0;
+	width: 100px;
+
+	color: var(--text-secondary);
+	font-size: 13px;
+	text-align: right;
+}
+
+
+.citation-drag-area {
+	width: 110px;
+	cursor: grab;
+}
+.citation-drag {
+	margin: 10px 0 0 45px;
+	width: 24px;
+}

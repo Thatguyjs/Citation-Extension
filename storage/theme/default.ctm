@@ -1,78 +1,19 @@
 THEME v.00.00.00
 {
-	"header": ["rgb", 41, 42, 45],
-	"outline": ["rgb", 60, 62, 67],
+	"background": ["hex", "282C34"],
+	"header": ["hex", "23272D"],
+	"outline": ["hex", "1A1C20"],
 
-	"search-bar": {
-		"background": ["rgb", 71, 72, 75],
-		"action": ["rgb", 215, 215, 215],
-		"text": ["rgb", 200, 200, 200]
-	},
+	"grey-1": ["hex", "2E323A"],
+	"grey-2": ["hex", "31353C"],
+	"grey-3": ["hex", "373B42"],
 
-	"section-border": ["rgb", 38, 38, 40],
+	"highlight": ["hex", "4D78CC"],
 
-	"tab-headers-background": ["rgb", 28, 30, 34],
-	"tab-header": {
-		"background": ["rgb", 32, 33, 36],
-		"border": ["rgb", 18, 22, 25],
+	"text-primary": ["hex", "F2F7F2"],
+	"text-secondary": ["hex", "A2A7A3"],
 
-		"active-indicator": ["rgb", 40, 90, 170],
-
-		"title": ["rgb", 115, 115, 115],
-		"title-active": ["rgb", 190, 190, 190],
-
-		"save-background": ["rgb", 60, 90, 150],
-
-		"close": {
-			"background": ["rgb", 43, 44, 49],
-			"background-hover": ["rgb", 55, 90, 160],
-			"fill": ["rgb", 90, 90, 90],
-			"fill-hover": ["rgb", 190, 190, 190]
-		}
-	},
-
-	"tab-create": {
-		"background": ["none"],
-		"background-hover": ["rgb", 44, 45, 48],
-		"fill": ["rgb", 130, 130, 130]
-	},
-
-	"toolbar-button": {
-		"background": ["rgb", 42, 43, 47],
-		"fill": ["rgb", 140, 142, 147]
-	},
-
-	"content-background": ["rgb", 42, 43, 47],
-
-	"citation": {
-		"background": ["rgb", 45, 46, 49],
-		"shadow-color": ["rgb", 18, 20, 24],
-
-		"container": {
-			"background": ["rgb", 55, 56, 59],
-			"view": ["rgb", 67, 68, 71]
-		}
-	},
-
-	"setting": {
-		"toggle": {
-			"background": ["rgb", 42, 43, 47],
-			"border": ["rgb", 60, 62, 67],
-			"slider": ["rgb", 81, 82, 84],
-			"active": ["rgb", 30, 145, 80]
-		}
-	},
-
-	"text": {
-		"primary": ["rgb", 205, 207, 211],
-		"secondary": ["rgb", 155, 157, 162]
-	},
-
-	"affirmative": ["rgb", 30, 140, 80],
-	"negative": ["rgb", 220, 115, 110],
-
-	"section-header": {
-		"hover": ["rgb", 27, 28, 30],
-		"active": ["rgb", 40, 41, 44]
-	}
+	"affirmative": ["hex", "558564"],
+	"warning": ["hex", "EC6A32"],
+	"negative": ["hex", "E02929"]
 }

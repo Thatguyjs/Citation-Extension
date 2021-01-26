@@ -6,7 +6,7 @@ const Main = {
 	_pages: {
 		'home': { inline: true },
 		'create': { inline: true },
-		'history': { inline: false, url: '/history/index.html' },
+		'saved': { inline: false, url: '/saved/index.html' },
 		'settings': { inline: false, url: '/settings/index.html' }
 	},
 
@@ -30,6 +30,12 @@ const Main = {
 				buttons[b].addEventListener('click', () => {
 					Main.open(p);
 				});
+			}
+
+			let colors = [...document.getElementsByClassName("color-" + p)];
+
+			for(let c in colors) {
+				colors[c].style.background = this._pages[p].color;
 			}
 		}
 

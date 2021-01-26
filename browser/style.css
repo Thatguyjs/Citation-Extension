@@ -9,6 +9,4 @@ body {
 /* Default styles */
 .menu {
 	display: block;
-
-	background: var(--background);
 }

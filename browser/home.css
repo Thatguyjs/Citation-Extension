@@ -3,33 +3,67 @@
 
 /* Tab styles */
 .tab {
+	position: relative;
+
 	margin: 9px 6%;
 	padding: 0;
 
 	width: 88%;
 	height: 60px;
 
-	background: var(--content-background);
+	background: var(--header);
 	border-radius: 4px;
 	box-shadow: 1px 1px 3px rgb(16, 16, 16);
 
 	cursor: pointer;
+	overflow: hidden;
 }
 
 .tab h2 {
 	margin: 0;
 	padding: 8px 0 0 16px;
 
-	color: var(--text-primary);
+	color: var(--text-secondary);
 	font-family: "Mulish";
-	font-size: 17px;
+	font-size: 16px;
+
+	transition: padding 0.15s, font-size 0.15s, color 0.15s;
+}
+.tab:hover h2 {
+	/* padding-top: 17px; */
+
+	color: var(--text-primary);
+	/* font-size: 18px; */
 }
 
 .tab p {
 	margin: 0;
-	padding: 4px 0 0 14px;
+	padding: 5px 0 0 16px;
 
 	color: var(--text-secondary);
 	font-family: "Varta";
-	font-size: 15px;
+	font-size: 14px;
+
+	transition: opacity 0.1s;
+}
+/* .tab:hover p {
+	opacity: 0;
+} */
+
+.tab-color {
+	position: absolute;
+	top: 0;
+	right: 0;
+
+	width: 30px;
+	height: 100%;
+
+	background: var(--highlight) !important;
+
+	clip-path: polygon(0 0, 100% 0, 100% 100%, 20px 100%);
+	transition: width 0.2s;
+}
+
+.tab:hover .tab-color {
+	width: 30%;
 }

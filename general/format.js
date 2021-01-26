@@ -3,423 +3,480 @@
 
 const Formatter = {
 
-	// Month names
-	_months: [
-		'January', 'February', 'March', 'April',
-		'May', 'June', 'July', 'August',
-		'September', 'October', 'November', 'December'
+	// Error messages
+	errors: [
+		"",
+		"Invalid File Length",
+		"Invalid File Constant",
+		"Incompatible File Version"
 	],
 
 
-	// Format file header
-	_fileHeader: "FORMAT v.",
-	_headerLength: 19,
+	// List of formats
+	formats: {},
 
 
-	// Available format file versions
-	_allowedVersions: [
-		"00.00.01",
-		"00.00.02"
+	// Format file header constant
+	_headerConstant: "FMT+",
+	_headerConstantArray: new Uint8Array([70, 77, 84, 43]),
+	_headerConstantLength: 4,
+	_headerLength: 8,
+
+
+	// Allowed file versions & current version
+	_minAllowedVersion: 0,
+	_maxAllowedVersion: 0,
+	_fileVersion: 0,
+
+
+	// Element type names
+	_typeNames: [
+		'title',
+		'url',
+		'authors',
+		'publishers',
+		'publishdate',
+		'accessdate'
 	],
 
 
-	// Element marker (group separator)
-	_elementMarker: String.fromCharCode(29),
-
-
-	// Different element numbers (function names)
-	_elements: {
-		0: "Title",
-		1: "Url",
-		2: "Authors",
-		3: "Publishers",
-		4: "PublishDate",
-		5: "AccessDate"
+	// Element type indices
+	_typeIndices: {
+		'title': 0,
+		'url': 1,
+		'authors': 2,
+		'publishers': 3,
+		'publishdate': 4,
+		'accessdate': 5
 	},
 
 
-	// Different citation formats
-	_formats: {},
-
-
-	// The citation result
-	_result: "",
-
-
-	// Init & parse the list of formats
+	// Load the default format files
 	init: function() {
+		/*
+		// Temp: Create a format file
+		const formats = [
+			{ name: "MLA8", settings: { indent: true }, data: [
+				{ type: 'element', element: 'authors', properties: 0, preceding: '', succeeding: '. ' },
+				{ type: 'text', value: '"' },
+				{ type: 'element', element: 'title', properties: 0, preceding: '', succeeding: '' },
+				{ type: 'text', value: '" ' },
+				{ type: 'element', element: 'publishers', properties: 0, preceding: '', succeeding: ', ' },
+				{ type: 'element', element: 'publishdate', properties: 0, preceding: '', succeeding: ', ' },
+				{ type: 'element', element: 'url', properties: 1, preceding: '', succeeding: '.' }
+			] },
+			{ name: "IEEE", settings: { indent: false }, data: [
+				{ type: 'element', element: 'authors', properties: 0, preceding: '', succeeding: ', ' },
+				{ type: 'text', value: '"' },
+				{ type: 'element', element: 'title', properties: 0, preceding: '', succeeding: ',' },
+				{ type: 'text', value: '" ' },
+				{ type: 'element', element: 'url', properties: 2, preceding: '', succeeding: ', ' },
+				{ type: 'element', element: 'publishdate', properties: 0, preceding: '', succeeding: '. ' },
+				{ type: 'text', value: '[Online]. ' },
+				{ type: 'element', element: 'url', properties: 0, preceding: 'Available: ', succeeding: '. ' },
+				{ type: 'element', element: 'accessdate', properties: 0, preceding: '[Accessed ', succeeding: ']' }
+			] },
+			{ name: "BibTeX", settings: { indent: false }, data: [
+				{ type: 'text', value: '@misc{citation_name' },
+				{ type: 'element', element: 'title', properties: 0, preceding: ', title={', succeeding: '}' },
+				{ type: 'element', element: 'url', properties: 0, preceding: ', url={', succeeding: '}' },
+				{ type: 'element', element: 'publishers', properties: 1, preceding: ', publisher={', succeeding: '}' },
+				{ type: 'element', element: 'authors', properties: 1, preceding: ', author={', succeeding: '}' },
+				{ type: 'element', element: 'publishdate', properties: 4, preceding: ', year={', succeeding: '}' },
+				{ type: 'element', element: 'publishdate', properties: 2, preceding: ', month={', succeeding: '}' },
+				{ type: 'element', element: 'publishdate', properties: 1, preceding: ', day={', succeeding: '}' },
+				{ type: 'text', value: ' }' }
+			] }
+		];
 
-		// Load the default extension formats
-		this._loadFile("storage/format/default.fmt");
+		const buf = this._compileFormats(formats);
+		const url = URL.createObjectURL(new Blob([buf.buffer], { type: 'application/octet-stream' }))
 
-	},
+		chrome.downloads.download({
+			url,
+			filename: "default.fmt",
+			saveAs: true
+		});
+		*/
 
-
-	// Load a format file
-	_loadFile: function(filepath) {
-		ExtStorage.readFile(filepath, (data) => {
-			let accepted = false;
-
-			for(let v in this._allowedVersions) {
-				let matchString = this._fileHeader + this._allowedVersions[v] + '\r\n';
-
-				if(data.slice(0, this._headerLength) === matchString) {
-					accepted = true;
-					break;
-				}
-			}
-
-			if(!accepted) {
-				return; // TODO: Error Message
-			}
-
-			// Parse and set formats
-			let formats = this._loadFormats(data.slice(this._headerLength));
+		ExtStorage.readFile("storage/format/default.fmt", "buffer", (buffer) => {
+			const formats = this._loadFile(buffer);
 
 			for(let f in formats) {
-				this._formats[formats[f].name] = formats[f];
+				this.formats[formats[f].name] = formats[f];
 			}
-
 		});
 	},
 
 
-	// Load a list of formats
-	_loadFormats: function(data) {
-		let formatList = [];
-		let currentFormat = null;
+	// Convert a string to a Uint8Array
+	_stringToArray: function(string) {
+		const arr = new Uint8Array(string.length);
 
-		let length = data.length;
-		let index = 0;
+		for(let c in string) {
+			arr[c] = string.charCodeAt(c);
+		}
 
-		let specialChars = [this._elementMarker, ';', '<', '>'];
+		return arr;
+	},
+
+
+	// Check & parse data
+	_loadFile: function(buffer) {
+		const data = new Uint8Array(buffer);
+
+		// Check for content first
+		if(data.length <= this._headerLength) {
+			console.log(data);
+			return 1;
+		}
+
+		// Check file constant
+		for(let i = 0; i < this._headerConstantLength; i++) {
+			if(data[i] !== this._headerConstantArray[i]) {
+				return 2;
+			}
+		}
+
+		// Check version number
+		const version = (data[4] << 8) | data[5];
+		if(version < this._minAllowedVersion || version > this._maxAllowedVersion) {
+			return { error: 3 };
+		}
+
+		// Parse data
+		return this._parseFormats(data);
+	},
+
+
+	// Parse format data
+	_parseFormats: function(data) {
+		const decoder = new TextDecoder("utf-8");
+
+		let error = 0;
+		let formats = [];
+
+		const length = data.length;
+		const dataStart = this._headerLength;
 
 		// Parse formats
-		while(index < length && index >= 0) {
+		const formatNum = (data[6] << 8) | data[7];
+		let index = dataStart;
+		let format = {};
 
-			// Escaped character
-			if(data[index] === '\\') {
-				currentFormat.data.push({
-					type: 'string',
-					data: data[index + 1]
-				});
+		for(let i = 0; i < formatNum; i++) {
+			format = {};
+			let offset = index;
 
-				index += 2;
-			}
+			// Header
+			const totalLength = (data[offset] << 8) | data[offset + 1];
+			offset += 2;
 
-			// Start of a new format
-			else if(data[index] === ':') {
-				currentFormat = {
-					name: data.slice(index + 1, data.indexOf(this._elementMarker, index)),
-					indent: null,
-					data: []
-				};
+			const nameLen = data[offset];
+			format.name = decoder.decode(data.slice(offset + 1, offset + 1 + nameLen));
+			offset += nameLen + 1;
 
-				index = data.indexOf(this._elementMarker, index) + 1;
+			format.settings = {};
+			format.settings.indent = (data[offset] & 0x80) !== 0;
+			offset++;
 
-				currentFormat.indent = !!Number(data.slice(index, data.indexOf(':', index)));
-				index = data.indexOf(':', index) + 1;
-			}
+			const blockNum = data[offset];
+			offset++;
 
-			// Citation element
-			else if(data[index] === this._elementMarker) {
-				index++;
+			// Body
+			format.data = [];
 
-				let match = data.slice(index).match(/\d+/);
-				if(!match) return; // TODO: Error message
+			for(let i = 0; i < blockNum; i++) {
+				const blockType = data[offset] >>> 7;
 
-				let node = { type: 'element', element: Number(match[0]) };
+				// Element
+				if(blockType === 1) {
+					const elementInd = data[offset] & 0x7f;
+					const properties = data[offset + 1];
+					offset += 2;
 
-				index += match[0].length;
+					const precedingLen = data[offset];
+					const preceding = data.slice(offset + 1, offset + 1 + precedingLen);
+					offset += 1 + precedingLen;
 
-				if(data[index] === ':') {
-					node.properties = [];
+					const succeedingLen = data[offset];
+					const succeeding = data.slice(offset + 1, offset + 1 + succeedingLen);
+					offset += 1 + succeedingLen;
+
+					format.data.push({
+						type: 'element',
+						element: this._typeNames[elementInd],
+						properties,
+						preceding: decoder.decode(preceding),
+						succeeding: decoder.decode(succeeding)
+					});
 				}
 
-				while(data[index] === ':') {
-					index++;
+				// Text
+				else {
+					const textLength = data[offset] & 0x7f;
+					format.data.push({
+						type: 'text',
+						value: decoder.decode(data.slice(offset + 1, offset + 1 + textLength))
+					});
 
-					match = data.slice(index).match(/\d+/);
-					if(!match) return // TODO: Error message
-
-					node.properties.push(Number(match[0]));
-					index += match[0].length;
+					offset += 1 + textLength;
 				}
-
-				currentFormat.data.push(node);
 			}
 
-			// Include characters after an element
-			else if(data[index] === '<') {
-				let nodes = [];
-
-				let ind = currentFormat.data.length;
-
-				while(currentFormat.data[--ind].type === 'string') {
-					nodes.unshift(currentFormat.data.pop().data);
-				}
-
-				currentFormat.data.push({
-					type: 'optional',
-					mode: 'after',
-					data: nodes.join('')
-				});
-
-				index++;
-			}
-
-			// Include characters before an element
-			else if(data[index] === '>') {
-				let text = "";
-
-				while(data[++index] !== this._elementMarker) {
-					text += data[index];
-				}
-
-				currentFormat.data.push({
-					type: 'optional',
-					mode: 'before',
-					data: text
-				});
-			}
-
-			// End of a format
-			else if(data[index] === ';') {
-				formatList.push(currentFormat);
-				currentFormat = null;
-
-				index = data.indexOf(':', index + 1);
-			}
-
-			// Additional characters
-			else {
-				let text = "";
-
-				while(!specialChars.includes(data[index])) {
-					text += data[index];
-					index++;
-				}
-
-				currentFormat.data.push({
-					type: 'string',
-					data: text
-				});
-			}
-
+			formats.push(format);
+			index += totalLength / 8;
 		}
 
-		return formatList;
+		return formats;
 	},
 
 
-	// Format different citation elements
+	// Construct a format file buffer
+	_compileFormats: function(formats) {
+		const formatNum = formats.length;
 
-	_formatTitle: function(properties, citation) {
-		return citation.title;
+		const header = new Uint8Array(8);
+		header.set(this._headerConstantArray, 0); // ID constant
+		header.set([this._fileVersion >>> 8, this._fileVersion & 0xff], 4); // Version number
+		header.set([formatNum >>> 8, formatNum & 0xff], 6); // Format number
+
+		// Compile formats
+		const formatList = [];
+		let fileLength = header.length;
+
+		for(let i = 0; i < formatNum; i++) {
+			const format = formats[i];
+			let array = [];
+			let formatLen = 32; // Minimum format length (bits)
+
+			// Format header
+			array.push(0, 0);
+			array.push(format.name.length, this._stringToArray(format.name));
+			array.push(format.settings.indent << 7);
+			array.push(format.data.length);
+
+			formatLen += 8 + array[3].length * 8; // Format name
+
+			// Format body
+			for(let i in format.data) {
+				const block = format.data[i];
+				const typeFlag = block.type === 'element';
+				formatLen += 8;
+
+				// Element
+				if(typeFlag) {
+					const elementInd = this._typeIndices[block.element];
+					array.push((typeFlag << 7) | (elementInd & 0x7f), block.properties & 0xff);
+
+					const precedingLen = block.preceding.length;
+					array.push(precedingLen & 0xff, this._stringToArray(block.preceding));
+
+					const succeedingLen = block.succeeding.length;
+					array.push(succeedingLen & 0xff, this._stringToArray(block.succeeding));
+
+					formatLen += 24 + precedingLen * 8 + succeedingLen * 8;
+				}
+
+				// Text
+				else {
+					const textLength = block.value.length;
+					array.push((typeFlag << 7) | (textLength & 0x7f));
+					array.push(this._stringToArray(block.value));
+
+					formatLen += textLength * 8;
+				}
+			}
+
+			array[0] = formatLen >>> 8;
+			array[1] = formatLen & 0xff;
+
+			let buf = new Uint8Array(formatLen / 8);
+			let ind = 0;
+
+			for(let i in array) {
+				if(typeof array[i] === 'number') {
+					buf.set([array[i]], ind);
+					ind++;
+				}
+				else if(array[i] instanceof Uint8Array) {
+					buf.set(array[i], ind);
+					ind += array[i].length;
+				}
+				else break;
+			}
+
+			fileLength += buf.length;
+			formatList.push(buf);
+		}
+
+		// Construct the file buffer
+		const buffer = new Uint8Array(fileLength);
+		let index = header.length;
+		buffer.set(header, 0); // Header
+
+		// Formats
+		for(let f in formatList) {
+			buffer.set(formatList[f], index);
+			index += formatList[f].length;
+		}
+
+		return buffer;
 	},
 
 
-	_formatUrl: function(properties, citation) {
-		let result = "";
+	// Format a title
+	_format_title: function(title, props) {
+		return title;
+	},
 
-		if(!properties) {
-			result = citation.url;
-		}
-		else if(properties[0] === 0 && citation.url.includes('://')) {
-			result = citation.url.slice(citation.url.indexOf('://') + 3);
-		}
-		else if(properties[0] === 1) {
-			result = this._formatUrl([0], citation);
 
-			if(result.includes('/')) {
-				result = result.slice(0, result.indexOf('/'));
-			}
+	// Format a URL
+	_format_url: function(url, props) {
+		let result = url;
+
+		if((props & 0b1) || (props & 0b10)) {
+			const match = result.match(/.+:\/\//);
+			if(match && match.index === 0) result = result.slice(match[0].length);
+		}
+		if(props & 0b10) {
+			const ind = result.indexOf('/');
+			if(ind > -1) result = result.slice(0, ind);
 		}
 
 		return result;
 	},
 
 
-	_formatAuthors: function(properties, citation) {
-		if(!citation.authors.length) return "";
+	// Format authors
+	_format_authors: function(authors, props) {
+		if(!authors.length) return "";
 
-		let authors = [];
-		let lastIndex = 0;
+		let copy = [];
+		let result = "";
 
-		if(properties && properties[0] === 0) {
-			authors.push(citation.authors[0]);
-			lastIndex = 1;
+		for(let i in authors) {
+			copy[i] = [
+				authors[i].prefix,
+				authors[i].firstname,
+				authors[i].middlename,
+				authors[i].lastname
+			];
 		}
-		else if(properties && properties[0] === 5) {
-			authors.push(citation.authors[properties[1]]);
-			lastIndex = 2;
+
+		if(props & 0b1) {
+			copy = [copy[0]];
 		}
-		else {
-			for(let a in citation.authors) {
-				authors.push(citation.authors[a]);
+		if(props & 0b11110) {
+			for(let c in copy) copy[c] = ["", "", "", ""];
+		}
+		if(props & 0b10) {
+			for(let c in copy) {
+				copy[c][0] = authors[c].prefix;
+			}
+		}
+		if(props & 0b100) {
+			for(let c in copy) {
+				copy[c][1] = authors[c].firstname;
+			}
+		}
+		if(props & 0b1000) {
+			for(let c in copy) {
+				copy[c][2] = authors[c].middlename;
+			}
+		}
+		if(props & 0b10000) {
+			for(let c in copy) {
+				copy[c][3] = authors[c].lastname;
 			}
 		}
 
-		// Recursive properties
-		if(properties && properties[lastIndex] >= 1 && properties[lastIndex] <= 4) {
-			let prop = [
-				'prefix', 'firstname', 'middlename', 'lastname'
-			][properties[lastIndex] - 1];
+		for(let c in copy) {
+			copy[c] = copy[c].filter((str) => { return str.length; });
+		}
 
-			for(let a in authors) {
-				for(let p in authors[a]) {
-					if(p !== prop) {
-						authors[a][p] = "";
+		if(copy.length === 1) {
+			result = copy[0].join(' ');
+		}
+		else {
+			const last = copy[copy.length - 1];
+			copy = copy.slice(0, -1);
+
+			for(let c in copy) result += copy[c].join(' ') + ', ';
+			result += 'and ' + last.join(' ');
+		}
+
+		return result;
+	},
+
+
+	// Format publishers
+	_format_publishers: function(publishers, props) {
+		if(!publishers.length) return "";
+
+		if(props & 0b1 || publishers.length === 1) return publishers[0];
+
+		const last = publishers[publishers.length - 1];
+		publishers = publishers.slice(0, -1);
+
+		return publishers.join(', ') + ' and ' + last;
+	},
+
+
+	// Format a publish date
+	_format_publishdate: function(date, props) {
+		let order = ['day', 'month', 'year'];
+		if(props & 0b111) order = ['', '', ''];
+
+		if(props & 0b1) order[0] = 'day';
+		if(props & 0b10) order[1] = 'month';
+		if(props & 0b100) order[2] = 'year';
+
+		return DateFormatter.asText(date, { order });
+	},
+
+
+	// Format an access date
+	_format_accessdate: function(date, props) {
+		return this._format_publishdate(date, props);
+	},
+
+
+	// Apply a format to citations
+	format: function(citations) {
+		if(!Array.isArray(citations)) citations = [citations];
+
+		let result = [];
+
+		for(let c in citations) {
+			const format = this.formats[citations[c].format];
+			if(!format) {
+				result[c] = null;
+				continue;
+			}
+
+			let formatted = "";
+
+			if(format.settings.indent) formatted += '\t';
+
+			for(let i in format.data) {
+				if(format.data[i].type === 'text') {
+					formatted += format.data[i].value;
+				}
+				else {
+					const elem = format.data[i].element;
+					const res = this['_format_' + elem](citations[c][elem], format.data[i].properties);
+
+					if(res) {
+						formatted += format.data[i].preceding + res + format.data[i].succeeding;
 					}
 				}
 			}
-		}
 
-		// Turn the authors array into a string
-		let result = "";
-
-		for(let a in authors) { // TODO: Add prefix and middlename support
-			result += (
-				(Number(a) > 0 ? " and " : "") +
-				(authors[a][3] ? authors[a][3] + " " : "") +
-				(authors[a][1] || "")
-			);
-		}
-
-		return result.trim();
-	},
-
-
-	_formatPublishers: function(properties, citation) {
-		if(!citation.publishers.length) return "";
-
-		let result = "";
-
-		if(!properties) {
-			for(let p in citation.publishers) {
-				result += (
-					(Number(p) > 0 ? " and " : "") +
-					citation.publishers[p]
-				);
-			}
-		}
-		else if(properties[0] === 0) {
-			result += citation.publishers[0];
-		}
-		else if(properties[0] === 1) {
-			result += citation.publishers[properties[1]];
+			result.push(formatted);
 		}
 
 		return result;
-	},
-
-
-	_formatPublishDate: function(properties, citation) {
-		if(!citation.publishdate.month) return "";
-
-		let result = "";
-
-		if(!properties) {
-			result += (
-				citation.publishdate.day + " " +
-				this._months[citation.publishdate.month - 1] + " " +
-				citation.publishdate.year
-			);
-		}
-		else if(properties[0] === 0) {
-			result += citation.publishdate.day.toString();
-		}
-		else if(properties[0] === 1) {
-			result += this._months[citation.publishdate.month - 1];
-		}
-		else if(properties[0] === 2) {
-			result += citation.publishdate.year.toString();
-		}
-
-		return result;
-	},
-
-
-	_formatAccessDate: function(properties, citation) {
-		if(!citation.accessdate.month) return "";
-
-		let result = "";
-
-		if(!properties) {
-			result += (
-				citation.accessdate.day + " " +
-				this._months[citation.accessdate.month - 1] + " " +
-				citation.accessdate.year
-			);
-		}
-		else if(properties[0] === 0) {
-			result += citation.accessdate.day.toString();
-		}
-		else if(properties[0] === 1) {
-			result += this._months[citation.accessdate.month - 1];
-		}
-		else if(properties[0] === 2) {
-			result += citation.accessdate.year.toString();
-		}
-
-		return result;
-	},
-
-
-	// Format a citation object
-	format: function(citation) {
-		if(!citation) return "Format Error";
-
-		// Get the format
-		let activeFormat = this._formats[citation.format];
-		if(!activeFormat) return "Format Error: Unknown citation format";
-
-		// Element state & optional text
-		let elementFound = false;
-		let nextOptional = "";
-
-		// Reset the result
-		this._result = activeFormat.indent ? "\t" : "";
-
-		// Generate the citation
-		for(let e in activeFormat.data) {
-
-			// Call the correct citation function
-			if(activeFormat.data[e].type === 'element') {
-				let formattedElement = this[
-					"_format" + this._elements[activeFormat.data[e].element]
-				](activeFormat.data[e].properties, citation);
-
-				elementFound = !!formattedElement;
-
-				if(nextOptional && elementFound) {
-					this._result += nextOptional;
-					nextOptional = "";
-				}
-
-				this._result += formattedElement;
-			}
-
-			// Add an optional string
-			else if(activeFormat.data[e].type === 'optional') {
-				if(activeFormat.data[e].mode === 'before') {
-					nextOptional = activeFormat.data[e].data;
-				}
-				else if(elementFound) {
-					this._result += activeFormat.data[e].data;
-				}
-			}
-
-			// Add the string to the result
-			else if(activeFormat.data[e].type === 'string') {
-				this._result += activeFormat.data[e].data;
-			}
-
-			// Unknown node
-			else return "Format Error: Unknown format node";
-		}
-
-		return this._result;
 	}
 
 };

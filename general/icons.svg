@@ -79,3 +79,11 @@
 <svg id="icon-text" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 	<path d="M5 4v3h5.5v12h3V7H19V4z"/>
 </svg>
+
+<svg id="icon-info" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+	<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+</svg>
+
+<svg id="icon-caret-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+	<path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
+</svg>
