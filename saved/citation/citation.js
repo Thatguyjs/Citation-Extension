@@ -15,12 +15,12 @@ const CitationManager = {
 
 
 	// Citations & containers
-	citations: [],
-	containers: [],
+	citations: {},
+	containers: {},
 
 
-	// Selected citations (indices)
-	selected: [],
+	// Selected citations (section:indices)
+	selected: {},
 	_lastToggled: null,
 
 
@@ -118,6 +118,10 @@ const CitationManager = {
 		if(!name) return;
 		if(this.sections[name]) return this.sections[name];
 
+		this.citations[name] = [];
+		this.containers[name] = [];
+		this.selected[name] = [];
+
 		this.sections[name] = document.createElement('div');
 		this.sections[name].classList.add('section');
 		this.sections[name].classList.add('section-' + name);
@@ -137,7 +141,7 @@ const CitationManager = {
 
 	// Load citations
 	loadCitations: function(citations, sectionName='default') {
-		const offset = this.citations.length;
+		const offset = this.citations[sectionName]?.length ?? 0;
 		let section = this.createSection(sectionName);
 		let copy = [];
 
@@ -173,25 +177,25 @@ const CitationManager = {
 				if(event.shiftKey && CitationManager._lastToggled !== null) {
 					let ind = Math.min(+c, CitationManager._lastToggled);
 					const end = Math.max(+c, CitationManager._lastToggled);
-					const select = CitationManager.selected.includes(CitationManager._lastToggled);
+					const select = CitationManager.selected[sectionName].includes(CitationManager._lastToggled);
 
 					while(ind <= end) {
-						if(select) CitationManager.select(+ind);
-						else CitationManager.deselect(+ind);
+						if(select) CitationManager.select(+ind, sectionName);
+						else CitationManager.deselect(+ind, sectionName);
 						ind++;
 					}
 				}
-				else CitationManager.toggleSelect(+c);
+				else CitationManager.toggleSelect(+c, sectionName);
 			});
 		}
 
-		this.citations.push(...copy);
+		this.citations[sectionName].push(...copy);
 	},
 
 
 	// Remove a citation
-	removeCitation: function(index) {
-		const citation = this.citations[index];
+	removeCitation: function(index, section) {
+		const citation = this.citations[section][index];
 		if(!citation) return;
 
 		console.log("Remove:", citation);
@@ -199,18 +203,18 @@ const CitationManager = {
 
 
 	// Toggle a citation selection
-	toggleSelect: function(index) {
-		if(this.selected.includes(index)) this.deselect(index);
-		else this.select(index);
+	toggleSelect: function(index, section) {
+		if(this.selected[section].includes(index)) this.deselect(index, section);
+		else this.select(index, section);
 	},
 
 
 	// Select a citation
-	select: function(index, update=true) {
-		const checkbox = this.citations[index]?.element.querySelector('.citation-select');
-		if(!checkbox || this.selected.includes(index)) return;
+	select: function(index, section, update=true) {
+		const checkbox = this.citations[section][index]?.element.querySelector('.citation-select');
+		if(!checkbox || this.selected[section].includes(index)) return;
 
-		this.selected.push(index);
+		this.selected[section].push(index);
 		ChangeSVGIcon(checkbox, "checkbox-checked");
 
 		this._lastToggled = index;
@@ -219,11 +223,11 @@ const CitationManager = {
 
 
 	// Deselect a citation
-	deselect: function(index, update=true) {
-		const checkbox = this.citations[index]?.element.querySelector('.citation-select');
-		if(!checkbox || !this.selected.includes(index)) return;
+	deselect: function(index, section, update=true) {
+		const checkbox = this.citations[section][index]?.element.querySelector('.citation-select');
+		if(!checkbox || !this.selected[section].includes(index)) return;
 
-		this.selected.splice(this.selected.indexOf(index), 1);
+		this.selected[section].splice(this.selected[section].indexOf(index), 1);
 		ChangeSVGIcon(checkbox, "checkbox-blank");
 
 		this._lastToggled = index;
@@ -233,8 +237,10 @@ const CitationManager = {
 
 	// Select all citations
 	selectAll: function() {
-		for(let c in this.citations) {
-			this.select(+c, false);
+		for(let s in this.sections) {
+			for(let c in this.citations[s]) {
+				this.select(+c, s, false);
+			}
 		}
 
 		Toolbar.updateButtons();
@@ -243,11 +249,39 @@ const CitationManager = {
 
 	// Deselect all citations
 	deselectAll: function() {
-		for(let c in this.citations) {
-			this.deselect(+c, false);
+		for(let s in this.sections) {
+			for(let c in this.citations[s]) {
+				this.deselect(+c, s, false);
+			}
 		}
 
 		Toolbar.updateButtons();
+	},
+
+
+	// Returns true if all citations are selected
+	allSelected: function(section) {
+		if(!section) {
+			for(let s in this.sections) {
+				if(this.citations[s].length !== this.selected[s].length) return false;
+			}
+
+			return true;
+		}
+		else return this.citations[section].length === this.selected[section].length;
+	},
+
+
+	// Returns true if any citation is selected
+	anySelected: function(section) {
+		if(!section) {
+			for(let s in this.sections) {
+				if(this.selected[s].length > 0) return true;
+			}
+
+			return false;
+		}
+		else return this.selected[section].length > 0;
 	},
 
 

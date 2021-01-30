@@ -26,9 +26,7 @@ const Toolbar = {
 		switch(name) {
 
 			case 'select-all':
-				if(CitationManager.selected.length < CitationManager.citations.length) {
-					CitationManager.selectAll();
-				}
+				if(!CitationManager.allSelected()) CitationManager.selectAll();
 				else CitationManager.deselectAll();
 				break;
 
@@ -65,22 +63,21 @@ const Toolbar = {
 		switch(name) {
 
 			case 'select-all': {
-				const selectedNum = CitationManager.selected.length;
-				const citationNum = CitationManager.citations.length;
+				let hasCitations = Object.keys(CitationManager.citations).length > 0;
 
-				if(citationNum > 0 && selectedNum === citationNum) {
+				if(hasCitations && CitationManager.allSelected()) {
 					icon.setAttribute('href', "#icon-checkbox-checked");
 				}
 				else icon.setAttribute('href', "#icon-checkbox-blank");
 				} break;
 
 			case 'copy':
-				if(CitationManager.selected.length) button.style.cursor = '';
+				if(CitationManager.anySelected()) button.style.cursor = '';
 				else button.style.cursor = 'not-allowed';
 				break;
 
 			case 'export':
-				if(CitationManager.selected.length) button.style.cursor = '';
+				if(CitationManager.anySelected()) button.style.cursor = '';
 				else button.style.cursor = 'not-allowed';
 				break;
 
