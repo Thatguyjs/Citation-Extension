@@ -355,13 +355,13 @@ const Formatter = {
 		let copy = [];
 		let result = "";
 
-		for(let i in authors) {
-			copy[i] = [
-				authors[i].prefix,
-				authors[i].firstname,
-				authors[i].middlename,
-				authors[i].lastname
-			];
+		for(let a in authors) {
+			copy.push([
+				authors[a][0],
+				authors[a][1],
+				authors[a][2],
+				authors[a][3]
+			]);
 		}
 
 		if(props & 0b1) {

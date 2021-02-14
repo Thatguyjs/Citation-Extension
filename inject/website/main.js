@@ -12,6 +12,7 @@ window['citation-ext-meta'] = {
 	get: function(name, attr=null) {
 		if(!attr) {
 			for(let e in this._elements) {
+				if(!(this._elements[e] instanceof HTMLElement)) continue;
 				let elemName = this._elements[e].getAttribute('property');
 
 				if(elemName === 'article:' + name || elemName === 'og:' + name || elemName === 'twitter:' + name) {
@@ -21,6 +22,8 @@ window['citation-ext-meta'] = {
 		}
 		else {
 			for(let e in this._elements) {
+				if(!(this._elements[e] instanceof HTMLElement)) continue;
+
 				if(this._elements[e].getAttribute(attr) === name) {
 					return this._elements[e].getAttribute('content');
 				}
@@ -67,31 +70,22 @@ window['citation-ext-get'] = function(element, path="") {
 
 	switch(element) {
 
-		// Title
 		case 'Title':
 			response = document.title || window['citation-ext-meta'].get('title');
 			break;
 
-
-		// Url
 		case 'Url':
 			response = window.location.href;
 			break;
 
-
-		// Author
 		case 'Authors':
 			response = window['citation-ext-meta'].get('author', 'name');
 			break;
 
-
-		// Publisher
 		case 'Publishers':
 			response = window['citation-ext-meta'].get('site_name');
 			break;
 
-
-		// Access date
 		case 'Access_Date':
 			window.CitationMessenger.send('set', element, null, 'automatic');
 			break;
@@ -172,6 +166,7 @@ window['citation-ext-links'] = {
 	// Block links
 	block: function() {
 		for(let l in this._links) {
+			if(!this._links[l].element) continue;
 			this._links[l].element.href = 'javascript:void(0);';
 		}
 	},
@@ -180,6 +175,7 @@ window['citation-ext-links'] = {
 	// Allow links
 	allow: function() {
 		for(let l in this._links) {
+			if(!this._links[l].element) continue;
 			this._links[l].element.href = this._links[l].url;
 		}
 	}

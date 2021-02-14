@@ -19,7 +19,7 @@ window.CitationMessenger = {
 	// Receive a message event
 	_onmessage: function(event) {
 		for(let l in this._listeners) {
-			if(!this._listeners[l]) continue;
+			if(!this._listeners[l] || !this._listeners[l].callback) continue;
 
 			this._listeners[l].callback(event.data);
 			if(this._listeners[l].once) this._listeners[l] = null;

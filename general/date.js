@@ -93,12 +93,11 @@ const DateFormatter = {
 					}	break;
 
 					case 'year':
-						if(date.month === 0) break;
 						result += ' ' + date.year.toString();
 						break;
 
 					case 'day':
-						if(date.month === 0) break;
+						if(date.day === 0) break;
 						result += ' ' + date.day.toString();
 						break;
 
