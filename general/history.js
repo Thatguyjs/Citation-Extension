@@ -64,10 +64,10 @@ const HistoryFormatter = {
 
 		for(let a in authors) {
 			names.push(
-				authors[a].prefix,
-				authors[a].firstname,
-				authors[a].middlename,
-				authors[a].lastname,
+				authors[a][0],
+				authors[a][1],
+				authors[a][2],
+				authors[a][3],
 			);
 		}
 
@@ -172,22 +172,22 @@ const HistoryFormatter = {
 			offset++;
 
 			for(let i = 0; i < authorNum; i++) {
-				let author = {};
+				let author = ['', '', '', ''];
 
 				let len = data[offset];
-				author.prefix = decoder.decode(data.slice(offset + 1, offset + 1 + len));
+				author[0] = decoder.decode(data.slice(offset + 1, offset + 1 + len));
 				offset += len + 1;
 
 				len = data[offset];
-				author.firstname = decoder.decode(data.slice(offset + 1, offset + 1 + len));
+				author[1] = decoder.decode(data.slice(offset + 1, offset + 1 + len));
 				offset += len + 1;
 
 				len = data[offset];
-				author.middlename = decoder.decode(data.slice(offset + 1, offset + 1 + len));
+				author[2] = decoder.decode(data.slice(offset + 1, offset + 1 + len));
 				offset += len + 1;
 
 				len = data[offset];
-				author.lastname = decoder.decode(data.slice(offset + 1, offset + 1 + len));
+				author[3] = decoder.decode(data.slice(offset + 1, offset + 1 + len));
 				offset += len + 1;
 
 				citation.authors.push(author);
