@@ -15,7 +15,6 @@ const Theme = {
 
 	// Theme file header
 	_fileHeader: "THEME v.",
-	_headerLength: 18,
 
 
 	// Available file versions
@@ -43,10 +42,10 @@ const Theme = {
 			let data = await response.text();
 
 			let accepted = false;
-			let header = data.slice(0, this._headerLength);
+			let header = data.slice(0, data.indexOf('\n')).trim();
 
 			for(let v in this._allowedVersions) {
-				let matchString = this._fileHeader + this._allowedVersions[v] + '\r\n';
+				let matchString = this._fileHeader + this._allowedVersions[v];
 
 				if(header === matchString) {
 					accepted = true;
@@ -59,7 +58,7 @@ const Theme = {
 				return;
 			}
 
-			let parsed = this._parseTheme(data.slice(this._headerLength));
+			let parsed = this._parseTheme(data.slice(data.indexOf('\n') + 1));
 			if(parsed.error) return console.error(parsed.error);
 
 			this.load(parsed.data);
